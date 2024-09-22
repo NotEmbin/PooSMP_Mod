@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " # ",
+    "#3#",
+    " # "
+  ],
+  "key": {
+    "3": {
+      "item": "minecraft:stone"
+    },
+    "#": {
+      "item": "poosmp:diamond_shard"
+    }
+  },
+  "result": {
+    "id": "poosmp:missingno",
+    "count": 8
+  },
+  "show_notification": true
+}

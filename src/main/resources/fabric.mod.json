@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "poosmp",
+	"version": "1.0.0",
+	"name": "PooSMP Mod",
+	"description": "The Official Poo SMP Mod. Gay.",
+	"authors": [
+		"Embin"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/poosmp/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"embin.poosmp.PooSMPMod"
+		],
+		"client": [
+			"embin.poosmp.PooSMPModClient"
+		],
+		"fabric-datagen": [
+			"embin.poosmp.PooSMPModDataGenerator"
+		]
+	},
+	"mixins": [
+		"poosmp.mixins.json",
+		{
+			"config": "poosmp.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": ["1.21-rc1","1.21","1.21.1-rc1","1.21.1"],
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
