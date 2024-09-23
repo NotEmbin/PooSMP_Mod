@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ring_items": {
+      "conditions": {
+        "items": [
+          {
+            "items": ["minecraft:iron_nugget","minecraft:quartz"]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "poosmp:ring"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ring_items"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "poosmp:ring"
+    ]
+  }
+}

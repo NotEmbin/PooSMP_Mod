@@ -16,7 +16,10 @@
   },
   "result": {
     "id": "poosmp:biome_stick",
-    "count": 1
+    "count": 1,
+    "components": {
+      "poosmp:from_creative": false
+    }
   },
   "show_notification": true
 }

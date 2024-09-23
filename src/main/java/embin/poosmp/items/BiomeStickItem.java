@@ -33,6 +33,8 @@ public class BiomeStickItem extends Item {
     public final ComponentType selected_biome_component = PooSMPItemComponents.SELECTED_BIOME;
     public final String default_biome = "minecraft:plains";
     public static final String[] vanilla_biomes = {
+        // used purely for the tooltip and item group
+        // actual biome stick logic does not use this list
         "minecraft:plains",
         "minecraft:forest",
         "minecraft:badlands",
@@ -156,19 +158,19 @@ public class BiomeStickItem extends Item {
                 }
                 String biome_name = cn.convertVanilla(biome).toTranslationKey("biome");
                 String biome_id = cn.convertVanilla(biome).toString();
-                tooltip.add(Text.literal("Selected biome").formatted(Formatting.GREEN).append(":"));
+                tooltip.add(Text.translatable("tooltip.poosmp.selected_biome").formatted(Formatting.GREEN).append(":"));
                 if (Language.getInstance().hasTranslation(biome_name)) {
                     tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(Text.translatable(biome_name)));
                 }
                 tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(biome_id));
                 if (Arrays.stream(vanilla_biomes).noneMatch(biome_id::equals)) {
-                    tooltip.add(Text.literal("Biome might not exist!").formatted(Formatting.RED, Formatting.ITALIC));
+                    tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.not_vanilla").formatted(Formatting.RED, Formatting.ITALIC));
                 }
             } else {
-                tooltip.add(Text.literal("No biome selected!").formatted(Formatting.LIGHT_PURPLE, Formatting.ITALIC));
+                tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.none_selected").formatted(Formatting.LIGHT_PURPLE, Formatting.ITALIC));
             }
         } catch (InvalidIdentifierException e) {
-            tooltip.add(Text.literal("Invalid Biome!").formatted(Formatting.RED));
+            tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.invalid").formatted(Formatting.RED));
             tooltip.add(Text.literal("").formatted(Formatting.RED));
             tooltip.add(Text.literal("InvalidIdentifierException:").formatted(Formatting.RED));
             tooltip.add(Text.literal(e.getMessage()).formatted(Formatting.RED, Formatting.ITALIC));

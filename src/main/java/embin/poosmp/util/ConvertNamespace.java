@@ -8,7 +8,7 @@ public class ConvertNamespace {
 
     public Identifier convert(String namespace, String default_namespace) {
         String name = removeInvalidCharactersFromString(namespace);
-        String[] splitted = name.split(String.valueOf(Identifier.NAMESPACE_SEPARATOR));
+        String[] splitted = name.split(String.valueOf(Identifier.NAMESPACE_SEPARATOR)); // Identifier.NAMESPACE_SEPARATOR = ":"
         if (splitted.length == 1) {
             return Identifier.of(default_namespace, namespace);
         }
@@ -20,7 +20,7 @@ public class ConvertNamespace {
     }
 
     public Identifier convertVanilla(String namespace) {
-        return convert(namespace, Identifier.DEFAULT_NAMESPACE);
+        return convert(namespace, Identifier.DEFAULT_NAMESPACE); // Identifier.DEFAULT_NAMESPACE = "minecraft"
     }
 
     public String removeInvalidCharactersFromString(String namespace) {

@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BoomStickItem extends Item {
+    public static int boom_stick_cooldown = 20;
     public BoomStickItem(Settings settings) {
         super(settings);
     }
@@ -26,9 +27,10 @@ public class BoomStickItem extends Item {
             player_y = user.getPos().getY() - 1;
         }
         user.setInvulnerable(true);
-        world.createExplosion(null, player_x, player_y, player_z, 7.0F, World.ExplosionSourceType.NONE);
+        world.createExplosion(null, player_x, player_y, player_z, 3.5F, World.ExplosionSourceType.NONE);
         user.setInvulnerable(false);
         user.incrementStat(Stats.USED.getOrCreateStat(this));
+        user.getItemCooldownManager().set(this, boom_stick_cooldown);
         return TypedActionResult.success(user.getStackInHand(hand));
     }
 }

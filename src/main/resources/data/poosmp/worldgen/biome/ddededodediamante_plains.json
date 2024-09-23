@@ -1,6 +1,6 @@
 {
-  "temperature": 0.8,
-  "downfall": 0.4,
+  "temperature": 0.85,
+  "downfall": 0.8,
   "has_precipitation": true,
   "creature_spawn_probability": 0.2,
   "effects": {
@@ -14,7 +14,13 @@
       "options": {
         "type": "minecraft:cherry_leaves"
       },
-      "probability": 0.015
+      "probability": 0.01
+    },
+    "music": {
+      "max_delay": 60,
+      "min_delay": 20,
+      "replace_current_music": false,
+      "sound": "minecraft:music.creative"
     }
   },
   "spawners": {

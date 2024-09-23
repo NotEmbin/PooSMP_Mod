@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "#3#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:nether_brick"
+    },
+    "3": {
+      "tag": "poosmp:makes_nether_bricks_red"
+    }
+  },
+  "result": {
+    "id": "poosmp:red_nether_brick",
+    "count": 8
+  },
+  "show_notification": true
+}

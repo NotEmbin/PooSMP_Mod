@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class ZombieStickItem extends Item {
+    public static int zombie_stick_cooldown = 20;
 
     private final String[] henchmen_names = {
         "Goon",
@@ -52,6 +53,7 @@ public class ZombieStickItem extends Item {
         }
 
         user.incrementStat(Stats.USED.getOrCreateStat(this));
+        user.getItemCooldownManager().set(this, zombie_stick_cooldown);
         return TypedActionResult.success(user.getStackInHand(hand));
     }
 }

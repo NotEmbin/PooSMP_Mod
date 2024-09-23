@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "343",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "poosmp:red_nether_brick"
+    },
+    "4": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "3": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "id": "poosmp:totem_of_health",
+    "count": 1,
+    "components": {
+      "!poosmp:from_creative": {}
+    }
+  },
+  "show_notification": true
+}

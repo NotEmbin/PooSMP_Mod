@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 2,
+  "ingredient": {
+    "item": "poosmp:pooplet"
+  },
+  "result": {
+    "id": "poosmp:poop_brick"
+  }
+}
