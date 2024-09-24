@@ -18,7 +18,7 @@
     }
   },
   "result": {
-    "id": "poosmp:warp_stick_stick",
+    "id": "poosmp:warp_stick",
     "count": 1,
     "components": {
       "!poosmp:from_creative": {}
