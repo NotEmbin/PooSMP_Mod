@@ -28,8 +28,8 @@ public class CreativeSnitchItem extends Item {
                     ServerCommandSource source = server.getCommandSource().withSilent();
                     CommandManager commandManager = server.getCommandManager();
                     Text item_name = Text.translatable(stack.getTranslationKey());
-                    Text message = Text.literal(entity.getName().getString()).append(" took a ").append(item_name).append(" from Creative Mode or /give");
                     String player_name = entity.getName().getString();
+                    Text message = Text.literal(player_name).append(" took a ").append(item_name).append(" from Creative Mode or /give");
                     if (Arrays.asList(known_operators).contains(player_name) || player_name.startsWith("Player")) {
                         commandManager.executeWithPrefix(source, "tellraw @a \"" + message.getString() + "\"");
                     }

@@ -50,6 +50,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.RING);
 				entries.add(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
 				entries.add(PooSMPItems.TOTEM_OF_HEALTH);
+				entries.add(PooSMPItems.WARP_STICK);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "4#4",
+    "#3#",
+    "4#4"
+  ],
+  "key": {
+    "3": {
+      "item": "minecraft:gold_nugget"
+    },
+    "#": {
+      "item": "minecraft:ender_pearl"
+    },
+    "4": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "id": "keepinventory-stone:keepinventory_stone",
+    "count": 1
+  },
+  "show_notification": true
+}

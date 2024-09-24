@@ -27,6 +27,9 @@ public class ServerSaysWhatItem extends Item {
         if (customItemName != null) {
             message = customItemName.getString();
         }
+        if (message.contains("testicle") || message.contains("rubbing") || message.contains("Rubbing")) {
+            message = "cubey smells";
+        }
         if (!world.isClient) {
             MinecraftServer server = user.getServer();
             CommandManager commandManager = server.getCommandManager();

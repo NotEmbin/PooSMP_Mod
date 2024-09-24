@@ -3,8 +3,8 @@
   "package": "embin.poosmp.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ExampleMixin",
-    "ItemEntityMixin"
+    "ItemEntityMixin",
+    "TradeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

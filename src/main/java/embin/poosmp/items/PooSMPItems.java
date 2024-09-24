@@ -32,6 +32,7 @@ public class PooSMPItems {
     public static final Item POOPLET = register("pooplet", new Item(new Item.Settings()));
     public static final Item RING = register("ring", new Item(new Item.Settings()));
     public static final Item TOTEM_OF_HEALTH = register("totem_of_health", new CreativeSnitchItem(new Item.Settings().attributeModifiers(healthTotemAttributes()).maxCount(1).rarity(Rarity.UNCOMMON)));
+    public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);

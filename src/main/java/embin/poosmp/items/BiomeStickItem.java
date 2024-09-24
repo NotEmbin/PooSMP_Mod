@@ -101,7 +101,8 @@ public class BiomeStickItem extends Item {
         "minecraft:wooded_badlands",
         "poosmp:ddededodediamante_plains",
         "poosmp:sky_islands",
-        "poosmp:outer_hyrule"
+        "poosmp:outer_hyrule",
+        "poosmp:grasslands"
     };
 
     @Override

@@ -5,7 +5,7 @@
     "settings": "poosmp:modified_overworld",
     "biome_source": {
       "type": "minecraft:fixed",
-      "biome": "poosmp:outer_hyrule"
+      "biome": "poosmp:grasslands"
     }
   }
 }

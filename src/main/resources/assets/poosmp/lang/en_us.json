@@ -27,5 +27,7 @@
 	"block.poosmp.poop_brick_wall":"Poop Brick Wall",
 	"item.poosmp.ring":"Ring",
 	"block.poosmp.red_nether_brick_fence":"Red Nether Brick Fence",
-	"item.poosmp.totem_of_health":"Totem of Health"
+	"item.poosmp.totem_of_health":"Totem of Health",
+	"item.poosmp.warp_stick":"Warp Stick",
+	"biome.poosmp.grasslands":"Grasslands"
 }

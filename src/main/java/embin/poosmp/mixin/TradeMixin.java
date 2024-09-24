@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TradeOffer.class)
-public class ExampleMixin {
+public class TradeMixin {
 	@Shadow private @Final @Mutable int maxUses;
 	@Shadow private int demandBonus;
 	@Inject(at = @At("RETURN"), method = "<init>*")
