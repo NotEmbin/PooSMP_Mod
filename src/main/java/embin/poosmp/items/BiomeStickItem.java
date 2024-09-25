@@ -81,7 +81,7 @@ public class BiomeStickItem extends Item {
         "minecraft:small_end_islands",
         "minecraft:snowy_beach",
         "minecraft:snowy_plains",
-        "minecraft:snowy_slops",
+        "minecraft:snowy_slopes",
         "minecraft:snowy_taiga",
         "minecraft:soul_sand_valley",
         "minecraft:sparse_jungle",
