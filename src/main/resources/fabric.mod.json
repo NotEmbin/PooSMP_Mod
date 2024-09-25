@@ -22,6 +22,9 @@
 		],
 		"fabric-datagen": [
 			"embin.poosmp.PooSMPModDataGenerator"
+		],
+		"preLaunch": [
+			"embin.poosmp.PooSMPPreLaunch"
 		]
 	},
 	"mixins": [

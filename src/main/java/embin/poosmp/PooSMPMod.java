@@ -15,12 +15,15 @@ import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.Unit;
+import net.minecraft.world.gen.densityfunction.DensityFunctionTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 public class PooSMPMod implements ModInitializer {
 	public static final String MOD_ID = "poosmp";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final PooSMPLogFilter filter = new PooSMPLogFilter();
 
 	public static final class PooSMPItemGroups {
 		public static void init() {
@@ -82,6 +85,6 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPItems.init();
 		PooSMPItemComponents.init();
 		PooSMPItemGroups.init();
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("im all pooped up");
 	}
 }
