@@ -16,7 +16,10 @@
   },
   "result": {
     "id": "poosmp:enchanted_totem_of_health",
-    "count": 1
+    "count": 1,
+    "components": {
+      "!poosmp:from_creative": {}
+    }
   },
   "show_notification": true
 }
