@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "#3#",
+    "###"
+  ],
+  "key": {
+    "3": {
+      "item": "poosmp:totem_of_health"
+    },
+    "#": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "id": "poosmp:enchanted_totem_of_health",
+    "count": 1
+  },
+  "show_notification": true
+}

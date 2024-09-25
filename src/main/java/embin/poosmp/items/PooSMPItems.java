@@ -4,6 +4,7 @@ import embin.poosmp.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.ConvertNamespace;
 import net.minecraft.block.jukebox.JukeboxSong;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -34,7 +35,7 @@ public class PooSMPItems {
     public static final Item POOP_BRICK = register("poop_brick", new Item(new Item.Settings()));
     public static final Item POOPLET = register("pooplet", new Item(new Item.Settings()));
     public static final Item RING = register("ring", new Item(new Item.Settings()));
-    public static final Item TOTEM_OF_HEALTH = register("totem_of_health", new CreativeSnitchItem(new Item.Settings().attributeModifiers(healthTotemAttributes()).maxCount(1).rarity(Rarity.UNCOMMON)));
+    public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4), false);
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
     public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.of(cn.convert("poosmp:fill")));
     public static final Item DISC_TRIFECTA_CAP = musicDisc("trifecta_cap", PooSMPJukeboxSongs.TRIFECTA_CAP, "Embin");
@@ -43,8 +44,10 @@ public class PooSMPItems {
     public static final Item DISC_STEREO_MADNESS = musicDisc("stereo_madness", PooSMPJukeboxSongs.STEREO_MADNESS, "a_pc");
     public static final Item DISC_NOT_LIKE_US = musicDisc("not_like_us", PooSMPJukeboxSongs.NOT_LIKE_US, "a_pc");
     public static final Item DISC_RESISTANCE_INSTRUMENTAL = musicDisc("resistance_instrumental", PooSMPJukeboxSongs.RESISTANCE_INSTRUMENTAL, "Embin");
-    public static final Item TOTEM_OF_REACH = register("totem_of_reach", new Item(new Item.Settings().attributeModifiers(reachTotemAttributes()).maxCount(1).rarity(Rarity.UNCOMMON)));
+    public static final Item TOTEM_OF_REACH = totem("reach", reachTotemAttributes(1.0F), false);
     public static final Item BLANK_MUSIC_DISC = register("blank_music_disc", new Item(new Item.Settings()));
+    public static final Item ENCHANTED_TOTEM_OF_REACH = totem("reach", reachTotemAttributes(2.0F), true);
+    public static final Item ENCHANTED_TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(6), true);
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
@@ -56,27 +59,35 @@ public class PooSMPItems {
         return register("music_disc/" + name, new RequestedDiscItem(requester, new Item.Settings().maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(song)));
     }
 
-    public static AttributeModifiersComponent healthTotemAttributes() {
+    private static Item totem(String name, AttributeModifiersComponent attributes, boolean enchanted) {
+        if (enchanted) {
+            return register("enchanted_totem_of_" + name, new CreativeSnitchItem(new Item.Settings().attributeModifiers(attributes).rarity(Rarity.RARE).maxCount(1).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)));
+        } else {
+            return register("totem_of_" + name, new CreativeSnitchItem(new Item.Settings().attributeModifiers(attributes).rarity(Rarity.UNCOMMON).maxCount(1)));
+        }
+    }
+
+    public static AttributeModifiersComponent healthTotemAttributes(int hp) {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.GENERIC_MAX_HEALTH,
             new EntityAttributeModifier(
-                cn.convert("poosmp:health_totem_buff"), 4, EntityAttributeModifier.Operation.ADD_VALUE
+                cn.convert("poosmp:health_totem_buff"), hp, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();
     }
 
-    public static AttributeModifiersComponent reachTotemAttributes() {
+    public static AttributeModifiersComponent reachTotemAttributes(float amount) {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
             new EntityAttributeModifier(
-                cn.convert("poosmp:reach_totem_blocks"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
+                cn.convert("poosmp:reach_totem_blocks"), amount, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).add(
             EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
             new EntityAttributeModifier(
-                cn.convert("poosmp:reach_totem_entities"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
+                cn.convert("poosmp:reach_totem_entities"), amount, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();

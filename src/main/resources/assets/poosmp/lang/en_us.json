@@ -45,5 +45,7 @@
 	"jukebox_song.poosmp.resistance_instrumental": "Muse - Resistance (Instrumental)",
 	"item.poosmp.music_disc.resistance_instrumental": "Music Disc",
 	"item.poosmp.totem_of_reach":"Totem of Reach",
-	"item.poosmp.blank_music_disc":"Blank Music Disc"
+	"item.poosmp.blank_music_disc":"Blank Music Disc",
+	"item.poosmp.enchanted_totem_of_reach":"Enchanted Totem of Reach",
+	"item.poosmp.enchanted_totem_of_health":"Enchanted Totem of Health"
 }

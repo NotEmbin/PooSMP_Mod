@@ -46,7 +46,7 @@ public class WeddingRingItem extends CreativeSnitchItem {
         ).add(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,
             new EntityAttributeModifier(
-                cn.convert("poosmp:wedding_ring_attack_damage"), 10, EntityAttributeModifier.Operation.ADD_VALUE
+                cn.convert("poosmp:wedding_ring_attack_damage"), 8, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).add(

@@ -1,6 +1,9 @@
 {
   "values": [
     "minecraft:totem_of_undying",
-	"poosmp:totem_of_health"
+	"poosmp:totem_of_health",
+	"poosmp:totem_of_reach",
+	"poosmp:enchanted_totem_of_health",
+	"poosmp:enchanted_totem_of_reach"
   ]
 }

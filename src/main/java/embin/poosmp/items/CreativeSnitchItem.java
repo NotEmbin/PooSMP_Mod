@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import java.util.Arrays;
 
 public class CreativeSnitchItem extends Item {
-    public static final String[] known_operators = {"_thecubic_", "lukitagame5"};
+    public static final String[] known_operators = {"_thecubic_", "lukitagame5", "Embin", "whentheapple"};
     public CreativeSnitchItem(Settings settings) {
         super(settings.component(PooSMPItemComponents.FROM_CREATIVE, true));
     }

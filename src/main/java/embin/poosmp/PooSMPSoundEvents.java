@@ -22,6 +22,6 @@ public class PooSMPSoundEvents {
     }
 
     public static void init() {
-        PooSMPMod.LOGGER.info("Registering PooSMP Mod sounds!");
+        PooSMPMod.LOGGER.info("Registering PooSMP Mod sounds! Help me.");
     }
 }
