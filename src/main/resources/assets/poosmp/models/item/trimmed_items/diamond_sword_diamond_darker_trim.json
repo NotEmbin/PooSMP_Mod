@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/diamond_sword",
+    "layer1": "poosmp:trims/items/sword_trim_diamond_darker"
+  }
+}

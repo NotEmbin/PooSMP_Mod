@@ -29,5 +29,7 @@
 	"block.poosmp.red_nether_brick_fence":"Red Nether Brick Fence",
 	"item.poosmp.totem_of_health":"Totem of Health",
 	"item.poosmp.warp_stick":"Warp Stick",
-	"biome.poosmp.grasslands":"Grasslands"
+	"biome.poosmp.grasslands":"Grasslands",
+	"item.poosmp.fill_armor_trim_smithing_template":"Smithing Template",
+	"trim_pattern.poosmp.fill":"Fill Armor Trim"
 }

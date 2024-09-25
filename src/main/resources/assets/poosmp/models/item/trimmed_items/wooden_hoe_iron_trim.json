@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/wooden_hoe",
+    "layer1": "poosmp:trims/items/hoe_trim_iron"
+  }
+}

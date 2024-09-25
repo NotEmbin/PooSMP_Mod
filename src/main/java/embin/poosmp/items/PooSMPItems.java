@@ -9,6 +9,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SmithingTemplateItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
@@ -33,6 +34,7 @@ public class PooSMPItems {
     public static final Item RING = register("ring", new Item(new Item.Settings()));
     public static final Item TOTEM_OF_HEALTH = register("totem_of_health", new CreativeSnitchItem(new Item.Settings().attributeModifiers(healthTotemAttributes()).maxCount(1).rarity(Rarity.UNCOMMON)));
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
+    public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.of(cn.convert("poosmp:fill")));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);

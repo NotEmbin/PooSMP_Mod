@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/stone_pickaxe",
+    "layer1": "poosmp:trims/items/pickaxe_trim_diamond"
+  }
+}

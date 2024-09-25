@@ -1,0 +1,68 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_quartz_trim",
+      "predicate": {
+        "trim_type": 0.1
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_iron_trim",
+      "predicate": {
+        "trim_type": 0.2
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_netherite_trim",
+      "predicate": {
+        "trim_type": 0.3
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_redstone_trim",
+      "predicate": {
+        "trim_type": 0.4
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_copper_trim",
+      "predicate": {
+        "trim_type": 0.5
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_gold_trim",
+      "predicate": {
+        "trim_type": 0.6
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_emerald_trim",
+      "predicate": {
+        "trim_type": 0.7
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_diamond_trim",
+      "predicate": {
+        "trim_type": 0.8
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_lapis_trim",
+      "predicate": {
+        "trim_type": 0.9
+      }
+    },
+    {
+      "model": "poosmp:item/trimmed_items/stone_hoe_amethyst_trim",
+      "predicate": {
+        "trim_type": 1
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "minecraft:item/stone_hoe"
+  }
+}

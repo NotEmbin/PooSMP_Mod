@@ -1,0 +1,8 @@
+{
+  "asset_id": "poosmp:fill",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.poosmp.fill"
+  },
+  "template_item": "poosmp:fill_armor_trim_smithing_template"
+}
