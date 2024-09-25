@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "overrides": [
     {
       "model": "poosmp:item/trimmed_items/golden_shovel_quartz_trim",

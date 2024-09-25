@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "minecraft:item/iron_hoe",
     "layer1": "poosmp:trims/items/hoe_trim_copper"

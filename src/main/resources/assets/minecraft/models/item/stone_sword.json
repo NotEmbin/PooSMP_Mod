@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "overrides": [
     {
       "model": "poosmp:item/trimmed_items/stone_sword_quartz_trim",
