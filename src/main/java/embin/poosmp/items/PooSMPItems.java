@@ -35,7 +35,7 @@ public class PooSMPItems {
     public static final Item POOP_BRICK = register("poop_brick", new Item(new Item.Settings()));
     public static final Item POOPLET = register("pooplet", new Item(new Item.Settings()));
     public static final Item RING = register("ring", new Item(new Item.Settings()));
-    public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4), false);
+    public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4, ""), false);
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
     public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.of(cn.convert("poosmp:fill")));
     public static final Item DISC_TRIFECTA_CAP = musicDisc("trifecta_cap", PooSMPJukeboxSongs.TRIFECTA_CAP, "Embin");
@@ -44,10 +44,10 @@ public class PooSMPItems {
     public static final Item DISC_STEREO_MADNESS = musicDisc("stereo_madness", PooSMPJukeboxSongs.STEREO_MADNESS, "a_pc");
     public static final Item DISC_NOT_LIKE_US = musicDisc("not_like_us", PooSMPJukeboxSongs.NOT_LIKE_US, "a_pc");
     public static final Item DISC_RESISTANCE_INSTRUMENTAL = musicDisc("resistance_instrumental", PooSMPJukeboxSongs.RESISTANCE_INSTRUMENTAL, "Embin");
-    public static final Item TOTEM_OF_REACH = totem("reach", reachTotemAttributes(1.0F), false);
+    public static final Item TOTEM_OF_REACH = totem("reach", reachTotemAttributes(1.0F, ""), false);
     public static final Item BLANK_MUSIC_DISC = register("blank_music_disc", new Item(new Item.Settings()));
-    public static final Item ENCHANTED_TOTEM_OF_REACH = totem("reach", reachTotemAttributes(2.0F), true);
-    public static final Item ENCHANTED_TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(6), true);
+    public static final Item ENCHANTED_TOTEM_OF_REACH = totem("reach", reachTotemAttributes(2.0F, "_enchanted"), true);
+    public static final Item ENCHANTED_TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(6, "_enchanted"), true);
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
@@ -67,27 +67,27 @@ public class PooSMPItems {
         }
     }
 
-    public static AttributeModifiersComponent healthTotemAttributes(int hp) {
+    public static AttributeModifiersComponent healthTotemAttributes(int hp, String id_suffix) {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.GENERIC_MAX_HEALTH,
             new EntityAttributeModifier(
-                cn.convert("poosmp:health_totem_buff"), hp, EntityAttributeModifier.Operation.ADD_VALUE
+                cn.convert("poosmp:health_totem_buff" + id_suffix), hp, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();
     }
 
-    public static AttributeModifiersComponent reachTotemAttributes(float amount) {
+    public static AttributeModifiersComponent reachTotemAttributes(float amount, String id_suffix) {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
             new EntityAttributeModifier(
-                cn.convert("poosmp:reach_totem_blocks"), amount, EntityAttributeModifier.Operation.ADD_VALUE
+                cn.convert("poosmp:reach_totem_blocks" + id_suffix), amount, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).add(
             EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
             new EntityAttributeModifier(
-                cn.convert("poosmp:reach_totem_entities"), amount, EntityAttributeModifier.Operation.ADD_VALUE
+                cn.convert("poosmp:reach_totem_entities" + id_suffix), amount, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();
