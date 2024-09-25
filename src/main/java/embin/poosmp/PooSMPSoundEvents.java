@@ -15,6 +15,7 @@ public class PooSMPSoundEvents {
     public static final SoundEvent MUSIC_DISC_STEREO_MADNESS = registerSound("music_disc.stereo_madness");
     public static final SoundEvent MUSIC_DISC_NOT_LIKE_US = registerSound("music_disc.not_like_us");
     public static final SoundEvent MUSIC_DISC_RESISTANCE_INSTRUMENTAL = registerSound("music_disc.resistance_instrumental");
+    public static final SoundEvent MUSIC_DISC_BLISS_INSTRUMENTAL = registerSound("music_disc.bliss_instrumental");
 
     private static SoundEvent registerSound(String namespace) {
         Identifier id = ConvertNamespace.cn.convert(namespace);

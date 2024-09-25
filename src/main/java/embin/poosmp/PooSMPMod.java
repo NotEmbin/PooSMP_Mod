@@ -65,6 +65,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.BLANK_MUSIC_DISC);
 				entries.add(PooSMPItems.ENCHANTED_TOTEM_OF_HEALTH);
 				entries.add(PooSMPItems.ENCHANTED_TOTEM_OF_REACH);
+				entries.add(PooSMPItems.DISC_BLISS_INSTRUMENTAL);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()

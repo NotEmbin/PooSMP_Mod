@@ -52,5 +52,14 @@
 				"stream":true
 			}
 		]
+	},
+	"music_disc.bliss_instrumental":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/bliss_instrumental",
+				"stream":true
+			}
+		]
 	}
 }

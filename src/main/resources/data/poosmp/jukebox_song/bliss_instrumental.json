@@ -1,0 +1,8 @@
+{
+  "comparator_output": 7,
+  "description": {
+    "translate": "jukebox_song.poosmp.bliss_instrumental"
+  },
+  "length_in_seconds": 275.0,
+  "sound_event": "poosmp:music_disc.bliss_instrumental"
+}

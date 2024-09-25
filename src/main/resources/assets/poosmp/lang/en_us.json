@@ -47,5 +47,7 @@
 	"item.poosmp.totem_of_reach":"Totem of Reach",
 	"item.poosmp.blank_music_disc":"Blank Music Disc",
 	"item.poosmp.enchanted_totem_of_reach":"Enchanted Totem of Reach",
-	"item.poosmp.enchanted_totem_of_health":"Enchanted Totem of Health"
+	"item.poosmp.enchanted_totem_of_health":"Enchanted Totem of Health",
+	"item.poosmp.music_disc.bliss_instrumental":"Music Disc",
+	"jukebox_song.poosmp.bliss_instrumental":"Muse - Bliss (Instrumental)"
 }

@@ -2,7 +2,6 @@ package embin.poosmp;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
-import java.util.List;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
