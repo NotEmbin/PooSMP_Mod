@@ -29,7 +29,7 @@ public class PooSMPMod implements ModInitializer {
 		}
 
 		public static final ItemGroup POOSMP_ITEMS = FabricItemGroup.builder()
-			.icon(() -> new ItemStack(PooSMPBlocks.POOP_BLOCK))
+			.icon(() -> new ItemStack(PooSMPItems.POOPLET))
 			.displayName(Text.literal("PooSMP"))
 			.entries(((displayContext, entries) -> {
 				entries.add(PooSMPBlocks.POOP_BLOCK);
@@ -52,14 +52,22 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.TOTEM_OF_HEALTH);
 				entries.add(PooSMPItems.WARP_STICK);
 				entries.add(PooSMPItems.FILL_ARMOR_TRIM_TEMPLATE);
+				entries.add(PooSMPItems.DISC_TRIFECTA_CAP);
+				entries.add(PooSMPItems.DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL);
+				entries.add(PooSMPItems.DISC_BUDDY_HOLLY);
+				entries.add(PooSMPItems.DISC_STEREO_MADNESS);
+				entries.add(PooSMPItems.DISC_NOT_LIKE_US);
+				entries.add(PooSMPItems.DISC_RESISTANCE_INSTRUMENTAL);
+				entries.add(PooSMPItems.TOTEM_OF_REACH);
+				entries.add(PooSMPItems.BLANK_MUSIC_DISC);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(PooSMPItems.BIOME_STICK))
 			.displayName(Text.literal("PooSMP: Biome Sticks"))
 			.entries((displayContext, entries) -> {
-                for (String vanillaBiome : BiomeStickItem.vanilla_biomes) {
-                    entries.add(PooSMPItems.getBiomeStickStack(vanillaBiome));
+                for (String vanilla_biome : BiomeStickItem.vanilla_biomes) {
+                    entries.add(PooSMPItems.getBiomeStickStack(vanilla_biome));
                 }
 			})
 			.build();
@@ -67,6 +75,7 @@ public class PooSMPMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		PooSMPSoundEvents.init(); // so that music discs actually work
 		PooSMPBlocks.init();
 		PooSMPItems.init();
 		PooSMPItemComponents.init();

@@ -1,0 +1,8 @@
+{
+  "comparator_output": 2,
+  "description": {
+    "translate": "jukebox_song.poosmp.butterflies_and_hurricanes_instrumental"
+  },
+  "length_in_seconds": 300.0,
+  "sound_event": "poosmp:music_disc.butterflies_and_hurricanes_instrumental"
+}

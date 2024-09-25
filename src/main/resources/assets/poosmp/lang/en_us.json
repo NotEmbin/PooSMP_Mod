@@ -31,5 +31,19 @@
 	"item.poosmp.warp_stick":"Warp Stick",
 	"biome.poosmp.grasslands":"Grasslands",
 	"item.poosmp.fill_armor_trim_smithing_template":"Smithing Template",
-	"trim_pattern.poosmp.fill":"Fill Armor Trim"
+	"trim_pattern.poosmp.fill":"Fill Armor Trim",
+	"item.poosmp.music_disc.trifecta_cap":"Music Disc",
+	"item.poosmp.music_disc.butterflies_and_hurricanes_instrumental":"Music Disc",
+	"item.poosmp.music_disc.stereo_madness":"Music Disc",
+	"item.poosmp.music_disc.buddy_holly":"Music Disc",
+	"jukebox_song.poosmp.trifecta_cap":"kayotix - Trifecta Cap",
+	"jukebox_song.poosmp.butterflies_and_hurricanes_instrumental":"Muse - Butterflies and Hurricanes (Instrumental)",
+	"jukebox_song.poosmp.stereo_madness":"Forever Bound - Stereo Madness",
+	"jukebox_song.poosmp.buddy_holly":"Weezer - Buddy Holly",
+	"item.poosmp.music_disc.not_like_us":"Music Disc",
+	"jukebox_song.poosmp.not_like_us":"Kendrick Lamar - Not Like Us",
+	"jukebox_song.poosmp.resistance_instrumental": "Muse - Resistance (Instrumental)",
+	"item.poosmp.music_disc.resistance_instrumental": "Music Disc",
+	"item.poosmp.totem_of_reach":"Totem of Reach",
+	"item.poosmp.blank_music_disc":"Blank Music Disc"
 }

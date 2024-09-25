@@ -3,6 +3,7 @@ package embin.poosmp.items;
 import embin.poosmp.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.ConvertNamespace;
+import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SmithingTemplateItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.Unit;
 
@@ -35,6 +37,14 @@ public class PooSMPItems {
     public static final Item TOTEM_OF_HEALTH = register("totem_of_health", new CreativeSnitchItem(new Item.Settings().attributeModifiers(healthTotemAttributes()).maxCount(1).rarity(Rarity.UNCOMMON)));
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
     public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.of(cn.convert("poosmp:fill")));
+    public static final Item DISC_TRIFECTA_CAP = musicDisc("trifecta_cap", PooSMPJukeboxSongs.TRIFECTA_CAP, "Embin");
+    public static final Item DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL = musicDisc("butterflies_and_hurricanes_instrumental", PooSMPJukeboxSongs.BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL, "Embin");
+    public static final Item DISC_BUDDY_HOLLY = musicDisc("buddy_holly", PooSMPJukeboxSongs.BUDDY_HOLLY, "ianyourgod");
+    public static final Item DISC_STEREO_MADNESS = musicDisc("stereo_madness", PooSMPJukeboxSongs.STEREO_MADNESS, "a_pc");
+    public static final Item DISC_NOT_LIKE_US = musicDisc("not_like_us", PooSMPJukeboxSongs.NOT_LIKE_US, "a_pc");
+    public static final Item DISC_RESISTANCE_INSTRUMENTAL = musicDisc("resistance_instrumental", PooSMPJukeboxSongs.RESISTANCE_INSTRUMENTAL, "Embin");
+    public static final Item TOTEM_OF_REACH = register("totem_of_reach", new Item(new Item.Settings().attributeModifiers(reachTotemAttributes()).maxCount(1).rarity(Rarity.UNCOMMON)));
+    public static final Item BLANK_MUSIC_DISC = register("blank_music_disc", new Item(new Item.Settings()));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
@@ -42,11 +52,31 @@ public class PooSMPItems {
         return stack;
     }
 
+    private static Item musicDisc(String name, RegistryKey<JukeboxSong> song, String requester) {
+        return register("music_disc/" + name, new RequestedDiscItem(requester, new Item.Settings().maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(song)));
+    }
+
     public static AttributeModifiersComponent healthTotemAttributes() {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.GENERIC_MAX_HEALTH,
             new EntityAttributeModifier(
                 cn.convert("poosmp:health_totem_buff"), 4, EntityAttributeModifier.Operation.ADD_VALUE
+            ),
+            AttributeModifierSlot.HAND
+        ).build();
+    }
+
+    public static AttributeModifiersComponent reachTotemAttributes() {
+        return AttributeModifiersComponent.builder().add(
+            EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
+            new EntityAttributeModifier(
+                cn.convert("poosmp:reach_totem_blocks"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
+            ),
+            AttributeModifierSlot.HAND
+        ).add(
+            EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
+            new EntityAttributeModifier(
+                cn.convert("poosmp:reach_totem_entities"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();

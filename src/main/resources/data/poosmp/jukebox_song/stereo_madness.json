@@ -1,0 +1,8 @@
+{
+  "comparator_output": 4,
+  "description": {
+    "translate": "jukebox_song.poosmp.stereo_madness"
+  },
+  "length_in_seconds": 198.0,
+  "sound_event": "poosmp:music_disc.stereo_madness"
+}

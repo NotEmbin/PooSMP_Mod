@@ -1,0 +1,56 @@
+{
+	"music_disc.trifecta_cap":{
+		"category": "record",
+		"sounds": [
+			{
+				"name":"poosmp:records/trifecta_cap",
+				"stream":true
+			}
+		]
+	},
+	"music_disc.butterflies_and_hurricanes_instrumental":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/butterflies_and_hurricanes_instrumental",
+				"stream":true
+			}
+		]
+	},
+	"music_disc.buddy_holly":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/buddy_holly",
+				"stream":true
+			}
+		]
+	},
+	"music_disc.stereo_madness":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/stereo_madness",
+				"stream":true
+			}
+		]
+	},
+	"music_disc.not_like_us":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/not_like_us",
+				"stream":true
+			}
+		]
+	},
+	"music_disc.resistance_instrumental":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/resistance_instrumental",
+				"stream":true
+			}
+		]
+	}
+}

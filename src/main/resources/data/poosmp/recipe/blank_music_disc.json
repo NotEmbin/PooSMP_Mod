@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "#3#",
+    "###"
+  ],
+  "key": {
+    "3": {
+      "item": "minecraft:gold_nugget"
+    },
+    "#": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "id": "poosmp:blank_music_disc",
+    "count": 1
+  },
+  "show_notification": true
+}

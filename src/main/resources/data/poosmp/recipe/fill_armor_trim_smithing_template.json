@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "3#3",
+    "3#3",
+    "333"
+  ],
+  "key": {
+    "3": {
+      "item": "minecraft:copper_ingot"
+    },
+    "#": {
+      "item": "poosmp:diamond_shard"
+    }
+  },
+  "result": {
+    "id": "poosmp:fill_armor_trim_smithing_template",
+    "count": 1
+  },
+  "show_notification": true
+}
