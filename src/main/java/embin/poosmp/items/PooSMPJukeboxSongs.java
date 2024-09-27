@@ -17,4 +17,7 @@ public interface PooSMPJukeboxSongs {
     RegistryKey<JukeboxSong> NOT_LIKE_US = of("not_like_us");
     RegistryKey<JukeboxSong> RESISTANCE_INSTRUMENTAL = of("resistance_instrumental");
     RegistryKey<JukeboxSong> BLISS_INSTRUMENTAL = of("bliss_instrumental");
+    RegistryKey<JukeboxSong> ENDLESSLY_INSTRUMENTAL = of("endlessly_instrumental");
+    RegistryKey<JukeboxSong> ENDLESSLY = of("endlessly");
+    RegistryKey<JukeboxSong> ENDLESSLY_STEREO = of("endlessly_stereo");
 }

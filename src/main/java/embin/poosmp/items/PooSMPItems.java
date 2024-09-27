@@ -49,6 +49,9 @@ public class PooSMPItems {
     public static final Item ENCHANTED_TOTEM_OF_REACH = totem("reach", reachTotemAttributes(2.0F, "_enchanted"), true);
     public static final Item ENCHANTED_TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(6, "_enchanted"), true);
     public static final Item DISC_BLISS_INSTRUMENTAL = musicDisc("bliss_instrumental", PooSMPJukeboxSongs.BLISS_INSTRUMENTAL, "Embin");
+    public static final Item DISC_ENDLESSLY_INSTRUMENTAL = musicDisc("endlessly_instrumental", PooSMPJukeboxSongs.ENDLESSLY_INSTRUMENTAL, "Embin");
+    public static final Item DISC_ENDLESSLY = musicDisc("endlessly", PooSMPJukeboxSongs.ENDLESSLY, "Embin");
+    public static final Item DISC_ENDLESSLY_STEREO = musicDisc("endlessly_stereo", PooSMPJukeboxSongs.ENDLESSLY_STEREO, "Embin", true);
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
@@ -56,8 +59,12 @@ public class PooSMPItems {
         return stack;
     }
 
+    private static Item musicDisc(String name, RegistryKey<JukeboxSong> song, String requester, boolean stereo) {
+        return register("music_disc/" + name, new RequestedDiscItem(requester, new Item.Settings().maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(song), stereo));
+    }
+
     private static Item musicDisc(String name, RegistryKey<JukeboxSong> song, String requester) {
-        return register("music_disc/" + name, new RequestedDiscItem(requester, new Item.Settings().maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(song)));
+        return musicDisc(name, song, requester, false);
     }
 
     private static Item totem(String name, AttributeModifiersComponent attributes, boolean enchanted) {

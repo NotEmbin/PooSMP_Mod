@@ -66,6 +66,9 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.ENCHANTED_TOTEM_OF_HEALTH);
 				entries.add(PooSMPItems.ENCHANTED_TOTEM_OF_REACH);
 				entries.add(PooSMPItems.DISC_BLISS_INSTRUMENTAL);
+				entries.add(PooSMPItems.DISC_ENDLESSLY_INSTRUMENTAL);
+				entries.add(PooSMPItems.DISC_ENDLESSLY);
+				entries.add(PooSMPItems.DISC_ENDLESSLY_STEREO);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
@@ -75,8 +78,7 @@ public class PooSMPMod implements ModInitializer {
                 for (String vanilla_biome : BiomeStickItem.vanilla_biomes) {
                     entries.add(PooSMPItems.getBiomeStickStack(vanilla_biome));
                 }
-			})
-			.build();
+			}).build();
 	}
 
 	@Override

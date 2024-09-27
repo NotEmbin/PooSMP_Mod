@@ -49,5 +49,11 @@
 	"item.poosmp.enchanted_totem_of_reach":"Enchanted Totem of Reach",
 	"item.poosmp.enchanted_totem_of_health":"Enchanted Totem of Health",
 	"item.poosmp.music_disc.bliss_instrumental":"Music Disc",
-	"jukebox_song.poosmp.bliss_instrumental":"Muse - Bliss (Instrumental)"
+	"jukebox_song.poosmp.bliss_instrumental":"Muse - Bliss (Instrumental)",
+	"jukebox_song.poosmp.endlessly_instrumental":"Muse - Endlessly (Instrumental)",
+	"jukebox_song.poosmp.endlessly":"Muse - Endlessly",
+	"item.poosmp.music_disc.endlessly_instrumental":"Music Disc",
+	"item.poosmp.music_disc.endlessly":"Music Disc",
+	"jukebox_song.poosmp.endlessly_stereo":"Muse - Endlessly (Stereo)",
+	"item.poosmp.music_disc.endlessly_stereo":"Music Disc"
 }

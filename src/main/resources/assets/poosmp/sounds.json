@@ -61,5 +61,32 @@
 				"stream":true
 			}
 		]
+	},
+	"music_disc.endlessly_instrumental":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/endlessly_instrumental",
+				"stream":true
+			}
+		]
+	},
+	"music_disc.endlessly":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:records/endlessly",
+				"stream":true
+			}
+		]
+	},
+	"music_disc.endlessly.stereo":{
+		"category": "record",
+		"sounds":[
+			{
+				"name":"poosmp:stereo/endlessly_stereo",
+				"stream":true
+			}
+		]
 	}
 }
