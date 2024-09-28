@@ -1,6 +1,5 @@
 package embin.poosmp.items;
 
-import embin.poosmp.util.ConvertNamespace;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
