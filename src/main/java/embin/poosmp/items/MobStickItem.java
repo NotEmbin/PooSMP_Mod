@@ -2,7 +2,7 @@ package embin.poosmp.items;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,16 +18,15 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class ZombieStickItem extends Item {
+public class MobStickItem extends Item {
     public static int zombie_stick_cooldown = 20;
+    public final EntityType<MobEntity> mob;
+    public String[] names;
 
-    private final String[] henchmen_names = {
-        "Goon",
-        "Henchman"
-    };
-
-    public ZombieStickItem(Settings settings) {
+    public MobStickItem(Settings settings, EntityType<?> mob, String[] name_list) {
         super(settings);
+        this.mob = (EntityType<MobEntity>) mob;
+        this.names = name_list;
     }
 
     @Override
@@ -38,11 +37,11 @@ public class ZombieStickItem extends Item {
         BlockPos pos = BlockPos.ofFloored(player_x, player_y, player_z);
 
         if (!world.isClient) {
-            ZombieEntity mob = EntityType.ZOMBIE.spawn(world.getServer().getWorld(world.getRegistryKey()), pos, SpawnReason.COMMAND);
+            MobEntity mob = this.mob.spawn(world.getServer().getWorld(world.getRegistryKey()), pos, SpawnReason.COMMAND);
             String zombie_uuid = mob.getUuidAsString();
             String player_uuid = user.getUuidAsString();
             Random random = new Random();
-            mob.setCustomName(Text.literal(user.getName().getString()).append("'s ").append(henchmen_names[random.nextInt(0, henchmen_names.length)]));
+            mob.setCustomName(Text.literal(user.getName().getString()).append("'s ").append(names[random.nextInt(0, names.length)]));
             mob.setCustomNameVisible(true);
             mob.setStackInHand(Hand.OFF_HAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             CommandManager commandManager = world.getServer().getCommandManager();

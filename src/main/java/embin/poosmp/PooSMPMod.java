@@ -46,6 +46,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPBlocks.POOP_BLOCK);
 				entries.add(PooSMPItems.POOP_STICK);
 				entries.add(PooSMPItems.SERVER_SAYS_WHAT_STICK);
+				entries.add(PooSMPItems.BIOME_STICK);
 				entries.add(PooSMPItems.BOOM_STICK);
 				entries.add(PooSMPItems.ZOMBIE_STICK);
 				entries.add(PooSMPItems.DIAMOND_SHARD);

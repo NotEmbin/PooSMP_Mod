@@ -11,14 +11,14 @@
       "tag": "c:rods/wooden"
     },
     "#": {
-      "tag": "c:ingots/copper"
+      "tag": "c:gems/emerald"
     },
     "4": {
-      "item": "poosmp:diamond_shard"
+      "item": "minecraft:netherite_scrap"
     }
   },
   "result": {
-    "id": "poosmp:lightning_stick",
+    "id": "poosmp:villager_stick",
     "count": 1,
     "components": {
       "!poosmp:from_creative": {}

@@ -7,6 +7,7 @@ import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
@@ -16,7 +17,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.Unit;
 
 public class PooSMPItems {
     private static final ConvertNamespace cn = new ConvertNamespace();
@@ -24,11 +24,20 @@ public class PooSMPItems {
         return Registry.register(Registries.ITEM, cn.convert(path), item);
     }
 
+    public static final String[] zombie_names = {
+        "Goon",
+        "Henchman"
+    };
+
+    public static final String[] villager_names = {
+        "Villager"
+    };
+
     public static final Item POOP_STICK = register("poop_stick", new PoopStickItem(new Item.Settings().rarity(Rarity.RARE).fireproof().maxCount(1)));
     public static final Item SERVER_SAYS_WHAT_STICK = register("server_says_what_stick", new ServerSaysWhatItem(new Item.Settings().rarity(Rarity.EPIC).maxCount(1).fireproof()));
     public static final Item BIOME_STICK = register("biome_stick", new BiomeStickItem(new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).component(PooSMPItemComponents.SELECTED_BIOME, "minecraft:plains")));
     public static final Item BOOM_STICK = register("boom_stick", new BoomStickItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).fireproof()));
-    public static final Item ZOMBIE_STICK = register("zombie_stick", new ZombieStickItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item ZOMBIE_STICK = register("zombie_stick", new MobStickItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).fireproof(), EntityType.ZOMBIE, zombie_names));
     public static final Item DIAMOND_SHARD = register("diamond_shard", new Item(new Item.Settings()));
     public static final Item WEDDING_RING = register("wedding_ring", new WeddingRingItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1).fireproof()));
     public static final Item RED_NETHER_BRICK = register("red_nether_brick", new Item(new Item.Settings()));
@@ -52,7 +61,8 @@ public class PooSMPItems {
     public static final Item DISC_ENDLESSLY_INSTRUMENTAL = musicDisc("endlessly_instrumental", PooSMPJukeboxSongs.ENDLESSLY_INSTRUMENTAL, "Embin");
     public static final Item DISC_ENDLESSLY = musicDisc("endlessly", PooSMPJukeboxSongs.ENDLESSLY, "Embin");
     public static final Item DISC_ENDLESSLY_STEREO = musicDisc("endlessly_stereo", PooSMPJukeboxSongs.ENDLESSLY_STEREO, "Embin");
-    public static final Item ZAP_STICK = register("lightning_stick", new ZapStick(new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item ZAP_STICK = register("lightning_stick", new ZapStick(new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON)));
+    public static final Item VILLAGER_STICK = register("villager_stick", new MobStickItem(new Item.Settings().maxCount(1).rarity(Rarity.EPIC), EntityType.VILLAGER, villager_names));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
