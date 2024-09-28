@@ -73,7 +73,10 @@ public class WeddingRingItem extends CreativeSnitchItem {
         super.inventoryTick(stack, world, entity, slot, selected);
         if (!world.isClient) {
             if (entity.isPlayer()) {
-                if (Arrays.asList(allowed_users).contains(entity.getName().getString()) || entity.getName().getString().startsWith("Player")) {
+                if (Arrays.asList(allowed_users).contains(entity.getName().getString())
+                    || entity.getName().getString().startsWith("Player")
+                    || stack.contains(PooSMPItemComponents.FORCE_MARRIED)
+                ) {
                     stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, weddingRingAttributes());
                     stack.set(PooSMPItemComponents.MARRIED, true);
                 } else {

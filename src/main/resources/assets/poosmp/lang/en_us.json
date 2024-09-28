@@ -57,5 +57,8 @@
 	"jukebox_song.poosmp.endlessly_stereo":"Muse - Endlessly (Stereo)",
 	"item.poosmp.music_disc.endlessly_stereo":"Music Disc",
 	"item.poosmp.lightning_stick":"Lightning Stick",
-	"item.poosmp.villager_stick":"Villager Stick"
+	"item.poosmp.villager_stick":"Villager Stick",
+	"tooltip.poosmp.selected_mob":"Mob override",
+	"tooltip.poosmp.selected_mob_names":"Mob names override",
+	"tooltip.poosmp.selected_mob_names.none":"Empty names list!"
 }
