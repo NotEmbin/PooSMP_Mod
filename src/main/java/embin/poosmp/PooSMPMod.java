@@ -69,6 +69,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.DISC_ENDLESSLY_INSTRUMENTAL);
 				entries.add(PooSMPItems.DISC_ENDLESSLY);
 				entries.add(PooSMPItems.DISC_ENDLESSLY_STEREO);
+				entries.add(PooSMPItems.ZAP_STICK);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()

@@ -17,18 +17,20 @@ public class BoomStickItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        double player_x = user.getPos().getX();
-        double player_z = user.getPos().getZ();
-        double player_y;
-        BlockPos pos = BlockPos.ofFloored(player_x, user.getPos().getY() - 1, player_z);
-        if (world.getBlockState(pos).isSolidBlock(world, pos)) {
-            player_y = user.getPos().getY();
-        } else {
-            player_y = user.getPos().getY() - 1;
+        if (!world.isClient) {
+            double player_x = user.getPos().getX();
+            double player_z = user.getPos().getZ();
+            double player_y;
+            BlockPos pos = BlockPos.ofFloored(player_x, user.getPos().getY() - 1, player_z);
+            if (world.getBlockState(pos).isSolidBlock(world, pos)) {
+                player_y = user.getPos().getY();
+            } else {
+                player_y = user.getPos().getY() - 1;
+            }
+            user.setInvulnerable(true);
+            world.createExplosion(null, player_x, player_y, player_z, 3.5F, World.ExplosionSourceType.NONE);
+            user.setInvulnerable(false);
         }
-        user.setInvulnerable(true);
-        world.createExplosion(null, player_x, player_y, player_z, 3.5F, World.ExplosionSourceType.NONE);
-        user.setInvulnerable(false);
         user.incrementStat(Stats.USED.getOrCreateStat(this));
         user.getItemCooldownManager().set(this, boom_stick_cooldown);
         return TypedActionResult.success(user.getStackInHand(hand));
