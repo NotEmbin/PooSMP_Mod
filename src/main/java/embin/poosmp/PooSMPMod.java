@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
@@ -27,8 +28,15 @@ public class PooSMPMod implements ModInitializer {
 
 	public static final class PooSMPItemGroups {
 		public static void init() {
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_biome_sticks"), BIOME_STICKS);
 			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_items"), POOSMP_ITEMS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_biome_sticks"), BIOME_STICKS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_music_discs"), MUSIC_DISCS);
+		}
+
+		public static void add_empty(ItemGroup.Entries entries, int amount) { // it dooo not work sad face
+			for (int i = 0; i < (amount - 1); i++) {
+				entries.add(ItemStack.EMPTY);
+			}
 		}
 
 		public static final ItemGroup POOSMP_ITEMS = FabricItemGroup.builder()
@@ -79,6 +87,22 @@ public class PooSMPMod implements ModInitializer {
                 for (String vanilla_biome : BiomeStickItem.vanilla_biomes) {
                     entries.add(PooSMPItems.getBiomeStickStack(vanilla_biome));
                 }
+			}).build();
+
+		public static final ItemGroup MUSIC_DISCS = FabricItemGroup.builder()
+			.icon(() -> new ItemStack(PooSMPItems.DISC_TRIFECTA_CAP))
+			.displayName(Text.literal("PooSMP: Music Discs"))
+			.entries((displayContext, entries) -> {
+				entries.add(PooSMPItems.DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL);
+				entries.add(PooSMPItems.DISC_RESISTANCE_INSTRUMENTAL);
+				entries.add(PooSMPItems.DISC_BLISS_INSTRUMENTAL);
+				entries.add(PooSMPItems.DISC_ENDLESSLY);
+				entries.add(PooSMPItems.DISC_ENDLESSLY_INSTRUMENTAL);
+				entries.add(PooSMPItems.DISC_ENDLESSLY_STEREO);
+				entries.add(PooSMPItems.DISC_TRIFECTA_CAP);
+				entries.add(PooSMPItems.DISC_BUDDY_HOLLY);
+				entries.add(PooSMPItems.DISC_STEREO_MADNESS);
+				entries.add(PooSMPItems.DISC_NOT_LIKE_US);
 			}).build();
 	}
 

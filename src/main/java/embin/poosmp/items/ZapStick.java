@@ -10,7 +10,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public class ZapStick extends CreativeSnitchItem {
-    public static int zap_stick_cooldown = 20;
+    public static int zap_stick_cooldown = 10;
 
     public ZapStick(Settings settings) {
         super(settings);
