@@ -29,7 +29,11 @@ public class PooSMPItems {
     public static final Item SERVER_SAYS_WHAT_STICK = register("server_says_what_stick", new ServerSaysWhatItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1).fireproof()));
     public static final Item BIOME_STICK = register("biome_stick", new BiomeStickItem(new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).component(PooSMPItemComponents.SELECTED_BIOME, "minecraft:plains")));
     public static final Item BOOM_STICK = register("boom_stick", new BoomStickItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).fireproof()));
-    public static final Item ZOMBIE_STICK = register("zombie_stick", new MobStickItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).fireproof(), EntityType.ZOMBIE, MobStickItem.BuiltInNames.zombie_names));
+    public static final Item ZOMBIE_STICK = register("zombie_stick", new MobStickItem(
+        new Item.Settings().maxCount(1).rarity(Rarity.RARE).fireproof(),
+        EntityType.ZOMBIE,
+        MobStickItem.BuiltInNames.zombie_names, false
+    ));
     public static final Item DIAMOND_SHARD = register("diamond_shard", new Item(new Item.Settings()));
     public static final Item WEDDING_RING = register("wedding_ring", new WeddingRingItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1).fireproof()));
     public static final Item RED_NETHER_BRICK = register("red_nether_brick", new Item(new Item.Settings()));

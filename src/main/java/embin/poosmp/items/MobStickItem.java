@@ -1,12 +1,14 @@
 package embin.poosmp.items;
 
 import embin.poosmp.PooSMPItemComponents;
+import embin.poosmp.PooSMPMod;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
@@ -21,15 +23,22 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
-public class MobStickItem extends Item {
+public class MobStickItem extends CreativeSnitchItem {
     public static int zombie_stick_cooldown = 20;
     public EntityType<MobEntity> mob;
     public String[] names;
-    public RegistryKey<Item> default_offhand_item = RegistryKey.of(RegistryKeys.ITEM, Identifier.ofVanilla("totem_of_undying"));
+
+    public MobStickItem(Settings settings, EntityType<?> mob, String[] name_list, boolean snitch) {
+        super(settings, snitch);
+        this.mob = (EntityType<MobEntity>) mob;
+        this.names = name_list;
+    }
 
     public MobStickItem(Settings settings, EntityType<?> mob, String[] name_list) {
         super(settings);
@@ -68,15 +77,17 @@ public class MobStickItem extends Item {
         }
 
         if (!world.isClient) {
-            Item offhand_item = Registries.ITEM.get(default_offhand_item);
-            if (stack.contains(PooSMPItemComponents.MOB_OFFHAND)) {
-                offhand_item = Registries.ITEM.get(stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, default_offhand_item));
-                if (offhand_item == null) {
-                    offhand_item = Registries.ITEM.get(default_offhand_item);
-                    user.sendMessage(Text.literal("Invalid offhand override item! Using default instead...").formatted(Formatting.RED));
-                }
+            EntityType<MobEntity> default_mob = this.mob;
+            ItemStack offhand_item = stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
+            if (offhand_item == null) {
+                offhand_item = new ItemStack(Items.TOTEM_OF_UNDYING);;
+                user.sendMessage(Text.literal("Invalid offhand override item! Using default instead...").formatted(Formatting.RED));
             }
             MobEntity mob = selected_mob.spawn(world.getServer().getWorld(world.getRegistryKey()), pos, SpawnReason.COMMAND);
+            if (mob == null) {
+                user.sendMessage(Text.literal("Mob override failed because mob is null! Using default instead...").formatted(Formatting.RED));
+                mob = default_mob.spawn(world.getServer().getWorld(world.getRegistryKey()), pos, SpawnReason.COMMAND);
+            }
             String zombie_uuid = mob.getUuidAsString();
             String player_uuid = user.getUuidAsString();
             Random random = new Random();
@@ -88,7 +99,7 @@ public class MobStickItem extends Item {
                 mob.setCustomName(Text.literal(user.getName().getString()).append("'s Mob"));
             }
             mob.setCustomNameVisible(true);
-            mob.setStackInHand(Hand.OFF_HAND, new ItemStack(offhand_item));
+            mob.setStackInHand(Hand.OFF_HAND, offhand_item.copy());
             CommandManager commandManager = world.getServer().getCommandManager();
             ServerCommandSource commandSource = world.getServer().getCommandSource().withSilent();
             commandManager.executeWithPrefix(commandSource, "team add " + player_uuid + " \"" + user.getName().getString() + "\"");
@@ -114,17 +125,37 @@ public class MobStickItem extends Item {
             }
         }
         if (stack.contains(PooSMPItemComponents.MOB_OFFHAND)) {
-            Item item = Registries.ITEM.get(stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, default_offhand_item));
-            tooltip.add(Text.translatable("tooltip.poosmp.selected_mob_offhand_item").append(":").formatted(Formatting.GREEN));
-            if (item != null) {
-                Text name = Text.empty().append(item.getName()).formatted(new ItemStack(item).getRarity().getFormatting());
-                String id = Registries.ITEM.getId(item).toString();
-                tooltip.add(Text.literal(" ").append(name));
-                if (type.isAdvanced()) {
-                    tooltip.add(Text.literal(" ").append(id).formatted(Formatting.DARK_GRAY));
+            ItemStack override_stack = stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
+            if (!(override_stack.getItem() == Items.TOTEM_OF_UNDYING) || override_stack.getCount() != 1) {
+                tooltip.add(Text.translatable("tooltip.poosmp.selected_mob_offhand_item").append(":").formatted(Formatting.GREEN));
+                if (override_stack != null) {
+                    Formatting item_rarity = override_stack.getRarity().getFormatting();
+                    Text name = Text.empty().append(override_stack.getName()).formatted(item_rarity);
+                    if (override_stack.getCount() > 1) {
+                        name = Text.empty().append(name).append(" x").append(String.valueOf(override_stack.getCount())).formatted(Formatting.GRAY);
+                    }
+                    String id = Registries.ITEM.getId(override_stack.getItem()).toString();
+                    tooltip.add(Text.literal(" ").append(name));
+                    if (type.isAdvanced()) {
+                        tooltip.add(Text.literal(" ").append(id).formatted(Formatting.DARK_GRAY));
+                        if (!override_stack.isEmpty()) {
+                            int component_count = override_stack.getComponents().size();
+                            if (PooSMPMod.componentless_installed) {
+                                int component_base = override_stack.getItem().getComponents().size();
+                                int component_diff = component_count - component_base;
+                                String component_display = String.valueOf(component_diff);
+                                if (!component_display.startsWith("-")) component_display = "+" + component_diff;
+                                if (component_diff != 0) {
+                                    tooltip.add(Text.literal(" ").append(Text.translatable("item.components", component_display)).formatted(Formatting.DARK_GRAY));
+                                }
+                            } else {
+                                tooltip.add(Text.literal(" ").append(Text.translatable("item.components", component_count)).formatted(Formatting.DARK_GRAY));
+                            }
+                        }
+                    }
+                } else {
+                    tooltip.add(Text.literal(" ").append(Text.translatable("tooltip.poosmp.selected_mob_offhand_item.invalid")).formatted(Formatting.RED));
                 }
-            } else {
-                tooltip.add(Text.literal(" ").append(Text.translatable("tooltip.poosmp.selected_mob_offhand_item.invalid")).formatted(Formatting.RED));
             }
         }
         if (stack.contains(PooSMPItemComponents.MOB_NAMES)) {
@@ -147,6 +178,93 @@ public class MobStickItem extends Item {
 
         public static final String[] villager_names = {
             "Villager"
+        };
+    }
+
+    public static final class Stack {
+        public static ItemStack getMobStick(EntityType<MobEntity> mob) {
+            ItemStack stack = new ItemStack(PooSMPItems.ZOMBIE_STICK);
+            stack.set(PooSMPItemComponents.MOB_OVERRIDE, mob);
+            return stack;
+        }
+
+        public static final EntityType<?>[] mob_list = {
+            EntityType.PIG,
+            EntityType.COW,
+            EntityType.SHEEP,
+            EntityType.CHICKEN,
+            EntityType.CREEPER,
+            EntityType.SKELETON,
+            EntityType.SPIDER,
+            EntityType.WITCH,
+            EntityType.IRON_GOLEM,
+            EntityType.CAVE_SPIDER,
+            EntityType.BOGGED,
+            EntityType.HUSK,
+            EntityType.STRAY,
+            EntityType.DROWNED,
+            EntityType.WITHER_SKELETON,
+            EntityType.ZOMBIE_VILLAGER,
+            EntityType.ZOMBIFIED_PIGLIN,
+            EntityType.PIGLIN,
+            EntityType.PIGLIN_BRUTE,
+            EntityType.HOGLIN,
+            EntityType.ZOGLIN,
+            EntityType.BLAZE,
+            EntityType.BREEZE,
+            EntityType.ALLAY,
+            EntityType.ARMADILLO,
+            EntityType.AXOLOTL,
+            EntityType.BAT,
+            EntityType.BEE,
+            EntityType.CAMEL,
+            EntityType.CAT,
+            EntityType.OCELOT,
+            EntityType.PANDA,
+            EntityType.PARROT,
+            EntityType.PILLAGER,
+            EntityType.VINDICATOR,
+            EntityType.EVOKER,
+            EntityType.COD,
+            EntityType.SALMON,
+            EntityType.TROPICAL_FISH,
+            EntityType.SQUID,
+            EntityType.GLOW_SQUID,
+            EntityType.DOLPHIN,
+            EntityType.GUARDIAN,
+            EntityType.ELDER_GUARDIAN,
+            EntityType.HORSE,
+            EntityType.DONKEY,
+            EntityType.MULE,
+            EntityType.SKELETON_HORSE,
+            EntityType.ZOMBIE_HORSE,
+            EntityType.GIANT,
+            EntityType.ENDERMAN,
+            EntityType.ENDERMITE,
+            EntityType.SHULKER,
+            EntityType.FOX,
+            EntityType.FROG,
+            EntityType.GHAST,
+            EntityType.GOAT,
+            EntityType.SNOW_GOLEM,
+            EntityType.LLAMA,
+            EntityType.TRADER_LLAMA,
+            EntityType.PUFFERFISH,
+            EntityType.WANDERING_TRADER,
+            EntityType.SLIME,
+            EntityType.MAGMA_CUBE,
+            EntityType.WOLF,
+            EntityType.MOOSHROOM,
+            EntityType.RABBIT,
+            EntityType.RAVAGER,
+            EntityType.PHANTOM,
+            EntityType.POLAR_BEAR,
+            EntityType.SILVERFISH,
+            EntityType.TADPOLE,
+            EntityType.SNIFFER,
+            EntityType.STRIDER,
+            EntityType.TURTLE,
+            EntityType.PLAYER
         };
     }
 }

@@ -2,13 +2,18 @@ package embin.poosmp;
 
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.BiomeStickItem;
+import embin.poosmp.items.MobStickItem;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.util.ConvertNamespace;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
@@ -19,12 +24,14 @@ public class PooSMPMod implements ModInitializer {
 	public static final String MOD_ID = "poosmp";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final PooSMPLogFilter filter = new PooSMPLogFilter();
+	public static final boolean componentless_installed = FabricLoader.getInstance().isModLoaded("componentless");
 
 	public static final class PooSMPItemGroups {
 		public static void init() {
 			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_items"), POOSMP_ITEMS);
 			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_biome_sticks"), BIOME_STICKS);
 			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_music_discs"), MUSIC_DISCS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_mob_sticks"), MOB_STICKS);
 		}
 
 		public static void add_empty(ItemGroup.Entries entries, int amount) { // it dooo not work sad face
@@ -101,6 +108,15 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.DISC_BUDDY_HOLLY);
 				entries.add(PooSMPItems.DISC_STEREO_MADNESS);
 				entries.add(PooSMPItems.DISC_NOT_LIKE_US);
+			}).build();
+
+		public static final ItemGroup MOB_STICKS = FabricItemGroup.builder()
+			.icon(() -> new ItemStack(Items.ZOMBIE_HEAD))
+			.displayName(Text.literal("PooSMP: Mob Sticks"))
+			.entries((displayContext, entries) -> {
+				for (EntityType<?> entity : MobStickItem.Stack.mob_list) {
+					entries.add(MobStickItem.Stack.getMobStick((EntityType<MobEntity>) entity));
+				}
 			}).build();
 	}
 

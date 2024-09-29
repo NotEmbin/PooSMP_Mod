@@ -9,14 +9,19 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
 public class CreativeSnitchItem extends Item {
     public static final String[] known_operators = {"_thecubic_", "lukitagame5", "Embin", "whentheapple"};
+    public CreativeSnitchItem(Settings settings, boolean snitch) {
+        super(settings);
+    }
     public CreativeSnitchItem(Settings settings) {
         super(settings.component(PooSMPItemComponents.FROM_CREATIVE, true));
     }
+
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
