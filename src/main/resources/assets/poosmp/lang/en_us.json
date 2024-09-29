@@ -60,5 +60,8 @@
 	"item.poosmp.villager_stick":"Villager Stick",
 	"tooltip.poosmp.selected_mob":"Mob override",
 	"tooltip.poosmp.selected_mob_names":"Mob names override",
-	"tooltip.poosmp.selected_mob_names.none":"Empty names list!"
+	"tooltip.poosmp.selected_mob_names.none":"Empty names list!",
+	"block.poosmp.im_gonna_kill_myself":"Sussy Amongus Impostoros Sussy Rizz Block",
+	"block.poosmp.ddededodediamante_block":"Block of ddededodediamante",
+	"block.poosmp.ddededodediamante_block.desc":"He loves everyone!"
 }

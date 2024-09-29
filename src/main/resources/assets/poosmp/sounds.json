@@ -88,5 +88,19 @@
 				"stream":true
 			}
 		]
+	},
+	"sus":{
+		"sounds":[
+			{
+				"name":"poosmp:kratos_scream",
+				"weight":5,
+				"volume":1.0
+			},
+			{
+				"name":"poosmp:mariofunny",
+				"weight":2,
+				"volume":3.0
+			}
+		]
 	}
 }
