@@ -7,6 +7,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -55,5 +56,11 @@ public class PooSMPItemComponents {
         Registries.DATA_COMPONENT_TYPE,
         cn.convert("mob_stick_names_override"),
         ComponentType.<List<String>>builder().codec(Codec.STRING.listOf()).build()
+    );
+
+    public static final ComponentType<RegistryKey<Item>> MOB_OFFHAND = Registry.register(
+        Registries.DATA_COMPONENT_TYPE,
+        cn.convert("mob_offhand_item_override"),
+        ComponentType.<RegistryKey<Item>>builder().codec(RegistryKey.createCodec(Registries.ITEM.getKey())).build()
     );
 }

@@ -7,19 +7,13 @@ import embin.poosmp.util.ConvertNamespace;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.Unit;
-import net.minecraft.world.gen.densityfunction.DensityFunctionTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 public class PooSMPMod implements ModInitializer {
 	public static final String MOD_ID = "poosmp";

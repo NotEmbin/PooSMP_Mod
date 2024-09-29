@@ -83,6 +83,9 @@ public class WeddingRingItem extends CreativeSnitchItem {
                     stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, weddingRingPublicAttributes());
                     stack.set(PooSMPItemComponents.MARRIED, false);
                 }
+            } else {
+                stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, weddingRingAttributes());
+                stack.set(PooSMPItemComponents.MARRIED, true);
             }
         }
     }

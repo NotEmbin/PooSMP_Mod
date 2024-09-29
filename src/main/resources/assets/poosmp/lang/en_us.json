@@ -63,5 +63,9 @@
 	"tooltip.poosmp.selected_mob_names.none":"Empty names list!",
 	"block.poosmp.im_gonna_kill_myself":"Sussy Amongus Impostoros Sussy Rizz Block",
 	"block.poosmp.ddededodediamante_block":"Block of ddededodediamante",
-	"block.poosmp.ddededodediamante_block.desc":"He loves everyone!"
+	"block.poosmp.ddededodediamante_block.desc":"He loves everyone!",
+	"item.poosmp.cube_pottery_sherd":"Cube Pottery Sherd",
+	"item.poosmp.poo_pottery_sherd":"Poo Pottery Sherd",
+	"tooltip.poosmp.selected_mob_offhand_item":"Offhand item override",
+	"tooltip.poosmp.selected_mob_offhand_item.invalid":"Invalid item!"
 }

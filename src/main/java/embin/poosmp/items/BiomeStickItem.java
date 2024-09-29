@@ -162,8 +162,12 @@ public class BiomeStickItem extends Item {
                 tooltip.add(Text.translatable("tooltip.poosmp.selected_biome").formatted(Formatting.GREEN).append(":"));
                 if (Language.getInstance().hasTranslation(biome_name)) {
                     tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(Text.translatable(biome_name)));
+                    if (type.isAdvanced()) {
+                        tooltip.add(Text.literal(" ").formatted(Formatting.DARK_GRAY).append(biome_id));
+                    }
+                } else {
+                    tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(biome_id));
                 }
-                tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(biome_id));
                 if (Arrays.stream(vanilla_biomes).noneMatch(biome_id::equals)) {
                     tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.not_vanilla").formatted(Formatting.RED, Formatting.ITALIC));
                 }
