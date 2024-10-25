@@ -6,17 +6,15 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.item.Item;
 
 public class PooSMPTags {
-    private static final ConvertNamespace cn = new ConvertNamespace();
-
     public static class Blocks {
         private static TagKey<Block> createTag(String name) {
-            return TagKey.of(RegistryKeys.BLOCK, cn.convert(name));
+            return TagKey.of(RegistryKeys.BLOCK, ConvertNamespace.convert(name));
         }
     }
 
     public static class Items {
         private static TagKey<Item> createTag(String name) {
-            return TagKey.of(RegistryKeys.ITEM, cn.convert(name));
+            return TagKey.of(RegistryKeys.ITEM, ConvertNamespace.convert(name));
         }
 
         public static final TagKey<Item> TOTEMS = createTag("poosmp:totems");

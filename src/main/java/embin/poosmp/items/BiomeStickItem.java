@@ -27,10 +27,8 @@ public class BiomeStickItem extends Item {
     public BiomeStickItem(Settings settings) {
         super(settings);
     }
-    private static final ConvertNamespace cn = new ConvertNamespace();
-    public static final int biome_stick_cooldown = 5;
-    public final int radius = 8;
-    public final ComponentType selected_biome_component = PooSMPItemComponents.SELECTED_BIOME;
+    public static final int default_radius = 8;
+    public final ComponentType<String> selected_biome_component = PooSMPItemComponents.SELECTED_BIOME;
     public final String default_biome = "minecraft:plains";
     public static final String[] vanilla_biomes = {
         // used purely for the tooltip and item group
@@ -110,12 +108,13 @@ public class BiomeStickItem extends Item {
         ItemStack stack = user.getStackInHand(hand);
         try {
             if (stack.contains(selected_biome_component) || stack.contains(DataComponentTypes.CUSTOM_NAME)) {
+                int radius = stack.getOrDefault(PooSMPItemComponents.BIOME_STICK_RADIUS_OVERRIDE, default_radius);
                 DynamicRegistryManager registryManager = world.getRegistryManager();
-                String biome_id = cn.convertVanilla(cn.removeInvalidCharactersFromString(stack.getOrDefault(selected_biome_component, default_biome))).toString();
+                String biome_id = ConvertNamespace.convertVanilla(ConvertNamespace.removeInvalidCharactersFromString(stack.getOrDefault(selected_biome_component, default_biome))).toString();
                 if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                    biome_id = cn.convertVanilla(cn.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString())).toString();
+                    biome_id = ConvertNamespace.convertVanilla(ConvertNamespace.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString())).toString();
                 }
-                if (registryManager.get(RegistryKeys.BIOME).containsId(cn.convertVanilla(biome_id))) {
+                if (registryManager.get(RegistryKeys.BIOME).containsId(ConvertNamespace.convertVanilla(biome_id))) {
                     if (!world.isClient) {
                         MinecraftServer server = user.getServer();
                         CommandManager commandManager = server.getCommandManager();
@@ -145,7 +144,7 @@ public class BiomeStickItem extends Item {
             }
         }
         user.incrementStat(Stats.USED.getOrCreateStat(this));
-        user.getItemCooldownManager().set(this, biome_stick_cooldown);
+        user.getItemCooldownManager().set(this, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 5));
         return TypedActionResult.success(user.getStackInHand(hand));
     }
 
@@ -155,10 +154,10 @@ public class BiomeStickItem extends Item {
             if (stack.contains(selected_biome_component) || stack.contains(DataComponentTypes.CUSTOM_NAME)) {
                 String biome = stack.getOrDefault(selected_biome_component, default_biome);
                 if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                    biome = cn.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString());
+                    biome = ConvertNamespace.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString());
                 }
-                String biome_name = cn.convertVanilla(biome).toTranslationKey("biome");
-                String biome_id = cn.convertVanilla(biome).toString();
+                String biome_name = ConvertNamespace.convertVanilla(biome).toTranslationKey("biome");
+                String biome_id = ConvertNamespace.convertVanilla(biome).toString();
                 tooltip.add(Text.translatable("tooltip.poosmp.selected_biome").formatted(Formatting.GREEN).append(":"));
                 if (Language.getInstance().hasTranslation(biome_name)) {
                     tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(Text.translatable(biome_name)));

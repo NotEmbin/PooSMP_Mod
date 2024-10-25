@@ -7,7 +7,7 @@ import net.minecraft.registry.RegistryKeys;
 
 public interface PooSMPJukeboxSongs {
     private static RegistryKey<JukeboxSong> of (String namespace) {
-        return RegistryKey.of(RegistryKeys.JUKEBOX_SONG, ConvertNamespace.cn.convert(namespace));
+        return RegistryKey.of(RegistryKeys.JUKEBOX_SONG, ConvertNamespace.convert(namespace));
     }
 
     RegistryKey<JukeboxSong> TRIFECTA_CAP = of("trifecta_cap");

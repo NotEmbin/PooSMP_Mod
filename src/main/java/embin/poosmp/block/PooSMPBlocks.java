@@ -14,8 +14,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 public class PooSMPBlocks {
-    private static final ConvertNamespace cn = new ConvertNamespace();
-
     public static final Block POOP_BLOCK = register("poop_block", new Block(copyBlock(Blocks.MUD).mapColor(DyeColor.BROWN)));
     public static final Block MISSINGNO_BLOCK = register("missingno", new Block(AbstractBlock.Settings.create().requiresTool().mapColor(DyeColor.MAGENTA).strength(1.5F)), new Item.Settings().rarity(Rarity.EPIC));
     public static final Block POOP_BRICKS = register("poop_bricks", new Block(copyBlock(Blocks.MUD_BRICKS).mapColor(MapColor.ORANGE)));
@@ -25,10 +23,11 @@ public class PooSMPBlocks {
     public static final Block RED_NETHER_BRICK_FENCE = register("red_nether_brick_fence", new FenceBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_RED).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F).sounds(BlockSoundGroup.NETHER_BRICKS)));
     public static final Block SUS = register("im_gonna_kill_myself", new SussyBlock(AbstractBlock.Settings.create().mapColor(DyeColor.RED).strength(1.0F)));
     public static final Block DDEDEDODEDIAMANTE_BLOCK = register("ddededodediamante_block", new ddededodediamanteBlock(AbstractBlock.Settings.create().mapColor(DyeColor.MAGENTA).strength(1.0F)));
+    public static final Block PENIS_BLOCK = register("minecraft:penis", new GrassBlock(copyBlock(Blocks.GRASS_BLOCK)));
 
 
     public static Block register(Block block, String name, Item.Settings settings, boolean should_register_item) {
-        Identifier id = cn.convert(name);
+        Identifier id = ConvertNamespace.convert(name);
         if (should_register_item) {
             BlockItem blockItem = new BlockItem(block, settings);
             Registry.register(Registries.ITEM, id, blockItem);

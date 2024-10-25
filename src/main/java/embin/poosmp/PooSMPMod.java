@@ -8,10 +8,12 @@ import embin.poosmp.util.ConvertNamespace;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
@@ -28,12 +30,14 @@ public class PooSMPMod implements ModInitializer {
 
 	public static final class PooSMPItemGroups {
 		public static void init() {
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_items"), POOSMP_ITEMS);
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_biome_sticks"), BIOME_STICKS);
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_music_discs"), MUSIC_DISCS);
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.cn.convert("poosmp_mob_sticks"), MOB_STICKS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_items"), POOSMP_ITEMS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_biome_sticks"), BIOME_STICKS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_music_discs"), MUSIC_DISCS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_mob_sticks"), MOB_STICKS);
+			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_money"), MONEY);
 		}
 
+		@Deprecated
 		public static void add_empty(ItemGroup.Entries entries, int amount) { // it dooo not work sad face
 			for (int i = 0; i < (amount - 1); i++) {
 				entries.add(ItemStack.EMPTY);
@@ -118,6 +122,24 @@ public class PooSMPMod implements ModInitializer {
 					entries.add(MobStickItem.Stack.getMobStick((EntityType<MobEntity>) entity));
 				}
 			}).build();
+
+		public static final ItemGroup MONEY = FabricItemGroup.builder()
+			.icon(() -> new ItemStack(PooSMPItems.ONE_DOLLAR_BILL))
+			.displayName(Text.literal("PooSMP: Money"))
+			.entries((displayContext, entries) -> {
+				entries.add(PooSMPItems.ONE_DOLLAR_BILL);
+				entries.add(PooSMPItems.TWO_DOLLAR_BILL);
+				entries.add(PooSMPItems.FIVE_DOLLAR_BILL);
+				entries.add(PooSMPItems.TEN_DOLLAR_BILL);
+				entries.add(PooSMPItems.TWENTY_FIVE_DOLLAR_BILL);
+				entries.add(PooSMPItems.FIFTY_DOLLAR_BILL);
+				entries.add(PooSMPItems.HUNDRED_DOLLAR_BILL);
+				entries.add(PooSMPItems.ONE_CENT_COIN);
+				entries.add(PooSMPItems.FIVE_CENT_COIN);
+				entries.add(PooSMPItems.TEN_CENT_COIN);
+				entries.add(PooSMPItems.TWENTY_FIVE_CENT_COIN);
+				entries.add(PooSMPItems.ONE_DOLLAR_COIN);
+			}).build();
 	}
 
 	@Override
@@ -127,6 +149,9 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPItems.init();
 		PooSMPItemComponents.init();
 		PooSMPItemGroups.init();
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
+			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
+		});
 		LOGGER.info("im all pooped up");
 	}
 }

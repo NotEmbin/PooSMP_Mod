@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
 	"id": "poosmp",
-	"version": "3.0.0",
+	"version": "${version}",
 	"name": "PooSMP Mod",
-	"description": "The Official Poo SMP Mod. Gay.",
+	"description": "The Official PooSMP Mod. Gay.",
 	"authors": [
 		"Embin"
 	],
@@ -36,7 +36,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",
-		"minecraft": ["1.21-rc1","1.21","1.21.1-rc1","1.21.1"],
+		"minecraft": ["1.21-rc.1","1.21","1.21.1-rc.1","1.21.1"],
 		"java": ">=21",
 		"fabric-api": "*"
 	},

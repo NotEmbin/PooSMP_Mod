@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemEntity.class)
 public class ItemEntityMixin {
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
-    public void damageMixin(DamageSource source, float amount, CallbackInfoReturnable cl) {
+    public void damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cl) {
         if (source.isIn(DamageTypeTags.IS_EXPLOSION)) {
             cl.setReturnValue(false);
         }

@@ -22,7 +22,7 @@ public class PooSMPSoundEvents {
     public static final SoundEvent SUS = registerSound("sus");
 
     private static SoundEvent registerSound(String namespace) {
-        Identifier id = ConvertNamespace.cn.convert(namespace);
+        Identifier id = ConvertNamespace.convert(namespace);
         return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
     }
 

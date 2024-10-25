@@ -14,8 +14,8 @@ public class PooSMPPotteryPatterns {
     }
 
     private static DecoratedPotPattern register(String name) {
-        Identifier pot_id = ConvertNamespace.cn.convert(name);
-        Identifier pot_pattern_id = ConvertNamespace.cn.convert(name + "_pottery_pattern");
+        Identifier pot_id = ConvertNamespace.convert(name);
+        Identifier pot_pattern_id = ConvertNamespace.convert(name + "_pottery_pattern");
         return Registry.register(Registries.DECORATED_POT_PATTERN, pot_id, new DecoratedPotPattern(pot_pattern_id));
     }
 

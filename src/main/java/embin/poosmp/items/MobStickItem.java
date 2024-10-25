@@ -6,31 +6,24 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class MobStickItem extends CreativeSnitchItem {
-    public static int zombie_stick_cooldown = 20;
     public EntityType<MobEntity> mob;
     public String[] names;
 
@@ -108,7 +101,7 @@ public class MobStickItem extends CreativeSnitchItem {
         }
 
         user.incrementStat(Stats.USED.getOrCreateStat(this));
-        user.getItemCooldownManager().set(this, zombie_stick_cooldown);
+        user.getItemCooldownManager().set(this, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 20));
         return TypedActionResult.success(user.getStackInHand(hand));
     }
 
@@ -263,8 +256,7 @@ public class MobStickItem extends CreativeSnitchItem {
             EntityType.TADPOLE,
             EntityType.SNIFFER,
             EntityType.STRIDER,
-            EntityType.TURTLE,
-            EntityType.PLAYER
+            EntityType.TURTLE
         };
     }
 }

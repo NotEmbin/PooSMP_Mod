@@ -11,7 +11,6 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public class WarpStick extends CreativeSnitchItem {
-    private static final ConvertNamespace cn = new ConvertNamespace();
     public static int warp_stick_cooldown = 200;
 
     public WarpStick(Settings settings) {
@@ -29,7 +28,7 @@ public class WarpStick extends CreativeSnitchItem {
             CommandManager commandManager = world.getServer().getCommandManager();
             ServerCommandSource commandSource = world.getServer().getCommandSource().withSilent();
             String player_uuid = user.getUuidAsString();
-            if (user.getEntityWorld().getDimensionEntry().matchesId(cn.convert("poosmp:hyrule"))) {
+            if (user.getEntityWorld().getDimensionEntry().matchesId(ConvertNamespace.convert("poosmp:hyrule"))) {
                 commandManager.executeWithPrefix(commandSource, "execute in minecraft:overworld run tp " + player_uuid + " " + pos);
             } else {
                 commandManager.executeWithPrefix(commandSource, "execute in poosmp:hyrule run tp " + player_uuid + " " + pos);
