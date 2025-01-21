@@ -80,5 +80,7 @@
 	"item.poosmp.ten_cent_coin": "Dime",
 	"item.poosmp.twenty_five_cent_coin": "Quarter",
 	"item.poosmp.one_dollar_coin": "One Dollar Coin",
-	"block.minecraft.penis": "The Penis"
+	"block.minecraft.penis": "The Penis",
+	"entity.minecraft.villager.banker": "Banker",
+	"block.poosmp.bankers_table": "Banker's Table"
 }

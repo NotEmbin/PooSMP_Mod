@@ -5,6 +5,9 @@ import embin.poosmp.items.BiomeStickItem;
 import embin.poosmp.items.MobStickItem;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.TradeConstructors;
+import embin.poosmp.villager.PooSMPPoi;
+import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -87,6 +90,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.VILLAGER_STICK);
 				entries.add(PooSMPBlocks.SUS);
 				entries.add(PooSMPBlocks.DDEDEDODEDIAMANTE_BLOCK);
+				entries.add(PooSMPItems.COW_STICK);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
@@ -127,6 +131,7 @@ public class PooSMPMod implements ModInitializer {
 			.icon(() -> new ItemStack(PooSMPItems.ONE_DOLLAR_BILL))
 			.displayName(Text.literal("PooSMP: Money"))
 			.entries((displayContext, entries) -> {
+				entries.add(PooSMPBlocks.BANKERS_TABLE);
 				entries.add(PooSMPItems.ONE_DOLLAR_BILL);
 				entries.add(PooSMPItems.TWO_DOLLAR_BILL);
 				entries.add(PooSMPItems.FIVE_DOLLAR_BILL);
@@ -152,6 +157,9 @@ public class PooSMPMod implements ModInitializer {
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
 		});
+		PooSMPPoi.init();
+		PooSMPVillagers.init();
+		TradeConstructors.register_villager_trades();
 		LOGGER.info("im all pooped up");
 	}
 }

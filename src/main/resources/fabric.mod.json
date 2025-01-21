@@ -28,11 +28,7 @@
 		]
 	},
 	"mixins": [
-		"poosmp.mixins.json",
-		{
-			"config": "poosmp.client.mixins.json",
-			"environment": "client"
-		}
+		"poosmp.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",

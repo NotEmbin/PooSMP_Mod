@@ -37,7 +37,7 @@ public class PooSMPItems {
     public static final Item WEDDING_RING = register("wedding_ring", new WeddingRingItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1).fireproof()));
     public static final Item RED_NETHER_BRICK = register("red_nether_brick", new Item(new Item.Settings()));
     public static final Item POOP_BRICK = register("poop_brick", new Item(new Item.Settings()));
-    public static final Item POOPLET = register("pooplet", new Item(new Item.Settings()));
+    public static final Item POOPLET = register("pooplet", new Item(new Item.Settings().food(PooSMPFoods.POOPLET)));
     public static final Item RING = register("ring", new Item(new Item.Settings()));
     public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4, ""), false);
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
@@ -81,6 +81,11 @@ public class PooSMPItems {
     public static final Item FIVE_CENT_COIN = coinItem("five_cent_coin", 5);
     public static final Item TEN_CENT_COIN = coinItem("ten_cent_coin", 10);
     public static final Item TWENTY_FIVE_CENT_COIN = coinItem("twenty_five_cent_coin", 25);
+    public static final Item COW_STICK = register("cow_stick", new MobStickItem(
+        new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).fireproof(),
+        EntityType.COW,
+        MobStickItem.BuiltInNames.no_names, false
+    ));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);

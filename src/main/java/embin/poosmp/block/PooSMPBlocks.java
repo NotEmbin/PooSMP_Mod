@@ -24,6 +24,17 @@ public class PooSMPBlocks {
     public static final Block SUS = register("im_gonna_kill_myself", new SussyBlock(AbstractBlock.Settings.create().mapColor(DyeColor.RED).strength(1.0F)));
     public static final Block DDEDEDODEDIAMANTE_BLOCK = register("ddededodediamante_block", new ddededodediamanteBlock(AbstractBlock.Settings.create().mapColor(DyeColor.MAGENTA).strength(1.0F)));
     public static final Block PENIS_BLOCK = register("minecraft:penis", new GrassBlock(copyBlock(Blocks.GRASS_BLOCK)));
+    public static final Block BANKERS_TABLE = register("bankers_table", new Block(copyBlock(Blocks.FLETCHING_TABLE).mapColor(DyeColor.BROWN)));
+
+    public static final Block PALE_OAK_LOG = register("minecraft:pale_oak_log", new PillarBlock(copyBlock(Blocks.OAK_LOG)));
+    public static final Block PALE_OAK_WOOD = register("minecraft:pale_oak_wood", new PillarBlock(copyBlock(Blocks.OAK_WOOD)));
+    public static final Block STRIPPED_PALE_OAK_LOG = register("minecraft:stripped_pale_oak_log", new PillarBlock(copyBlock(Blocks.STRIPPED_OAK_LOG)));
+    public static final Block STRIPPED_PALE_OAK_WOOD = register("minecraft:stripped_pale_oak_wood", new PillarBlock(copyBlock(Blocks.STRIPPED_OAK_WOOD)));
+    public static final Block PALE_OAK_PLANKS = register("minecraft:pale_oak_planks", new Block(copyBlock(Blocks.OAK_PLANKS)));
+    public static final Block PALE_OAK_LEAVES = register("minecraft:pale_oak_leaves", new LeavesBlock(copyBlock(Blocks.OAK_LEAVES)));
+    public static final Block PALE_OAK_SAPLING = register("minecraft:pale_oak_sapling", new SaplingBlock(, copyBlock(Blocks.OAK_SAPLING)));
+    // public static final Block ITEM_SHOP = register("item_shop", new ItemShopBlock(copyBlock(Blocks.IRON_BLOCK)));
+    // i can't bother with this right now
 
 
     public static Block register(Block block, String name, Item.Settings settings, boolean should_register_item) {

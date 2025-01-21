@@ -4,6 +4,8 @@ import embin.poosmp.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -52,7 +54,7 @@ public class MobStickItem extends CreativeSnitchItem {
             if (stack.contains(PooSMPItemComponents.MOB_OVERRIDE)) {
                 selected_mob = (EntityType<MobEntity>) stack.get(PooSMPItemComponents.MOB_OVERRIDE);
             }
-        } catch (Exception exception) {
+        } catch (ClassCastException exception) {
             if (world.isClient) {
                 user.sendMessage(Text.literal("Mob override failed!").formatted(Formatting.RED));
                 user.sendMessage(Text.literal(exception.toString()).formatted(Formatting.RED));
@@ -84,14 +86,20 @@ public class MobStickItem extends CreativeSnitchItem {
             String zombie_uuid = mob.getUuidAsString();
             String player_uuid = user.getUuidAsString();
             Random random = new Random();
-            try {
-                mob.setCustomName(Text.literal(user.getName().getString()).append("'s ").append(name_list.get(random.nextInt(0, name_list.size()))));
-            } catch (IllegalArgumentException exception) {
-                user.sendMessage(Text.literal("Mob could not be given a custom name!").formatted(Formatting.RED));
-                user.sendMessage(Text.literal(exception.toString()).formatted(Formatting.RED));
-                mob.setCustomName(Text.literal(user.getName().getString()).append("'s Mob"));
+            if (name_list != null) {
+                if (!name_list.isEmpty()) {
+                    try {
+                        mob.setCustomName(Text.literal(user.getName().getString()).append("'s ").append(name_list.get(random.nextInt(0, name_list.size()))));
+                    } catch (IllegalArgumentException exception) {
+                        user.sendMessage(Text.literal("Mob could not be given a custom name!").formatted(Formatting.RED));
+                        user.sendMessage(Text.literal(exception.toString()).formatted(Formatting.RED));
+                        mob.setCustomName(Text.literal(user.getName().getString()).append("'s Mob"));
+                    } catch (NullPointerException exception) {
+                        mob.setCustomName(Text.literal(user.getName().getString()).append("'s Mob"));
+                    }
+                    mob.setCustomNameVisible(true);
+                }
             }
-            mob.setCustomNameVisible(true);
             mob.setStackInHand(Hand.OFF_HAND, offhand_item.copy());
             CommandManager commandManager = world.getServer().getCommandManager();
             ServerCommandSource commandSource = world.getServer().getCommandSource().withSilent();
@@ -172,6 +180,8 @@ public class MobStickItem extends CreativeSnitchItem {
         public static final String[] villager_names = {
             "Villager"
         };
+
+        public static final String[] no_names = {};
     }
 
     public static final class Stack {
@@ -258,5 +268,9 @@ public class MobStickItem extends CreativeSnitchItem {
             EntityType.STRIDER,
             EntityType.TURTLE
         };
+    }
+
+    public static StatusEffectInstance copy(StatusEffectInstance instance) {
+        return new StatusEffectInstance(instance);
     }
 }
