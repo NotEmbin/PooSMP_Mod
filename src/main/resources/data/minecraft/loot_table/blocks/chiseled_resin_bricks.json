@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:pale_moss_carpet"
+          "name": "minecraft:chiseled_resin_bricks"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "minecraft:blocks/pale_moss_carpet"
+  "random_sequence": "minecraft:blocks/chiseled_resin_bricks"
 }

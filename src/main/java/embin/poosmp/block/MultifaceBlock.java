@@ -17,6 +17,7 @@ public class MultifaceBlock extends MultifaceGrowthBlock {
     private static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public MultifaceBlock(Settings settings) {
         super(settings);
+        this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
     }
 
     @Override

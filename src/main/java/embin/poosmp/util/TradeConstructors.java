@@ -31,11 +31,13 @@ public class TradeConstructors {
             factories.add(((entity, random) -> new FromMoney(Items.IRON_INGOT, 1, PooSMPItems.FIVE_DOLLAR_BILL).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.GOLD_INGOT, 1, PooSMPItems.ONE_DOLLAR_BILL, 4).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.DIAMOND, 1, PooSMPItems.FIVE_DOLLAR_BILL, 3).create(entity, random)));
-            factories.add(((entity, random) -> new FromMoney(Items.REDSTONE, 4, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.LAPIS_LAZULI, 4, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.COPPER_INGOT, 12, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
+        });
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.TOOLSMITH, 2, factories -> {
+            factories.add(((entity, random) -> new FromMoney(Items.REDSTONE, 4, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.ONE_DOLLAR_BILL, 75).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 3).create(entity, random)));
-            factories.add(((entity, random) -> new FromMoney(Items.COPPER_INGOT, 12, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
         });
         TradeOfferHelper.registerVillagerOffers(PooSMPVillagers.BANKER, 1, factories -> {
             factories.add(((entity, random) -> new ToMoney(PooSMPItems.ONE_DOLLAR_BILL, 5, PooSMPItems.FIVE_DOLLAR_BILL).create(entity, random)));
@@ -58,6 +60,8 @@ public class TradeConstructors {
             factories.add(((entity, random) -> new ToMoney(Items.GOLD_INGOT, 1, PooSMPItems.ONE_DOLLAR_BILL, 7).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.IRON_INGOT, 1, PooSMPItems.ONE_DOLLAR_BILL, 8).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.IRON_BLOCK, 1, PooSMPItems.ONE_DOLLAR_BILL, 72).create(entity, random)));
+            factories.add(((entity, random) -> new ToMoney(Items.EMERALD, 1, PooSMPItems.ONE_DOLLAR_BILL, 5).create(entity, random)));
+            factories.add(((entity, random) -> new ToMoney(Items.EMERALD, 1, PooSMPItems.FIVE_DOLLAR_BILL, 1).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.DIAMOND, 1, PooSMPItems.ONE_DOLLAR_BILL, 25).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.DIAMOND, 1, PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, 1).create(entity, random)));
         });
@@ -71,7 +75,7 @@ public class TradeConstructors {
         TradeOfferHelper.registerVillagerOffers(PooSMPVillagers.BANKER, 5, factories -> {
             factories.add(((entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.ONE_DOLLAR_BILL, 50).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 2).create(entity, random)));
-            factories.add(((entity, random) -> new ToMoney(Items.ELYTRA, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 5).create(entity, random)));
+            factories.add(((entity, random) -> new ToMoney(Items.ELYTRA, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 8).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.FIFTY_DOLLAR_BILL, 1).create(entity, random)));
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3, factories -> {

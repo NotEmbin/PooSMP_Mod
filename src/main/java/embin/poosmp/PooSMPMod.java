@@ -120,8 +120,10 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPBlocks.RESIN_CLUMP);
 				entries.add(PooSMPItems.RESIN_BRICK);
 				entries.add(PooSMPBlocks.PALE_OAK_SAPLING);
-				entries.add(PooSMPItems.STRANGE_DIAMOND_PICKAXE);
-				entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
+				//entries.add(PooSMPItems.STRANGE_DIAMOND_PICKAXE);
+				//entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
+				//entries.add(PooSMPItems.STRANGE_UPGRADE_SMITHING_TEMPLATE);
+				entries.add(PooSMPBlocks.PALE_OAK_LEAVES);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()

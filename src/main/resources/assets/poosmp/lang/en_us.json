@@ -117,5 +117,7 @@
 	"biome.poosmp.hyrule_castle": "Hyrule Castle",
 	"tooltip.poosmp.blocks_mined": "Blocks Mined: %s",
 	"item.poosmp.strange_diamond_pickaxe": "Strange Diamond Pickaxe",
-	"item.poosmp.strange_netherite_pickaxe": "Strange Netherite Pickaxe"
+	"item.poosmp.strange_netherite_pickaxe": "Strange Netherite Pickaxe",
+	"item.poosmp.strange_upgrade_smithing_template": "Strange Upgrade Smithing Template",
+	"block.minecraft.pale_oak_leaves": "Pale Oak Leaves"
 }
