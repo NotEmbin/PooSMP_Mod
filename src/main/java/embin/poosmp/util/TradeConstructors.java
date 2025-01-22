@@ -1,5 +1,6 @@
 package embin.poosmp.util;
 
+import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
@@ -78,6 +79,21 @@ public class TradeConstructors {
             factories.add(((entity, random) -> new FromMoney(Items.WHEAT, 24, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.CARROT, 28, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.POTATO, 28, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
+        });
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 5, factories -> {
+            factories.add(((entity, random) -> new ToMoney(Items.SHULKER_SHELL, 2, PooSMPItems.HUNDRED_DOLLAR_BILL).create(entity, random)));
+        });
+        TradeOfferHelper.registerWanderingTraderOffers(1, factories -> {
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_MOSS_BLOCK, 8).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.RESIN_CLUMP, 16).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPItems.RESIN_BRICK, 8).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 2, PooSMPBlocks.PALE_OAK_SAPLING, 4).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_HANGING_MOSS, 8).create(entity, random)));
+        });
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 4, factories -> {
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_MOSS_BLOCK, 4).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.RESIN_CLUMP, 8).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_HANGING_MOSS, 4).create(entity, random)));
         });
     }
 

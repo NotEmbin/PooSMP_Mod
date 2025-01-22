@@ -6,6 +6,10 @@
 	"poosmp:poop_brick_slab",
 	"poosmp:red_nether_brick_fence",
 	"poosmp:im_gonna_kill_myself",
-	"poosmp:ddededodediamante_block"
+	"poosmp:ddededodediamante_block",
+	"minecraft:resin_bricks",
+	"minecraft:resin_brick_stairs",
+	"minecraft:resin_brick_slab",
+	"minecraft:resin_brick_wall"
   ]
 }

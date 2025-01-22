@@ -100,7 +100,8 @@ public class BiomeStickItem extends Item {
         "poosmp:ddededodediamante_plains",
         "poosmp:sky_islands",
         "poosmp:outer_hyrule",
-        "poosmp:grasslands"
+        "poosmp:grasslands",
+        "poosmp:hyrule_castle"
     };
 
     @Override

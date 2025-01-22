@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "minecraft:diamond_pickaxe"
+  },
+  "addition": {
+    "item": "minecraft:resin_brick"
+  },
+  "template": {
+    "item": "poosmp:strange_upgrade_smithing_template"
+  },
+  "result": {
+    "id": "poosmp:strange_diamond_pickaxe",
+    "count": 1
+  }
+}

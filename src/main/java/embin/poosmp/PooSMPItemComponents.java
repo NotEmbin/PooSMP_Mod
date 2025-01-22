@@ -81,4 +81,10 @@ public class PooSMPItemComponents {
         ConvertNamespace.convert("biome_stick_radius_override"),
         ComponentType.<Integer>builder().codec(Codec.INT).build()
     );
+
+    public static final ComponentType<Integer> BLOCKS_MINED = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            ConvertNamespace.convert("strange/blocks_mined"),
+            ComponentType.<Integer>builder().codec(Codec.INT).build()
+    );
 }

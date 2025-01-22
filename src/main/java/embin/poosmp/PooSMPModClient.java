@@ -1,5 +1,6 @@
 package embin.poosmp;
 
+import embin.poosmp.block.PooSMPBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.Blocks;
@@ -25,7 +26,12 @@ public class PooSMPModClient implements ClientModInitializer {
 			Blocks.MAGENTA_CARPET,
 			Blocks.PINK_CARPET,
 			Blocks.MAGENTA_CARPET,
-			Blocks.WHITE_CARPET
+			Blocks.WHITE_CARPET,
+			PooSMPBlocks.PALE_OAK_SAPLING,
+			PooSMPBlocks.PALE_HANGING_MOSS,
+			PooSMPBlocks.RESIN_CLUMP,
+			PooSMPBlocks.PALE_MOSS_CARPET,
+			PooSMPBlocks.POTTED_PALE_OAK_SAPLING
 		);
 	}
 }

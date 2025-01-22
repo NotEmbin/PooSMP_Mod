@@ -22,7 +22,13 @@ public class PooSMPModelProvider extends FabricModelProvider {
         poop_bricks.slab(PooSMPBlocks.POOP_BRICK_SLAB);
         poop_bricks.wall(PooSMPBlocks.POOP_BRICK_WALL);
         red_nether_bricks.fence(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
-        blockStateModelGenerator.registerSimpleCubeAll(PooSMPBlocks.PENIS_BLOCK);
+        //blockStateModelGenerator.registerSimpleCubeAll(PooSMPBlocks.PENIS_BLOCK);
+        blockStateModelGenerator.registerSimpleCubeAll(PooSMPBlocks.RESIN_BLOCK);
+        BlockStateModelGenerator.BlockTexturePool resin_bricks = blockStateModelGenerator.registerCubeAllModelTexturePool(PooSMPBlocks.RESIN_BRICKS);
+        resin_bricks.stairs(PooSMPBlocks.RESIN_BRICK_STAIRS);
+        resin_bricks.slab(PooSMPBlocks.RESIN_BRICK_SLAB);
+        resin_bricks.wall(PooSMPBlocks.RESIN_BRICK_WALL);
+        blockStateModelGenerator.registerSimpleCubeAll(PooSMPBlocks.CHISELED_RESIN_BRICKS);
     }
 
     @Override
@@ -34,11 +40,11 @@ public class PooSMPModelProvider extends FabricModelProvider {
         itemModelGenerator.register(PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, Models.GENERATED);
         itemModelGenerator.register(PooSMPItems.FIFTY_DOLLAR_BILL, Models.GENERATED);
         itemModelGenerator.register(PooSMPItems.HUNDRED_DOLLAR_BILL, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.ONE_CENT_COIN, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.FIVE_CENT_COIN, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.TEN_CENT_COIN, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.TWENTY_FIVE_CENT_COIN, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.ONE_DOLLAR_COIN, Models.GENERATED);
+        //itemModelGenerator.register(PooSMPItems.ONE_CENT_COIN, Models.GENERATED);
+        //itemModelGenerator.register(PooSMPItems.FIVE_CENT_COIN, Models.GENERATED);
+        //itemModelGenerator.register(PooSMPItems.TEN_CENT_COIN, Models.GENERATED);
+        //itemModelGenerator.register(PooSMPItems.TWENTY_FIVE_CENT_COIN, Models.GENERATED);
+        //itemModelGenerator.register(PooSMPItems.ONE_DOLLAR_COIN, Models.GENERATED);
         itemModelGenerator.register(PooSMPItems.BACON_BUCKET, Models.GENERATED);
     }
 }

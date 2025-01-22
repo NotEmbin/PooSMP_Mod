@@ -3,7 +3,9 @@ package embin.poosmp.items;
 import embin.poosmp.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.ConvertNamespace;
+import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.jukebox.JukeboxSong;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -33,12 +35,12 @@ public class PooSMPItems {
         EntityType.ZOMBIE,
         MobStickItem.BuiltInNames.zombie_names, false
     ));
-    public static final Item DIAMOND_SHARD = register("diamond_shard", new Item(new Item.Settings()));
+    public static final Item DIAMOND_SHARD = register("diamond_shard");
     public static final Item WEDDING_RING = register("wedding_ring", new WeddingRingItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1).fireproof()));
-    public static final Item RED_NETHER_BRICK = register("red_nether_brick", new Item(new Item.Settings()));
-    public static final Item POOP_BRICK = register("poop_brick", new Item(new Item.Settings()));
+    public static final Item RED_NETHER_BRICK = register("red_nether_brick");
+    public static final Item POOP_BRICK = register("poop_brick");
     public static final Item POOPLET = register("pooplet", new Item(new Item.Settings().food(PooSMPFoods.POOPLET)));
-    public static final Item RING = register("ring", new Item(new Item.Settings()));
+    public static final Item RING = register("ring");
     public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4, ""), false);
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
     public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.of(ConvertNamespace.convert("poosmp:fill")));
@@ -49,7 +51,7 @@ public class PooSMPItems {
     public static final Item DISC_NOT_LIKE_US = musicDisc("not_like_us", PooSMPJukeboxSongs.NOT_LIKE_US, "a_pc");
     public static final Item DISC_RESISTANCE_INSTRUMENTAL = musicDisc("resistance_instrumental", PooSMPJukeboxSongs.RESISTANCE_INSTRUMENTAL, "Embin");
     public static final Item TOTEM_OF_REACH = totem("reach", reachTotemAttributes(1.0F, ""), false);
-    public static final Item BLANK_MUSIC_DISC = register("blank_music_disc", new Item(new Item.Settings().rarity(Rarity.UNCOMMON)));
+    public static final Item BLANK_MUSIC_DISC = register("blank_music_disc", Rarity.UNCOMMON);
     public static final Item ENCHANTED_TOTEM_OF_REACH = totem("reach", reachTotemAttributes(2.0F, "_enchanted"), true);
     public static final Item ENCHANTED_TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(6, "_enchanted"), true);
     public static final Item DISC_BLISS_INSTRUMENTAL = musicDisc("bliss_instrumental", PooSMPJukeboxSongs.BLISS_INSTRUMENTAL, "Embin");
@@ -76,16 +78,20 @@ public class PooSMPItems {
     public static final Item TWENTY_FIVE_DOLLAR_BILL = moneyItem("twenty_five_dollar_bill", 25);
     public static final Item FIFTY_DOLLAR_BILL = moneyItem("fifty_dollar_bill", 50);
     public static final Item HUNDRED_DOLLAR_BILL = moneyItem("hundred_dollar_bill", 100);
-    public static final Item ONE_DOLLAR_COIN = coinItem("one_dollar_coin", 100);
-    public static final Item ONE_CENT_COIN = coinItem("one_cent_coin", 1);
-    public static final Item FIVE_CENT_COIN = coinItem("five_cent_coin", 5);
-    public static final Item TEN_CENT_COIN = coinItem("ten_cent_coin", 10);
-    public static final Item TWENTY_FIVE_CENT_COIN = coinItem("twenty_five_cent_coin", 25);
+    //public static final Item ONE_DOLLAR_COIN = coinItem("one_dollar_coin", 100);
+    //public static final Item ONE_CENT_COIN = coinItem("one_cent_coin", 1);
+    //public static final Item FIVE_CENT_COIN = coinItem("five_cent_coin", 5);
+    //public static final Item TEN_CENT_COIN = coinItem("ten_cent_coin", 10);
+    //public static final Item TWENTY_FIVE_CENT_COIN = coinItem("twenty_five_cent_coin", 25);
     public static final Item COW_STICK = register("cow_stick", new MobStickItem(
         new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).fireproof(),
         EntityType.COW,
         MobStickItem.BuiltInNames.no_names, false
     ));
+    public static final Item RESIN_BRICK = register("minecraft:resin_brick");
+    public static final Item STRANGE_DIAMOND_PICKAXE = register("strange_diamond_pickaxe", new StrangePickaxeItem(ToolMaterials.DIAMOND, copyAttributes(Items.DIAMOND_PICKAXE).component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
+    public static final Item STRANGE_NETHERITE_PICKAXE = register("strange_netherite_pickaxe", new StrangePickaxeItem(ToolMaterials.NETHERITE, copyAttributes(Items.NETHERITE_PICKAXE).fireproof().component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
+    public static final Item STRANGE_UPGRADE_SMITHING_TEMPLATE = register("strange_upgrade_smithing_template");
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
@@ -103,6 +109,18 @@ public class PooSMPItems {
 
     private static Item musicDisc(String name, RegistryKey<JukeboxSong> song, String requester) {
         return register("music_disc/" + name, new RequestedDiscItem(requester, new Item.Settings().maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(song)));
+    }
+
+    private static Item register(String name) {
+        return register(name, new Item(new Item.Settings()));
+    }
+
+    private static Item register(String name, int max_count) {
+        return register(name, new Item(new Item.Settings().maxCount(max_count)));
+    }
+
+    private static Item register(String name, Rarity rarity) {
+        return register(name, new Item(new Item.Settings().rarity(rarity)));
     }
 
     private static Item totem(String name, AttributeModifiersComponent attributes, boolean enchanted) {
@@ -141,5 +159,10 @@ public class PooSMPItems {
 
     public static void init() {
         PooSMPMod.LOGGER.info("Making PooSMP items!!!");
+    }
+
+    public static Item.Settings copyAttributes(ItemConvertible item) {
+        AttributeModifiersComponent attributes = item.asItem().getComponents().getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
+        return new Item.Settings().attributeModifiers(attributes);
     }
 }

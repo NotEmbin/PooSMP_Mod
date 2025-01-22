@@ -12,6 +12,8 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
@@ -90,7 +92,36 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.VILLAGER_STICK);
 				entries.add(PooSMPBlocks.SUS);
 				entries.add(PooSMPBlocks.DDEDEDODEDIAMANTE_BLOCK);
+				entries.add(PooSMPItems.BACON_BUCKET);
 				entries.add(PooSMPItems.COW_STICK);
+				entries.add(PooSMPBlocks.BANKERS_TABLE);
+				entries.add(PooSMPBlocks.PALE_MOSS_BLOCK);
+				entries.add(PooSMPBlocks.PALE_MOSS_CARPET);
+				entries.add(PooSMPBlocks.PALE_HANGING_MOSS);
+				entries.add(PooSMPBlocks.PALE_OAK_LOG);
+				entries.add(PooSMPBlocks.PALE_OAK_WOOD);
+				entries.add(PooSMPBlocks.STRIPPED_PALE_OAK_LOG);
+				entries.add(PooSMPBlocks.STRIPPED_PALE_OAK_WOOD);
+				entries.add(PooSMPBlocks.PALE_OAK_PLANKS);
+				entries.add(PooSMPBlocks.PALE_OAK_STAIRS);
+				entries.add(PooSMPBlocks.PALE_OAK_SLAB);
+				entries.add(PooSMPBlocks.PALE_OAK_FENCE);
+				entries.add(PooSMPBlocks.PALE_OAK_FENCE_GATE);
+				entries.add(PooSMPBlocks.PALE_OAK_DOOR);
+				entries.add(PooSMPBlocks.PALE_OAK_TRAPDOOR);
+				entries.add(PooSMPBlocks.PALE_OAK_PRESSURE_PLATE);
+				entries.add(PooSMPBlocks.PALE_OAK_BUTTON);
+				entries.add(PooSMPBlocks.RESIN_BLOCK);
+				entries.add(PooSMPBlocks.RESIN_BRICKS);
+				entries.add(PooSMPBlocks.RESIN_BRICK_STAIRS);
+				entries.add(PooSMPBlocks.RESIN_BRICK_SLAB);
+				entries.add(PooSMPBlocks.RESIN_BRICK_WALL);
+				entries.add(PooSMPBlocks.CHISELED_RESIN_BRICKS);
+				entries.add(PooSMPBlocks.RESIN_CLUMP);
+				entries.add(PooSMPItems.RESIN_BRICK);
+				entries.add(PooSMPBlocks.PALE_OAK_SAPLING);
+				entries.add(PooSMPItems.STRANGE_DIAMOND_PICKAXE);
+				entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
@@ -139,11 +170,11 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.TWENTY_FIVE_DOLLAR_BILL);
 				entries.add(PooSMPItems.FIFTY_DOLLAR_BILL);
 				entries.add(PooSMPItems.HUNDRED_DOLLAR_BILL);
-				entries.add(PooSMPItems.ONE_CENT_COIN);
-				entries.add(PooSMPItems.FIVE_CENT_COIN);
-				entries.add(PooSMPItems.TEN_CENT_COIN);
-				entries.add(PooSMPItems.TWENTY_FIVE_CENT_COIN);
-				entries.add(PooSMPItems.ONE_DOLLAR_COIN);
+				//entries.add(PooSMPItems.ONE_CENT_COIN);
+				//entries.add(PooSMPItems.FIVE_CENT_COIN);
+				//entries.add(PooSMPItems.TEN_CENT_COIN);
+				//entries.add(PooSMPItems.TWENTY_FIVE_CENT_COIN);
+				//entries.add(PooSMPItems.ONE_DOLLAR_COIN);
 			}).build();
 	}
 
@@ -156,10 +187,51 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPItemGroups.init();
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_LOG.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_WOOD.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.STRIPPED_PALE_OAK_LOG.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.STRIPPED_PALE_OAK_WOOD.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_PLANKS.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_STAIRS.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_SLAB.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_FENCE.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_FENCE_GATE.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_DOOR.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_TRAPDOOR.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_PRESSURE_PLATE.asItem());
+			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_BUTTON.asItem());
+			entries.addBefore(Items.SANDSTONE, PooSMPBlocks.RESIN_BRICKS.asItem());
+			entries.addBefore(Items.SANDSTONE, PooSMPBlocks.RESIN_BRICK_STAIRS.asItem());
+			entries.addBefore(Items.SANDSTONE, PooSMPBlocks.RESIN_BRICK_SLAB.asItem());
+			entries.addBefore(Items.SANDSTONE, PooSMPBlocks.RESIN_BRICK_WALL.asItem());
+			entries.addBefore(Items.SANDSTONE, PooSMPBlocks.CHISELED_RESIN_BRICKS.asItem());
+		});
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> {
+			entries.addAfter(Items.HONEY_BLOCK, PooSMPBlocks.RESIN_BLOCK.asItem());
+			entries.addAfter(Items.CHERRY_SAPLING, PooSMPBlocks.PALE_OAK_SAPLING.asItem());
+			entries.addAfter(Items.MOSS_CARPET, PooSMPBlocks.PALE_HANGING_MOSS.asItem());
+			entries.addAfter(Items.MOSS_CARPET, PooSMPBlocks.PALE_MOSS_CARPET.asItem());
+			entries.addAfter(Items.MOSS_CARPET, PooSMPBlocks.PALE_MOSS_BLOCK.asItem());
+		});
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
+			entries.addAfter(Items.HONEYCOMB, PooSMPBlocks.RESIN_CLUMP.asItem());
+			entries.addAfter(Items.NETHER_BRICK, PooSMPItems.RESIN_BRICK);
 		});
 		PooSMPPoi.init();
 		PooSMPVillagers.init();
 		TradeConstructors.register_villager_trades();
+		StrippableBlockRegistry.register(PooSMPBlocks.PALE_OAK_LOG, PooSMPBlocks.STRIPPED_PALE_OAK_LOG);
+		StrippableBlockRegistry.register(PooSMPBlocks.PALE_OAK_WOOD, PooSMPBlocks.STRIPPED_PALE_OAK_WOOD);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_LOG, 5, 5);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.STRIPPED_PALE_OAK_LOG, 5, 5);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_WOOD, 5, 5);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.STRIPPED_PALE_OAK_WOOD, 5, 5);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_PLANKS, 5, 20);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_LEAVES, 30, 60);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_STAIRS, 5, 20);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_SLAB, 5, 20);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_FENCE, 5, 20);
+		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_FENCE_GATE, 5, 20);
 		LOGGER.info("im all pooped up");
 	}
 }
