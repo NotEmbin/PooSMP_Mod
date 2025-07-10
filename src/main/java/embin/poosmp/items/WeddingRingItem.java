@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WeddingRingItem extends CreativeSnitchItem {
-    public static String[] married_users = {"Embin", "lukitagame5"};
+    public static String[] married_users = {"Embin", "ddededodediamant"};
     public WeddingRingItem(Settings settings) {
         super(settings);
     }
