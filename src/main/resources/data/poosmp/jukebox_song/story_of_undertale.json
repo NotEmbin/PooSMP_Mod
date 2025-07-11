@@ -1,0 +1,8 @@
+{
+  "comparator_output": 11,
+  "description": {
+    "translate": "jukebox_song.poosmp.story_of_undertale"
+  },
+  "length_in_seconds": 196.5,
+  "sound_event": "poosmp:music_disc.story_of_undertale"
+}

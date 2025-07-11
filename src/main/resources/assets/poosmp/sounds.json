@@ -90,6 +90,7 @@
 		]
 	},
 	"sus":{
+		"subtitle":"subtitles.poosmp.sus",
 		"sounds":[
 			{
 				"name":"poosmp:kratos_scream",
@@ -100,6 +101,15 @@
 				"name":"poosmp:mariofunny",
 				"weight":2,
 				"volume":3.0
+			}
+		]
+	},
+	"music_disc.story_of_undertale":{
+		"category":"record",
+		"sounds":[
+			{
+				"name":"poosmp:stereo/story_of_undertale",
+				"stream":true
 			}
 		]
 	}

@@ -124,6 +124,7 @@ public class PooSMPMod implements ModInitializer {
 				//entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
 				//entries.add(PooSMPItems.STRANGE_UPGRADE_SMITHING_TEMPLATE);
 				entries.add(PooSMPBlocks.PALE_OAK_LEAVES);
+				entries.add(PooSMPItems.DISC_STORY_OF_UNDERTALE);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
@@ -149,6 +150,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.DISC_BUDDY_HOLLY);
 				entries.add(PooSMPItems.DISC_STEREO_MADNESS);
 				entries.add(PooSMPItems.DISC_NOT_LIKE_US);
+				entries.add(PooSMPItems.DISC_STORY_OF_UNDERTALE);
 			}).build();
 
 		public static final ItemGroup MOB_STICKS = FabricItemGroup.builder()

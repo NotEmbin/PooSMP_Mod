@@ -92,6 +92,7 @@ public class PooSMPItems {
     public static final Item STRANGE_DIAMOND_PICKAXE = register("strange_diamond_pickaxe", new StrangePickaxeItem(ToolMaterials.DIAMOND, copyAttributes(Items.DIAMOND_PICKAXE).component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
     public static final Item STRANGE_NETHERITE_PICKAXE = register("strange_netherite_pickaxe", new StrangePickaxeItem(ToolMaterials.NETHERITE, copyAttributes(Items.NETHERITE_PICKAXE).fireproof().component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
     public static final Item STRANGE_UPGRADE_SMITHING_TEMPLATE = register("strange_upgrade_smithing_template");
+    public static final Item DISC_STORY_OF_UNDERTALE = musicDisc("story_of_undertale", PooSMPJukeboxSongs.SOU, "Cubey");
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);

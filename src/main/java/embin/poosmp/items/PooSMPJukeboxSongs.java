@@ -20,4 +20,5 @@ public interface PooSMPJukeboxSongs {
     RegistryKey<JukeboxSong> ENDLESSLY_INSTRUMENTAL = of("endlessly_instrumental");
     RegistryKey<JukeboxSong> ENDLESSLY = of("endlessly");
     RegistryKey<JukeboxSong> ENDLESSLY_STEREO = of("endlessly_stereo");
+    RegistryKey<JukeboxSong> SOU = of("story_of_undertale");
 }

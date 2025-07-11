@@ -31,12 +31,6 @@ public class WeddingRingItem extends CreativeSnitchItem {
             ),
             AttributeModifierSlot.OFFHAND
         ).add(
-            EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
-            new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:wedding_ring_block_reach_buff"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
-            ),
-            AttributeModifierSlot.OFFHAND
-        ).add(
             EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
             new EntityAttributeModifier(
                 ConvertNamespace.convert("poosmp:wedding_ring_entity_reach_buff"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
@@ -51,7 +45,7 @@ public class WeddingRingItem extends CreativeSnitchItem {
         ).add(
             EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:wedding_ring_armor_toughness"), 4, EntityAttributeModifier.Operation.ADD_VALUE
+                ConvertNamespace.convert("poosmp:wedding_ring_armor_toughness"), 6, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.OFFHAND
         ).build();
