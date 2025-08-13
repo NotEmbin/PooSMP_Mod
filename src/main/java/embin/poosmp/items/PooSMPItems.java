@@ -3,9 +3,7 @@ package embin.poosmp.items;
 import embin.poosmp.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.ConvertNamespace;
-import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.jukebox.JukeboxSong;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -86,13 +84,26 @@ public class PooSMPItems {
     public static final Item COW_STICK = register("cow_stick", new MobStickItem(
         new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).fireproof(),
         EntityType.COW,
-        MobStickItem.BuiltInNames.no_names, false
+        MobStickItem.BuiltInNames.cow_names, false
     ));
     public static final Item RESIN_BRICK = register("minecraft:resin_brick");
     public static final Item STRANGE_DIAMOND_PICKAXE = register("strange_diamond_pickaxe", new StrangePickaxeItem(ToolMaterials.DIAMOND, copyAttributes(Items.DIAMOND_PICKAXE).component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
     public static final Item STRANGE_NETHERITE_PICKAXE = register("strange_netherite_pickaxe", new StrangePickaxeItem(ToolMaterials.NETHERITE, copyAttributes(Items.NETHERITE_PICKAXE).fireproof().component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
     public static final Item STRANGE_UPGRADE_SMITHING_TEMPLATE = register("strange_upgrade_smithing_template");
     public static final Item DISC_STORY_OF_UNDERTALE = musicDisc("story_of_undertale", PooSMPJukeboxSongs.SOU, "Cubey");
+    public static final Item RAW_RED_POO = register("raw_red_poo", Rarity.UNCOMMON);
+    public static final Item RED_POO_INGOT = register("red_poo_ingot", Rarity.UNCOMMON);
+    public static final Item RED_POO_UPGRADE_SMITHING_TEMPLATE = register("red_poo_upgrade_smithing_template", Rarity.RARE);
+    public static final Item BANANA = register("banana", new Item(new Item.Settings().food(PooSMPFoods.BANANA)));
+    public static final Item RED_POO_SWORD = register("red_poo_sword", new SwordItem(PooSMPMaterials.RED_POO, new Item.Settings().attributeModifiers(SwordItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 3, -2.4F))));
+    public static final Item RED_POO_SHOVEL = register("red_poo_shovel", new ShovelItem(PooSMPMaterials.RED_POO, new Item.Settings().attributeModifiers(ShovelItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 1.5F, -3.0F))));
+    public static final Item RED_POO_PICKAXE = register("red_poo_pickaxe", new PickaxeItem(PooSMPMaterials.RED_POO, new Item.Settings().attributeModifiers(PickaxeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 1.0F, -2.8F))));
+    public static final Item RED_POO_AXE = register("red_poo_axe", new AxeItem(PooSMPMaterials.RED_POO, new Item.Settings().attributeModifiers(AxeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 5.0F, -3.0F))));
+    public static final Item RED_POO_HOE = register("red_poo_hoe", new HoeItem(PooSMPMaterials.RED_POO, new Item.Settings().attributeModifiers(HoeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, -3.0F, 0.0F))));
+    public static final Item RED_POO_HELMET = register("red_poo_helmet", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.HELMET, (new Item.Settings()).maxDamage(ArmorItem.Type.HELMET.getMaxDamage(44))));
+    public static final Item RED_POO_CHESTPLATE = register("red_poo_chestplate", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.CHESTPLATE, new Item.Settings().maxDamage(ArmorItem.Type.CHESTPLATE.getMaxDamage(44))));
+    public static final Item RED_POO_LEGGINGS = register("red_poo_leggings", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.LEGGINGS, (new Item.Settings()).maxDamage(ArmorItem.Type.LEGGINGS.getMaxDamage(44))));
+    public static final Item RED_POO_BOOTS = register("red_poo_boots", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.BOOTS, new Item.Settings().maxDamage(ArmorItem.Type.BOOTS.getMaxDamage(44))));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);

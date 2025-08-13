@@ -125,6 +125,20 @@ public class PooSMPMod implements ModInitializer {
 				//entries.add(PooSMPItems.STRANGE_UPGRADE_SMITHING_TEMPLATE);
 				entries.add(PooSMPBlocks.PALE_OAK_LEAVES);
 				entries.add(PooSMPItems.DISC_STORY_OF_UNDERTALE);
+                entries.add(PooSMPItems.RAW_RED_POO);
+                entries.add(PooSMPItems.RED_POO_INGOT);
+                entries.add(PooSMPBlocks.RED_POO_BLOCK);
+				entries.add(PooSMPItems.RED_POO_UPGRADE_SMITHING_TEMPLATE);
+                entries.add(PooSMPItems.BANANA);
+                entries.add(PooSMPItems.RED_POO_SWORD);
+                entries.add(PooSMPItems.RED_POO_PICKAXE);
+                entries.add(PooSMPItems.RED_POO_AXE);
+                entries.add(PooSMPItems.RED_POO_SHOVEL);
+                entries.add(PooSMPItems.RED_POO_HOE);
+				entries.add(PooSMPItems.RED_POO_HELMET);
+				entries.add(PooSMPItems.RED_POO_CHESTPLATE);
+				entries.add(PooSMPItems.RED_POO_LEGGINGS);
+				entries.add(PooSMPItems.RED_POO_BOOTS);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "poosmp:red_poo_ingot"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+	"###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "poosmp:red_poo_block"
+  }
+}

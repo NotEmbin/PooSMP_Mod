@@ -182,6 +182,11 @@ public class MobStickItem extends CreativeSnitchItem {
         };
 
         public static final String[] no_names = {};
+
+        public static final String[] cow_names = {
+            "Cow",
+            "Ol' Betsey"
+        };
     }
 
     public static final class Stack {

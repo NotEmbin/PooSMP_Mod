@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "poosmp:pooplet"
+    },
+    "title": "Eat Shit",
+    "description": "Eat a Pooplet"
+  },
+  "parent": "poosmp:poosmp/root",
+  "criteria": {
+    "eat_poo": {
+      "trigger": "minecraft:using_item",
+      "conditions": {
+        "item": {
+          "items": "poosmp:pooplet"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "eat_poo"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

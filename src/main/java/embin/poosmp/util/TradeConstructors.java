@@ -4,10 +4,17 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
@@ -15,6 +22,8 @@ import net.minecraft.village.TradedItem;
 import net.minecraft.village.VillagerProfession;
 
 public class TradeConstructors {
+    public static final ComponentMap TRADED_BOOK_ENCHANTS = ComponentMap.builder().build();
+
     public static void register_villager_trades() {
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.MASON, 1, factories -> {
             factories.add(((entity, random) -> new FromMoney(Items.STONE, 32, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
@@ -77,6 +86,7 @@ public class TradeConstructors {
             factories.add(((entity, random) -> new ToMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 2).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.ELYTRA, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 8).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.FIFTY_DOLLAR_BILL, 1).create(entity, random)));
+            factories.add(((entity, random) -> new ToMoney(new ItemStack(Items.ENCHANTED_BOOK), PooSMPItems.HUNDRED_DOLLAR_BILL, 5).create(entity, random)));
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3, factories -> {
             factories.add(((entity, random) -> new FromMoney(Items.PUMPKIN, 32, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
@@ -86,6 +96,7 @@ public class TradeConstructors {
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 5, factories -> {
             factories.add(((entity, random) -> new ToMoney(Items.SHULKER_SHELL, 2, PooSMPItems.HUNDRED_DOLLAR_BILL).create(entity, random)));
+            factories.add(((entity, random) -> new ToMoney(PooSMPItems.BANANA, 4, Items.EMERALD).create(entity, random)));
         });
         TradeOfferHelper.registerWanderingTraderOffers(1, factories -> {
             factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_MOSS_BLOCK, 8).create(entity, random)));
@@ -126,6 +137,10 @@ public class TradeConstructors {
 
         public ToMoney(ItemConvertible item, int amount, ItemConvertible sell_price, int amount2) {
             this(new TradedItem(sell_price.asItem(), amount2), new ItemStack(item, amount));
+        }
+
+        public ToMoney(ItemStack item, ItemConvertible sell_price, int amount2) {
+            this(new TradedItem(sell_price.asItem(), amount2), item);
         }
 
         @Override

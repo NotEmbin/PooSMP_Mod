@@ -12,6 +12,7 @@ public class PooSMPTags {
         }
 
         public static final TagKey<Block> PALE_OAK_LOGS = createTag("poosmp:pale_oak_logs");
+        public static final TagKey<Block> INCORRECT_FOR_RED_POO_TOOLS = createTag("poosmp:incorrect_for_red_poo_tools");
     }
 
     public static class Items {

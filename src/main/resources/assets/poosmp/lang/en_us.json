@@ -122,5 +122,21 @@
 	"block.minecraft.pale_oak_leaves": "Pale Oak Leaves",
 	"item.poosmp.music_disc.story_of_undertale":"Music Disc",
 	"subtitles.poosmp.sus": "Annoyance",
-	"jukebox_song.poosmp.story_of_undertale":"LHUGUENY - Story of Undertale"
+	"jukebox_song.poosmp.story_of_undertale":"LHUGUENY - Story of Undertale",
+	"item.poosmp.raw_red_poo": "Raw Red Poo",
+	"item.poosmp.red_poo_ingot": "Red Poo Ingot",
+	"block.poosmp.red_poo_block": "Block of Red Poo",
+	"item.poosmp.red_poo_upgrade_smithing_template": "Red Poo Upgrade",
+	"item.poosmp.red_poo_sword": "Red Poo Sword",
+	"item.poosmp.red_poo_pickaxe": "Red Poo Pickaxe",
+	"item.poosmp.red_poo_axe": "Red Poo Axe",
+	"item.poosmp.red_poo_shovel": "Red Poo Shovel",
+	"item.poosmp.red_poo_hoe": "Red Poo Hoe",
+	"item.poosmp.banana": "Banana",
+	"item.poosmp.bacon_bucket": "Bacon Bucket",
+	"item.poosmp.cow_stick": "Cow Stick",
+	"item.poosmp.red_poo_helmet": "Red Poo Helmet",
+	"item.poosmp.red_poo_chestplate": "Red Poo Chestplate",
+	"item.poosmp.red_poo_leggings": "Red Poo Leggings",
+	"item.poosmp.red_poo_boots": "Red Poo Boots"
 }

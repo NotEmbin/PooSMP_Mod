@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 120,
+  "experience": 15,
+  "ingredient": {
+    "item": "poosmp:raw_red_poo"
+  },
+  "result": {
+    "id": "poosmp:red_poo_ingot"
+  }
+}

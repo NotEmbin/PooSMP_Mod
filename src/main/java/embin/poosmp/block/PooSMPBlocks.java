@@ -57,6 +57,7 @@ public class PooSMPBlocks {
     public static final Block RESIN_CLUMP = register("minecraft:resin_clump", new MultifaceBlock(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_ORANGE).replaceable().noCollision().sounds(BlockSoundGroup.PACKED_MUD).burnable().pistonBehavior(PistonBehavior.DESTROY)));
     // public static final Block ITEM_SHOP = register("item_shop", new ItemShopBlock(copyBlock(Blocks.IRON_BLOCK)));
     // i can't bother with this right now
+    public static final Block RED_POO_BLOCK = register("red_poo_block", new Block(AbstractBlock.Settings.create().requiresTool().mapColor(DyeColor.RED).strength(2.5F).sounds(BlockSoundGroup.BONE)), new Item.Settings().rarity(Rarity.UNCOMMON));
 
 
     public static Block register(Block block, String name, Item.Settings settings, boolean should_register_item) {

@@ -14,9 +14,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 public class CreativeSnitchItem extends Item {
-    public static final String[] known_operators = {"_thecubic_", "lukitagame5", "Embin", "whentheapple"};
+    public static final String[] known_operators = {"_thecubic_", "ddededodediamant", "Embin", "whentheapple"};
     public CreativeSnitchItem(Settings settings, boolean snitch) {
-        super(settings);
+        super(settings.component(PooSMPItemComponents.FROM_CREATIVE, snitch));
     }
     public CreativeSnitchItem(Settings settings) {
         super(settings.component(PooSMPItemComponents.FROM_CREATIVE, true));

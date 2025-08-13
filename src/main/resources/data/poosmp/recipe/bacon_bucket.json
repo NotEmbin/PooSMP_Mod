@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "4",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:bucket"
+    },
+    "4": {
+      "item": "minecraft:porkchop"
+    }
+  },
+  "result": {
+    "id": "poosmp:bacon_bucket",
+    "count": 1
+  },
+  "show_notification": true
+}
