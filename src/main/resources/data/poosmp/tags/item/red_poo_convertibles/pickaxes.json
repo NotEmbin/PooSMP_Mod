@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:diamond_pickaxe",
+    "minecraft:netherite_pickaxe",
+    {"id": "betternether:nether_ruby_pickaxe", "required": false},
+    {"id": "betternether:flaming_ruby_pickaxe", "required": false}
+  ]
+}

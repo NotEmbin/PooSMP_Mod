@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "poosmp:poop_block"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "poosmp:pooplet"
+  },
+  "show_notification": true
+}

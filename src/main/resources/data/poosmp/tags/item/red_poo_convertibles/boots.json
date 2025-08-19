@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:diamond_boots",
+    "minecraft:netherite_boots",
+    {"id": "betternether:nether_ruby_boots", "required": false},
+    {"id": "betternether:flaming_ruby_boots", "required": false}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:diamond_shovel",
+    "minecraft:netherite_shovel",
+    {"id": "betternether:nether_ruby_shovel", "required": false},
+    {"id": "betternether:flaming_ruby_shovel", "required": false}
+  ]
+}

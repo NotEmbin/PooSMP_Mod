@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:diamond_helmet",
+    "minecraft:netherite_helmet",
+    {"id": "betternether:nether_ruby_helmet", "required": false},
+    {"id": "betternether:flaming_ruby_helmet", "required": false}
+  ]
+}

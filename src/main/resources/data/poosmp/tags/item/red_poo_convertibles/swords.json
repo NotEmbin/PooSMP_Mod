@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:diamond_sword",
+    "minecraft:netherite_sword",
+    {"id": "betternether:nether_ruby_sword", "required": false},
+    {"id": "betternether:flaming_ruby_sword", "required": false}
+  ]
+}

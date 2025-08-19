@@ -1,6 +1,8 @@
 {
   "values": [
     "minecraft:diamond_axe",
-    "minecraft:netherite_axe"
+    "minecraft:netherite_axe",
+    {"id": "betternether:nether_ruby_axe", "required": false},
+    {"id": "betternether:flaming_ruby_axe", "required": false}
   ]
 }
