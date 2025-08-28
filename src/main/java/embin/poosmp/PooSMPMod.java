@@ -4,25 +4,31 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.BiomeStickItem;
 import embin.poosmp.items.MobStickItem;
 import embin.poosmp.items.PooSMPItems;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.upgrade.Upgrades;
+import embin.poosmp.util.Id;
+import embin.poosmp.util.PooSMPTags;
 import embin.poosmp.util.TradeConstructors;
 import embin.poosmp.villager.PooSMPPoi;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.decoration.painting.PaintingEntity;
+import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.item.*;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.registry.*;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +41,11 @@ public class PooSMPMod implements ModInitializer {
 
 	public static final class PooSMPItemGroups {
 		public static void init() {
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_items"), POOSMP_ITEMS);
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_biome_sticks"), BIOME_STICKS);
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_music_discs"), MUSIC_DISCS);
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_mob_sticks"), MOB_STICKS);
-			Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_money"), MONEY);
+			Registry.register(Registries.ITEM_GROUP, Id.of("poosmp_items"), POOSMP_ITEMS);
+			//Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_biome_sticks"), BIOME_STICKS);
+			Registry.register(Registries.ITEM_GROUP, Id.of("poosmp_music_discs"), MUSIC_DISCS);
+			//Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_mob_sticks"), MOB_STICKS);
+			Registry.register(Registries.ITEM_GROUP, Id.of("poosmp_money"), MONEY);
 		}
 
 		@Deprecated
@@ -124,6 +130,14 @@ public class PooSMPMod implements ModInitializer {
 				//entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
 				//entries.add(PooSMPItems.STRANGE_UPGRADE_SMITHING_TEMPLATE);
 				entries.add(PooSMPBlocks.PALE_OAK_LEAVES);
+				RegistryEntryLookup<PaintingVariant> registryEntryLookup = displayContext.lookup().createRegistryLookup().getOrThrow(RegistryKeys.PAINTING_VARIANT);
+				RegistryOps<NbtElement> registryOps = displayContext.lookup().getOps(NbtOps.INSTANCE);
+				for (RegistryEntry<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.POOSMP_PAINTINGS).stream().toList()) {
+					NbtComponent nbtComponent = NbtComponent.DEFAULT.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
+					ItemStack painting = new ItemStack(Items.PAINTING);
+					painting.set(DataComponentTypes.ENTITY_DATA, nbtComponent);
+					entries.add(painting);
+				}
 				entries.add(PooSMPItems.DISC_STORY_OF_UNDERTALE);
                 entries.add(PooSMPItems.RAW_RED_POO);
                 entries.add(PooSMPItems.RED_POO_INGOT);
@@ -139,6 +153,10 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.RED_POO_CHESTPLATE);
 				entries.add(PooSMPItems.RED_POO_LEGGINGS);
 				entries.add(PooSMPItems.RED_POO_BOOTS);
+				entries.add(PooSMPItems.GEAR);
+				entries.add(PooSMPItems.SCREW);
+				entries.add(PooSMPItems.GLASS_SHARD);
+				entries.add(PooSMPItems.MAGIC_DEVICE);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
@@ -154,17 +172,10 @@ public class PooSMPMod implements ModInitializer {
 			.icon(() -> new ItemStack(PooSMPItems.DISC_TRIFECTA_CAP))
 			.displayName(Text.literal("PooSMP: Music Discs"))
 			.entries((displayContext, entries) -> {
-				entries.add(PooSMPItems.DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL);
-				entries.add(PooSMPItems.DISC_RESISTANCE_INSTRUMENTAL);
-				entries.add(PooSMPItems.DISC_BLISS_INSTRUMENTAL);
-				entries.add(PooSMPItems.DISC_ENDLESSLY);
-				entries.add(PooSMPItems.DISC_ENDLESSLY_INSTRUMENTAL);
-				entries.add(PooSMPItems.DISC_ENDLESSLY_STEREO);
-				entries.add(PooSMPItems.DISC_TRIFECTA_CAP);
-				entries.add(PooSMPItems.DISC_BUDDY_HOLLY);
-				entries.add(PooSMPItems.DISC_STEREO_MADNESS);
-				entries.add(PooSMPItems.DISC_NOT_LIKE_US);
-				entries.add(PooSMPItems.DISC_STORY_OF_UNDERTALE);
+				RegistryEntryLookup<Item> registryEntryLookup = displayContext.lookup().createRegistryLookup().getOrThrow(RegistryKeys.ITEM);
+				for (RegistryEntry<Item> i : registryEntryLookup.getOrThrow(PooSMPTags.Items.POOSMP_DISCS).stream().toList()) {
+					entries.add(i.value());
+				}
 			}).build();
 
 		public static final ItemGroup MOB_STICKS = FabricItemGroup.builder()
@@ -198,7 +209,9 @@ public class PooSMPMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		PooSMPRegistries.acknowledge();
 		PooSMPSoundEvents.init(); // so that music discs actually work
+		Upgrades.init();
 		PooSMPBlocks.init();
 		PooSMPItems.init();
 		PooSMPItemComponents.init();
@@ -250,6 +263,11 @@ public class PooSMPMod implements ModInitializer {
 		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_SLAB, 5, 20);
 		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_FENCE, 5, 20);
 		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_FENCE_GATE, 5, 20);
+
+		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
+
+		});
+
 		LOGGER.info("im all pooped up");
 	}
 }

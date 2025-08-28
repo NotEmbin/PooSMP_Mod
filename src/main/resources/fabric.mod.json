@@ -7,7 +7,7 @@
 	"authors": [
 		"Embin"
 	],
-	"contributers": [
+	"contributors": [
 		"ddededodediamante"
 	],
 	"contact": {
@@ -21,7 +21,7 @@
 			"embin.poosmp.PooSMPMod"
 		],
 		"client": [
-			"embin.poosmp.PooSMPModClient"
+			"embin.poosmp.client.PooSMPModClient"
 		],
 		"fabric-datagen": [
 			"embin.poosmp.PooSMPModDataGenerator"

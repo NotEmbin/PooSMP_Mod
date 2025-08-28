@@ -1,7 +1,7 @@
 package embin.poosmp.items;
 
 import embin.poosmp.PooSMPMod;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.block.DecoratedPotPattern;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -14,8 +14,8 @@ public class PooSMPPotteryPatterns {
     }
 
     private static DecoratedPotPattern register(String name) {
-        Identifier pot_id = ConvertNamespace.convert(name);
-        Identifier pot_pattern_id = ConvertNamespace.convert(name + "_pottery_pattern");
+        Identifier pot_id = Id.of(name);
+        Identifier pot_pattern_id = Id.of(name + "_pottery_pattern");
         return Registry.register(Registries.DECORATED_POT_PATTERN, pot_id, new DecoratedPotPattern(pot_pattern_id));
     }
 

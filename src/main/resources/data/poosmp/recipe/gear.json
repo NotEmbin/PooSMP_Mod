@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " # ",
+    "#3#",
+    " # "
+  ],
+  "key": {
+    "3": {
+      "item": "minecraft:iron_nugget"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "id": "poosmp:gear",
+    "count": 2
+  },
+  "show_notification": true
+}

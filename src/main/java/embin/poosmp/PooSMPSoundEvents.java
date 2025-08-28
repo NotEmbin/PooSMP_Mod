@@ -1,6 +1,6 @@
 package embin.poosmp;
 
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
@@ -23,7 +23,7 @@ public class PooSMPSoundEvents {
     public static final SoundEvent MUSIC_DISC_SOU = registerSound("music_disc.story_of_undertale");
 
     private static SoundEvent registerSound(String namespace) {
-        Identifier id = ConvertNamespace.convert(namespace);
+        Identifier id = Id.of(namespace);
         return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
     }
 

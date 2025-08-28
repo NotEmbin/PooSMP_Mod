@@ -4,22 +4,29 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.TradedItem;
 import net.minecraft.village.VillagerProfession;
+
+import java.util.Optional;
 
 public class TradeConstructors {
     public static final ComponentMap TRADED_BOOK_ENCHANTS = ComponentMap.builder().build();
@@ -86,7 +93,16 @@ public class TradeConstructors {
             factories.add(((entity, random) -> new ToMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 2).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.ELYTRA, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 8).create(entity, random)));
             factories.add(((entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.FIFTY_DOLLAR_BILL, 1).create(entity, random)));
-            factories.add(((entity, random) -> new ToMoney(new ItemStack(Items.ENCHANTED_BOOK), PooSMPItems.HUNDRED_DOLLAR_BILL, 5).create(entity, random)));
+            factories.add(((entity, random) -> {
+                Optional<RegistryEntry<Enchantment>> enchantment = entity.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getRandomEntry(PooSMPTags.Enchantments.BANKER_TRADEABLE, random);
+                int maxLevel;
+                if (enchantment.isPresent()) {
+                    maxLevel = enchantment.get().value().getMaxLevel();
+                } else {
+                    return new ToMoney(new ItemStack(Items.BOOK), PooSMPItems.HUNDRED_DOLLAR_BILL, 1).create(entity, random);
+                }
+                return new ToMoney(EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(enchantment.get(), maxLevel)), PooSMPItems.HUNDRED_DOLLAR_BILL, 3).create(entity, random);
+            }));
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3, factories -> {
             factories.add(((entity, random) -> new FromMoney(Items.PUMPKIN, 32, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
@@ -95,13 +111,13 @@ public class TradeConstructors {
             factories.add(((entity, random) -> new FromMoney(Items.POTATO, 28, PooSMPItems.ONE_DOLLAR_BILL).create(entity, random)));
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 5, factories -> {
-            factories.add(((entity, random) -> new ToMoney(Items.SHULKER_SHELL, 2, PooSMPItems.HUNDRED_DOLLAR_BILL).create(entity, random)));
-            factories.add(((entity, random) -> new ToMoney(PooSMPItems.BANANA, 4, Items.EMERALD).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(PooSMPItems.HUNDRED_DOLLAR_BILL, 1, Items.SHULKER_SHELL, 2).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPItems.BANANA, 4).create(entity, random)));
         });
         TradeOfferHelper.registerWanderingTraderOffers(1, factories -> {
             factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_MOSS_BLOCK, 8).create(entity, random)));
-            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.RESIN_CLUMP, 16).create(entity, random)));
-            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPItems.RESIN_BRICK, 8).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.RESIN_CLUMP, 24).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPItems.RESIN_BRICK, 16).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 2, PooSMPBlocks.PALE_OAK_SAPLING, 4).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_HANGING_MOSS, 8).create(entity, random)));
         });
@@ -109,6 +125,7 @@ public class TradeConstructors {
             factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_MOSS_BLOCK, 4).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.RESIN_CLUMP, 8).create(entity, random)));
             factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_HANGING_MOSS, 4).create(entity, random)));
+            factories.add(((entity, random) -> new FromMoney(Items.EMERALD, 1, PooSMPBlocks.PALE_OAK_SAPLING, 2).create(entity, random)));
         });
     }
 

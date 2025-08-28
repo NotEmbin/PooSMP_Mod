@@ -14,7 +14,7 @@ public abstract class EntityDataSaveMixin implements IEntityDataSaver {
     private NbtCompound persistentData;
 
     @Override
-    public NbtCompound getPersistentData() {
+    public NbtCompound poosmpmod$getPersistentData() {
         if (this.persistentData == null) {
             this.persistentData = new NbtCompound();
         }

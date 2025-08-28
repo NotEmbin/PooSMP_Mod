@@ -1,0 +1,8 @@
+{
+  "icon": "minecraft:magma_block",
+  "price": {
+    "base_price": 250,
+    "price_increase_base": 0
+  },
+  "max_purchases": 1
+}

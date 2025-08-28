@@ -1,15 +1,15 @@
 {
   "values": [
-    "poosmp:music_disc/trifecta_cap",
     "poosmp:music_disc/butterflies_and_hurricanes_instrumental",
-    "poosmp:music_disc/buddy_holly",
-    "poosmp:music_disc/stereo_madness",
-    "poosmp:music_disc/not_like_us",
     "poosmp:music_disc/resistance_instrumental",
     "poosmp:music_disc/bliss_instrumental",
     "poosmp:music_disc/endlessly",
     "poosmp:music_disc/endlessly_instrumental",
     "poosmp:music_disc/endlessly_stereo",
+    "poosmp:music_disc/trifecta_cap",
+    "poosmp:music_disc/buddy_holly",
+    "poosmp:music_disc/stereo_madness",
+    "poosmp:music_disc/not_like_us",
     "poosmp:music_disc/story_of_undertale"
   ]
 }

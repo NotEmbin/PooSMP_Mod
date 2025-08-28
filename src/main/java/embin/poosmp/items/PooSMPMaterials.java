@@ -1,6 +1,6 @@
 package embin.poosmp.items;
 
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import embin.poosmp.util.PooSMPTags;
 import net.minecraft.block.Block;
 import net.minecraft.item.ArmorItem;
@@ -52,7 +52,7 @@ public class PooSMPMaterials {
     };
 
     public static RegistryEntry<ArmorMaterial> register(String name, Supplier<ArmorMaterial> material) {
-        return Registry.registerReference(Registries.ARMOR_MATERIAL, ConvertNamespace.convert(name), material.get());
+        return Registry.registerReference(Registries.ARMOR_MATERIAL, Id.of(name), material.get());
     }
 
     public static final RegistryEntry<ArmorMaterial> A_RED_POO = register("red_poo",
@@ -63,7 +63,7 @@ public class PooSMPMaterials {
                 map.put(ArmorItem.Type.HELMET, 4);
                 map.put(ArmorItem.Type.BODY, 16);
             }), 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, () -> Ingredient.ofItems(PooSMPItems.RED_POO_INGOT),
-                List.of(new ArmorMaterial.Layer(ConvertNamespace.convert("red_poo"))), 4.5f, 0.1f
+                List.of(new ArmorMaterial.Layer(Id.of("red_poo"))), 4.5f, 0.1f
             )
     );
 }

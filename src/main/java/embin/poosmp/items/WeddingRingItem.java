@@ -1,7 +1,7 @@
 package embin.poosmp.items;
 
 import embin.poosmp.PooSMPItemComponents;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -27,25 +27,25 @@ public class WeddingRingItem extends CreativeSnitchItem {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.GENERIC_MAX_HEALTH,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:wedding_ring_hp_buff"), 10, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:wedding_ring_hp_buff"), 10, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.OFFHAND
         ).add(
             EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:wedding_ring_entity_reach_buff"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:wedding_ring_entity_reach_buff"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.OFFHAND
         ).add(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:wedding_ring_attack_damage"), 8, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:wedding_ring_attack_damage"), 8, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).add(
             EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:wedding_ring_armor_toughness"), 6, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:wedding_ring_armor_toughness"), 6, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.OFFHAND
         ).build();
@@ -55,7 +55,7 @@ public class WeddingRingItem extends CreativeSnitchItem {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:wedding_ring_attack_damage"), 2, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:wedding_ring_attack_damage"), 2, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();

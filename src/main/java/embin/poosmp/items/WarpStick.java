@@ -1,6 +1,6 @@
 package embin.poosmp.items;
 
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
@@ -28,7 +28,7 @@ public class WarpStick extends CreativeSnitchItem {
             CommandManager commandManager = world.getServer().getCommandManager();
             ServerCommandSource commandSource = world.getServer().getCommandSource().withSilent();
             String player_uuid = user.getUuidAsString();
-            if (user.getEntityWorld().getDimensionEntry().matchesId(ConvertNamespace.convert("poosmp:hyrule"))) {
+            if (user.getEntityWorld().getDimensionEntry().matchesId(Id.of("poosmp:hyrule"))) {
                 commandManager.executeWithPrefix(commandSource, "execute in minecraft:overworld run tp " + player_uuid + " " + pos);
             } else {
                 commandManager.executeWithPrefix(commandSource, "execute in poosmp:hyrule run tp " + player_uuid + " " + pos);

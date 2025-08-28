@@ -2,7 +2,7 @@ package embin.poosmp.villager;
 
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.block.PooSMPBlocks;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.registry.RegistryKey;
@@ -15,11 +15,11 @@ public class PooSMPPoi {
 
 
     private static RegistryKey<PointOfInterestType> poi_key(String name) {
-        return RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, ConvertNamespace.convert(name));
+        return RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, Id.of(name));
     }
 
     private static PointOfInterestType register(String name, Block block) {
-        return PointOfInterestHelper.register(ConvertNamespace.convert(name), 1, 1, block);
+        return PointOfInterestHelper.register(Id.of(name), 1, 1, block);
     }
 
     public static void init() {

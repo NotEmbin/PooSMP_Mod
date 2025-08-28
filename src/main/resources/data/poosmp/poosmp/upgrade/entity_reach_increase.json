@@ -1,0 +1,8 @@
+{
+  "icon": "minecraft:zombie_head",
+  "price": {
+    "base_price": 50,
+    "price_increase_base": 40
+  },
+  "max_purchases": 15
+}

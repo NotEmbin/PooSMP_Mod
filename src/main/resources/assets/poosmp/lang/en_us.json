@@ -142,5 +142,13 @@
 	"painting.poosmp.penguinmod.title": "PenguinMod",
 	"painting.poosmp.penguinmod.author": "Requested by Embin",
 	"painting.poosmp.tech_tip.title": "Tech Tip",
-	"painting.poosmp.tech_tip.author": "Requested by Embin"
+	"painting.poosmp.tech_tip.author": "Requested by Embin",
+	"biome.poosmp.missingno": "missingno",
+	"tooltip.poosmp.selected_biome.not_valid": "This biome does not exist!",
+	"item.poosmp.gear": "Gear",
+	"item.poosmp.screw": "Screw",
+	"item.poosmp.glass_shard": "Glass Shard",
+	"item.poosmp.magic_device": "Magic Device",
+	"category.poosmp.keybinds": "Poo SMP",
+	"upgrade.poosmp.fire_resistance": "Fire Resistance"
 }

@@ -1,7 +1,8 @@
 package embin.poosmp.items;
 
 import embin.poosmp.PooSMPItemComponents;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +21,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class BiomeStickItem extends Item {
@@ -101,7 +101,9 @@ public class BiomeStickItem extends Item {
         "poosmp:sky_islands",
         "poosmp:outer_hyrule",
         "poosmp:grasslands",
-        "poosmp:hyrule_castle"
+        "poosmp:hyrule_castle",
+        "poosmp:hyrule",
+        "poosmp:missingno"
     };
 
     @Override
@@ -111,11 +113,11 @@ public class BiomeStickItem extends Item {
             if (stack.contains(selected_biome_component) || stack.contains(DataComponentTypes.CUSTOM_NAME)) {
                 int radius = stack.getOrDefault(PooSMPItemComponents.BIOME_STICK_RADIUS_OVERRIDE, default_radius);
                 DynamicRegistryManager registryManager = world.getRegistryManager();
-                String biome_id = ConvertNamespace.convertVanilla(ConvertNamespace.removeInvalidCharactersFromString(stack.getOrDefault(selected_biome_component, default_biome))).toString();
+                String biome_id = Id.ofVanilla(Id.removeInvalidCharactersFromString(stack.getOrDefault(selected_biome_component, default_biome))).toString();
                 if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                    biome_id = ConvertNamespace.convertVanilla(ConvertNamespace.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString())).toString();
+                    biome_id = Id.ofVanilla(Id.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString())).toString();
                 }
-                if (registryManager.get(RegistryKeys.BIOME).containsId(ConvertNamespace.convertVanilla(biome_id))) {
+                if (registryManager.get(RegistryKeys.BIOME).containsId(Id.ofVanilla(biome_id))) {
                     if (!world.isClient) {
                         MinecraftServer server = user.getServer();
                         CommandManager commandManager = server.getCommandManager();
@@ -155,21 +157,22 @@ public class BiomeStickItem extends Item {
             if (stack.contains(selected_biome_component) || stack.contains(DataComponentTypes.CUSTOM_NAME)) {
                 String biome = stack.getOrDefault(selected_biome_component, default_biome);
                 if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                    biome = ConvertNamespace.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString());
+                    biome = Id.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString());
                 }
-                String biome_name = ConvertNamespace.convertVanilla(biome).toTranslationKey("biome");
-                String biome_id = ConvertNamespace.convertVanilla(biome).toString();
+                String biome_name = Id.ofVanilla(biome).toTranslationKey("biome");
+                Identifier biome_id = Id.ofVanilla(biome);
                 tooltip.add(Text.translatable("tooltip.poosmp.selected_biome").formatted(Formatting.GREEN).append(":"));
                 if (Language.getInstance().hasTranslation(biome_name)) {
                     tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(Text.translatable(biome_name)));
                     if (type.isAdvanced()) {
-                        tooltip.add(Text.literal(" ").formatted(Formatting.DARK_GRAY).append(biome_id));
+                        tooltip.add(Text.literal(" ").formatted(Formatting.DARK_GRAY).append(biome_id.toString()));
                     }
                 } else {
-                    tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(biome_id));
+                    tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(biome_id.toString()));
                 }
-                if (Arrays.stream(vanilla_biomes).noneMatch(biome_id::equals)) {
-                    tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.not_vanilla").formatted(Formatting.RED, Formatting.ITALIC));
+                World world = MinecraftClient.getInstance().world;
+                if (!world.getRegistryManager().get(RegistryKeys.BIOME).containsId(biome_id)) {
+                    tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.not_valid").formatted(Formatting.RED, Formatting.ITALIC));
                 }
             } else {
                 tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.none_selected").formatted(Formatting.LIGHT_PURPLE, Formatting.ITALIC));
@@ -179,6 +182,8 @@ public class BiomeStickItem extends Item {
             tooltip.add(Text.literal("").formatted(Formatting.RED));
             tooltip.add(Text.literal("InvalidIdentifierException:").formatted(Formatting.RED));
             tooltip.add(Text.literal(e.getMessage()).formatted(Formatting.RED, Formatting.ITALIC));
+        } catch (NullPointerException e) {
+            tooltip.add(Text.literal("NullPointerException").formatted(Formatting.RED, Formatting.ITALIC));
         }
     }
 }

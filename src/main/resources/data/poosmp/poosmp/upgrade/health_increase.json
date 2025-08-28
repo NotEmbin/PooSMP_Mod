@@ -1,0 +1,7 @@
+{
+  "icon": "minecraft:enchanted_golden_apple",
+  "price": {
+    "base_price": 15,
+    "price_increase_base": 10
+  }
+}

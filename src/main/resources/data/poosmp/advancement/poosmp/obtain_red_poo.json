@@ -1,0 +1,29 @@
+{
+  "parent": "poosmp:poosmp/root",
+  "criteria": {
+    "red_poo": {
+      "conditions": {
+        "items": [
+          {
+            "items": "poosmp:raw_red_poo"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Obtain Red Poo",
+    "icon": {
+      "count": 1,
+      "id": "poosmp:raw_red_poo"
+    },
+    "title": "A Toilet's Worst Nightmare"
+  },
+  "requirements": [
+    [
+      "red_poo"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

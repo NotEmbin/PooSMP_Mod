@@ -1,6 +1,6 @@
 package embin.poosmp.world;
 
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -20,7 +20,7 @@ public class PooSMPPlacedFeatures {
 
 
     public static RegistryKey<PlacedFeature> registerKey(String name) {
-        return RegistryKey.of(RegistryKeys.PLACED_FEATURE, ConvertNamespace.convert(name));
+        return RegistryKey.of(RegistryKeys.PLACED_FEATURE, Id.of(name));
     }
 
     private static void register(Registerable<PlacedFeature> context, RegistryKey<PlacedFeature> key, RegistryEntry<ConfiguredFeature<?, ?>> config, List<PlacementModifier> modifiers) {

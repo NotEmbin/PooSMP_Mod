@@ -2,7 +2,7 @@ package embin.poosmp.villager;
 
 import com.google.common.collect.ImmutableSet;
 import embin.poosmp.PooSMPMod;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -17,7 +17,7 @@ public class PooSMPVillagers {
 
 
     private static VillagerProfession register(String name, RegistryKey<PointOfInterestType> type, SoundEvent sound_event) {
-        return Registry.register(Registries.VILLAGER_PROFESSION, ConvertNamespace.convert(name),
+        return Registry.register(Registries.VILLAGER_PROFESSION, Id.of(name),
                 new VillagerProfession(name, entry -> entry.matchesKey(type),
                         entry -> entry.matchesKey(type), ImmutableSet.of(),
                         ImmutableSet.of(), sound_event));

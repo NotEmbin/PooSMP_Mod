@@ -1,7 +1,7 @@
 package embin.poosmp.block;
 
 import embin.poosmp.PooSMPMod;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import embin.poosmp.world.PooSMPConfiguredFeatures;
 import embin.poosmp.world.tree.PooSMPSaplingGens;
 import net.minecraft.block.*;
@@ -61,7 +61,7 @@ public class PooSMPBlocks {
 
 
     public static Block register(Block block, String name, Item.Settings settings, boolean should_register_item) {
-        Identifier id = ConvertNamespace.convert(name);
+        Identifier id = Id.of(name);
         if (should_register_item) {
             BlockItem blockItem = new BlockItem(block, settings);
             Registry.register(Registries.ITEM, id, blockItem);

@@ -1,0 +1,8 @@
+{
+  "icon": "minecraft:stone",
+  "price": {
+    "base_price": 40,
+    "price_increase_base": 25
+  },
+  "max_purchases": 15
+}

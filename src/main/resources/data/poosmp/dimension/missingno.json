@@ -1,0 +1,11 @@
+{
+  "type": "poosmp:missingno",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "poosmp:missingno",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "poosmp:missingno"
+    }
+  }
+}

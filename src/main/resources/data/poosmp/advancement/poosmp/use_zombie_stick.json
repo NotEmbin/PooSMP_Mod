@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:zombie_head"
+    },
+    "title": "Rise my Goons!",
+    "description": "Use a Zombie Stick to create an army"
+  },
+  "parent": "poosmp:poosmp/root",
+  "criteria": {
+    "use": {
+      "trigger": "minecraft:using_item",
+      "conditions": {
+        "item": {
+          "items": "poosmp:zombie_stick"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "use"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

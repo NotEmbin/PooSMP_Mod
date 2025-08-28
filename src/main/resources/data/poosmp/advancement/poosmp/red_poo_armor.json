@@ -1,0 +1,42 @@
+{
+  "parent": "poosmp:poosmp/obtain_red_poo",
+  "criteria": {
+    "red_poo_armor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "poosmp:red_poo_helmet"
+          },
+          {
+            "items": "poosmp:red_poo_chestplate"
+          },
+          {
+            "items": "poosmp:red_poo_leggings"
+          },
+          {
+            "items": "poosmp:red_poo_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Obtain a full set of Red Poo armor",
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "poosmp:red_poo_chestplate"
+    },
+    "title": "Cover Me in Shit"
+  },
+  "requirements": [
+    [
+      "red_poo_armor"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  },
+  "sends_telemetry_event": false
+}

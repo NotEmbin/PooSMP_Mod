@@ -1,13 +1,13 @@
 package embin.poosmp.items;
 
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 
 public interface PooSMPJukeboxSongs {
     private static RegistryKey<JukeboxSong> of (String namespace) {
-        return RegistryKey.of(RegistryKeys.JUKEBOX_SONG, ConvertNamespace.convert(namespace));
+        return RegistryKey.of(RegistryKeys.JUKEBOX_SONG, Id.of(namespace));
     }
 
     RegistryKey<JukeboxSong> TRIFECTA_CAP = of("trifecta_cap");

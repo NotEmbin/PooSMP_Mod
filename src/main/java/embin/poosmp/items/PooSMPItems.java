@@ -2,11 +2,12 @@ package embin.poosmp.items;
 
 import embin.poosmp.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
-import embin.poosmp.util.ConvertNamespace;
+import embin.poosmp.util.Id;
 import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -21,7 +22,7 @@ import net.minecraft.util.Rarity;
 
 public class PooSMPItems {
     public static <T extends Item> T register(String path, T item) {
-        return Registry.register(Registries.ITEM, ConvertNamespace.convert(path), item);
+        return Registry.register(Registries.ITEM, Id.of(path), item);
     }
 
     public static final Item POOP_STICK = register("poop_stick", new PoopStickItem(new Item.Settings().rarity(Rarity.UNCOMMON).fireproof().maxCount(1)));
@@ -41,7 +42,7 @@ public class PooSMPItems {
     public static final Item RING = register("ring");
     public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4, ""), false);
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
-    public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.of(ConvertNamespace.convert("poosmp:fill")));
+    public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.of(Id.of("poosmp:fill")));
     public static final Item DISC_TRIFECTA_CAP = musicDisc("trifecta_cap", PooSMPJukeboxSongs.TRIFECTA_CAP, "Embin");
     public static final Item DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL = musicDisc("butterflies_and_hurricanes_instrumental", PooSMPJukeboxSongs.BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL, "Embin");
     public static final Item DISC_BUDDY_HOLLY = musicDisc("buddy_holly", PooSMPJukeboxSongs.BUDDY_HOLLY, "ianyourgod");
@@ -104,6 +105,10 @@ public class PooSMPItems {
     public static final Item RED_POO_CHESTPLATE = register("red_poo_chestplate", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.CHESTPLATE, new Item.Settings().maxDamage(ArmorItem.Type.CHESTPLATE.getMaxDamage(44))));
     public static final Item RED_POO_LEGGINGS = register("red_poo_leggings", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.LEGGINGS, (new Item.Settings()).maxDamage(ArmorItem.Type.LEGGINGS.getMaxDamage(44))));
     public static final Item RED_POO_BOOTS = register("red_poo_boots", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.BOOTS, new Item.Settings().maxDamage(ArmorItem.Type.BOOTS.getMaxDamage(44))));
+    public static final Item GEAR = register("gear");
+    public static final Item SCREW = register("screw");
+    public static final Item GLASS_SHARD = register("glass_shard");
+    public static final Item MAGIC_DEVICE = register("magic_device", new MagicDeviceItem(new Item.Settings().maxDamage(1024).attributeModifiers(magicDeviceAttributes(17.0F))));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
@@ -135,6 +140,10 @@ public class PooSMPItems {
         return register(name, new Item(new Item.Settings().rarity(rarity)));
     }
 
+    private static Item food(String name, FoodComponent food) {
+        return register(name, new Item(new Item.Settings().food(food)));
+    }
+
     private static Item totem(String name, AttributeModifiersComponent attributes, boolean enchanted) {
         if (enchanted) {
             return register("enchanted_totem_of_" + name, new CreativeSnitchItem(new Item.Settings().attributeModifiers(attributes).rarity(Rarity.RARE).maxCount(1).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)));
@@ -147,7 +156,7 @@ public class PooSMPItems {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.GENERIC_MAX_HEALTH,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:health_totem_buff" + id_suffix), hp, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:health_totem_buff" + id_suffix), hp, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();
@@ -157,13 +166,13 @@ public class PooSMPItems {
         return AttributeModifiersComponent.builder().add(
             EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:reach_totem_blocks" + id_suffix), amount, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:reach_totem_blocks" + id_suffix), amount, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).add(
             EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
             new EntityAttributeModifier(
-                ConvertNamespace.convert("poosmp:reach_totem_entities" + id_suffix), amount, EntityAttributeModifier.Operation.ADD_VALUE
+                Id.of("poosmp:reach_totem_entities" + id_suffix), amount, EntityAttributeModifier.Operation.ADD_VALUE
             ),
             AttributeModifierSlot.HAND
         ).build();
@@ -176,5 +185,15 @@ public class PooSMPItems {
     public static Item.Settings copyAttributes(ItemConvertible item) {
         AttributeModifiersComponent attributes = item.asItem().getComponents().getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
         return new Item.Settings().attributeModifiers(attributes);
+    }
+
+    public static AttributeModifiersComponent magicDeviceAttributes(float amount) {
+        return AttributeModifiersComponent.builder().add(
+                EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
+                new EntityAttributeModifier(
+                        Id.of("poosmp:magic_device"), amount, EntityAttributeModifier.Operation.ADD_VALUE
+                ),
+                AttributeModifierSlot.HAND
+        ).build();
     }
 }
