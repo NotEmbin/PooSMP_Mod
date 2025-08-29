@@ -4,6 +4,7 @@ import embin.poosmp.PooSMPMod;
 import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.client.ClientUpgradeData;
 import embin.poosmp.networking.payload.BuyUpgradePayload;
+import embin.poosmp.networking.payload.SellUpgradePayload;
 import embin.poosmp.upgrade.PriceObject;
 import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.upgrade.Upgrades;
@@ -115,6 +116,9 @@ public class UpgradesListWidget extends ElementListWidget<UpgradesListWidget.Upg
                 UpgradesListWidget.this.update();
             }).dimensions(50, 50, 20, 20).build();
             this.sellButton = ButtonWidget.builder(Text.literal("-"), button -> {
+                ClientPlayNetworking.send(new SellUpgradePayload(this.upgrade.getId()));
+                int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(this.upgrade);
+                ClientUpgradeData.INSTANCE.setPurchasedAmount(this.upgrade, amountPurchased - 1);
                 player.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK);
                 UpgradesListWidget.this.update();
             }).dimensions(30, 50, 20, 20).build();
@@ -159,7 +163,7 @@ public class UpgradesListWidget extends ElementListWidget<UpgradesListWidget.Upg
 
         protected void update() {
             this.sellButton.active = canBeSold(this.upgrade);
-            this.buyButton.active = this.ticksSincePurchase >= 10;
+            this.buyButton.active = this.ticksSincePurchase >= 60;
             this.ticksSincePurchase++;
             //this.text.setCentered(true);
             //this.text.setTextColor(Colors.BLACK);

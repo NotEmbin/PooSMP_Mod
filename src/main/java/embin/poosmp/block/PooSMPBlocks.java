@@ -1,6 +1,7 @@
 package embin.poosmp.block;
 
 import embin.poosmp.PooSMPMod;
+import embin.poosmp.block.annoyance.Annoyances;
 import embin.poosmp.util.Id;
 import embin.poosmp.world.PooSMPConfiguredFeatures;
 import embin.poosmp.world.tree.PooSMPSaplingGens;
@@ -24,7 +25,7 @@ public class PooSMPBlocks {
     public static final Block POOP_BRICK_SLAB = register("poop_brick_slab", slabBlock(POOP_BRICKS));
     public static final Block POOP_BRICK_WALL = register("poop_brick_wall", wallBlock(POOP_BRICKS));
     public static final Block RED_NETHER_BRICK_FENCE = register("red_nether_brick_fence", new FenceBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_RED).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F).sounds(BlockSoundGroup.NETHER_BRICKS)));
-    public static final Block SUS = register("im_gonna_kill_myself", new AnnoyanceBlock(AbstractBlock.Settings.create().mapColor(DyeColor.RED).strength(1.0F)));
+    public static final Block SUS = register("im_gonna_kill_myself", new AnnoyanceBlock(Annoyances.SUS, AbstractBlock.Settings.create().mapColor(DyeColor.RED).strength(1.0F)));
     public static final Block DDEDEDODEDIAMANTE_BLOCK = register("ddededodediamante_block", new ddededodediamanteBlock(AbstractBlock.Settings.create().mapColor(DyeColor.MAGENTA).strength(1.0F)));
     public static final Block PENIS_BLOCK = register("minecraft:penis", new GrassBlock(copyBlock(Blocks.GRASS_BLOCK)));
     public static final Block BANKERS_TABLE = register("bankers_table", new Block(copyBlock(Blocks.FLETCHING_TABLE).mapColor(DyeColor.BROWN)));
@@ -58,6 +59,7 @@ public class PooSMPBlocks {
     // public static final Block ITEM_SHOP = register("item_shop", new ItemShopBlock(copyBlock(Blocks.IRON_BLOCK)));
     // i can't bother with this right now
     public static final Block RED_POO_BLOCK = register("red_poo_block", new Block(AbstractBlock.Settings.create().requiresTool().mapColor(DyeColor.RED).strength(2.5F).sounds(BlockSoundGroup.BONE)), new Item.Settings().rarity(Rarity.UNCOMMON));
+    public static final Block DRAGON_ANNOYANCE = register("ear_destroyer_9000", new AnnoyanceBlock(Annoyances.DRAGON, AbstractBlock.Settings.create().mapColor(DyeColor.WHITE).strength(1.0F)));
 
 
     public static Block register(Block block, String name, Item.Settings settings, boolean should_register_item) {

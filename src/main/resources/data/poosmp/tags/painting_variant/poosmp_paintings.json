@@ -1,9 +1,6 @@
 {
   "values": [
-    "poosmp:wedding",
-    "poosmp:pet",
-    "poosmp:monster_genocide",
-    "poosmp:penguinmod",
-    "poosmp:tech_tip"
+    "#poosmp:placeable_poosmp_paintings",
+    "#poosmp:non_placeable_poosmp_paintings"
   ]
 }

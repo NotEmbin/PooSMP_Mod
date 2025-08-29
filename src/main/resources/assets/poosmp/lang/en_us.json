@@ -150,5 +150,9 @@
 	"item.poosmp.glass_shard": "Glass Shard",
 	"item.poosmp.magic_device": "Magic Device",
 	"category.poosmp.keybinds": "Poo SMP",
-	"upgrade.poosmp.fire_resistance": "Fire Resistance"
+	"upgrade.poosmp.health_increase": "Health Increase Upgrade",
+	"upgrade.poosmp.block_reach_distance": "Block Reach Upgrade",
+	"upgrade.poosmp.entity_reach_distance": "Entity Reach Upgrade",
+	"upgrade.poosmp.fire_resistance": "Fire Resistance",
+	"block.poosmp.ear_destroyer_9000": "Ear Destroyer 9000"
 }

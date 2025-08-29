@@ -31,6 +31,10 @@ public class ClientUpgradeData {
         this.purchases.put(id, amount);
     }
 
+    public void setPurchasedAmount(Identifier upgrade, int amount) {
+        this.purchases.put(upgrade, amount);
+    }
+
     public void sync(PacketByteBuf buf) {
         NbtCompound data = buf.readNbt();
         if (data != null) {

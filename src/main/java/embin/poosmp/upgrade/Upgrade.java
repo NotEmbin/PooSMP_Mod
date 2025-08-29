@@ -3,12 +3,15 @@ package embin.poosmp.upgrade;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.networking.payload.UpgradeSyncPayload;
 import embin.poosmp.util.IEntityDataSaver;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -49,5 +52,13 @@ public record Upgrade(
 
     public int amountPurchased() {
         return ServerUpgradeData.INSTANCE.getPurchasedAmount(this);
+    }
+
+    public static void syncData(ServerPlayerEntity player) {
+        NbtCompound data = new NbtCompound();
+        for (Identifier upgrade : ServerUpgradeData.INSTANCE.savedUpgrades()) {
+            data.putInt(upgrade.toString(), ServerUpgradeData.INSTANCE.getPurchasedAmount(upgrade));
+        }
+        ServerPlayNetworking.send(player, new UpgradeSyncPayload(data));
     }
 }

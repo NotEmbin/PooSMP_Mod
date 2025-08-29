@@ -26,6 +26,7 @@ import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.*;
@@ -133,7 +134,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPBlocks.PALE_OAK_LEAVES);
 				RegistryEntryLookup<PaintingVariant> registryEntryLookup = displayContext.lookup().createRegistryLookup().getOrThrow(RegistryKeys.PAINTING_VARIANT);
 				RegistryOps<NbtElement> registryOps = displayContext.lookup().getOps(NbtOps.INSTANCE);
-				for (RegistryEntry<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.POOSMP_PAINTINGS).stream().toList()) {
+				for (RegistryEntry<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.PLACEABLE_PAINTINGS).stream().toList()) {
 					NbtComponent nbtComponent = NbtComponent.DEFAULT.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
 					ItemStack painting = new ItemStack(Items.PAINTING);
 					painting.set(DataComponentTypes.ENTITY_DATA, nbtComponent);
@@ -158,6 +159,14 @@ public class PooSMPMod implements ModInitializer {
 				entries.add(PooSMPItems.SCREW);
 				entries.add(PooSMPItems.GLASS_SHARD);
 				entries.add(PooSMPItems.MAGIC_DEVICE);
+				entries.add(PooSMPBlocks.DRAGON_ANNOYANCE);
+				for (RegistryEntry<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.NON_PLACEABLE_PAINTINGS).stream().toList()) {
+					NbtComponent nbtComponent = NbtComponent.DEFAULT.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
+					ItemStack painting = new ItemStack(Items.PAINTING);
+					painting.set(DataComponentTypes.ENTITY_DATA, nbtComponent);
+					entries.add(painting);
+					//NbtComponent.DEFAULT.apply((nbtCompound -> nbtCompound.put("variant", )));
+				}
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()

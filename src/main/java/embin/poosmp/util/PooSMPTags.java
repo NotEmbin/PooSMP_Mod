@@ -44,6 +44,8 @@ public class PooSMPTags {
         }
 
         public static final TagKey<PaintingVariant> POOSMP_PAINTINGS = createTag("poosmp:poosmp_paintings");
+        public static final TagKey<PaintingVariant> PLACEABLE_PAINTINGS = createTag("poosmp:placeable_poosmp_paintings");
+        public static final TagKey<PaintingVariant> NON_PLACEABLE_PAINTINGS = createTag("poosmp:non_placeable_poosmp_paintings");
     }
 
     public static class Upgrades {

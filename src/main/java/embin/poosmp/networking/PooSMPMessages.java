@@ -2,15 +2,19 @@ package embin.poosmp.networking;
 
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.client.ClientUpgradeData;
 import embin.poosmp.networking.packet.BuyUpgradeC2SPacket;
 import embin.poosmp.networking.payload.BuyUpgradePayload;
 import embin.poosmp.networking.payload.SellUpgradePayload;
+import embin.poosmp.networking.payload.UpgradeSyncPayload;
 import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.IEntityDataSaver;
 import embin.poosmp.util.Id;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -70,13 +74,14 @@ public class PooSMPMessages {
     }
 
     public static void registerS2CPackets() {
-        /*
-
-        ClientPlayNetworking.registerGlobalReceiver(MoneySyncPayload.ID, (payload, context) -> {
+        PayloadTypeRegistry.playS2C().register(UpgradeSyncPayload.ID, UpgradeSyncPayload.CODEC);
+        ClientPlayNetworking.registerGlobalReceiver(UpgradeSyncPayload.ID, (payload, context) -> {
             context.client().execute(() -> {
+                for (String upgradeId : payload.nbt().getKeys()) {
+                    Identifier id = Id.of(upgradeId);
+                    ClientUpgradeData.INSTANCE.setPurchasedAmount(id, payload.nbt().getInt(upgradeId));
+                }
             });
         });
-
-         */
     }
 }

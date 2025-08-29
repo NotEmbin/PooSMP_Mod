@@ -3,6 +3,7 @@ package embin.poosmp.upgrade;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.client.ClientUpgradeData;
 import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.util.IEntityDataSaver;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,7 +50,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
     }
 
     public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity) {
-        return getCurrentPrice(upgrade, playerEntity, ServerUpgradeData.INSTANCE.getPurchasedAmount(upgrade));
+        return getCurrentPrice(upgrade, playerEntity, ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade));
     }
 
     public static boolean canBeSold(Upgrade upgrade, PlayerEntity playerEntity) {

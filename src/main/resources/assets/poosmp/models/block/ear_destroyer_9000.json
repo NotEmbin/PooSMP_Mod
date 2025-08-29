@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "poosmp:block/ear_destroyer_9000"
+  }
+}

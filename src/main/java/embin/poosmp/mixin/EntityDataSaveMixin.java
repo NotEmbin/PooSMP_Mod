@@ -1,10 +1,13 @@
 package embin.poosmp.mixin;
 
+import embin.poosmp.client.ClientUpgradeData;
 import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.util.IEntityDataSaver;
 import embin.poosmp.util.Id;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,11 +39,16 @@ public abstract class EntityDataSaveMixin implements IEntityDataSaver {
 
     @Inject(method = "readNbt", at = @At("HEAD"))
     protected void injectRead(NbtCompound nbt, CallbackInfo ci) {
+        Entity entity = (Entity)(Object)this;
         if (nbt.contains("poosmp:upgrades", 10)) {
             NbtCompound upgradeData = nbt.getCompound("poosmp:upgrades");
             for (String upgradeId : upgradeData.getKeys()) {
                 Identifier id = Id.of(upgradeId);
-                ServerUpgradeData.INSTANCE.setPurchasedAmount(id, upgradeData.getInt(upgradeId));
+                if (!entity.getWorld().isClient()) {
+                    ServerUpgradeData.INSTANCE.setPurchasedAmount(id, upgradeData.getInt(upgradeId));
+                } else if (entity instanceof ClientPlayerEntity) {
+                    ClientUpgradeData.INSTANCE.setPurchasedAmount(id, upgradeData.getInt(upgradeId));
+                }
             }
         }
     }
