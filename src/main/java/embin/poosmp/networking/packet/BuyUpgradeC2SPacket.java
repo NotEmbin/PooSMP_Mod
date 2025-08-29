@@ -18,7 +18,7 @@ public class BuyUpgradeC2SPacket {
         ServerWorld world = player.getServerWorld();
         Upgrade upgrade = server.getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE).get(Identifier.of(buf.readString()));
         if (upgrade != null) {
-            upgrade.buyUpgrade((IEntityDataSaver) player);
+            //upgrade.buyUpgrade((IEntityDataSaver) player);
             world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS);
         }
     }

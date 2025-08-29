@@ -4,6 +4,7 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.BiomeStickItem;
 import embin.poosmp.items.MobStickItem;
 import embin.poosmp.items.PooSMPItems;
+import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.upgrade.Upgrades;
 import embin.poosmp.util.Id;
 import embin.poosmp.util.PooSMPTags;
@@ -263,6 +264,9 @@ public class PooSMPMod implements ModInitializer {
 		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_SLAB, 5, 20);
 		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_FENCE, 5, 20);
 		FlammableBlockRegistry.getDefaultInstance().add(PooSMPBlocks.PALE_OAK_FENCE_GATE, 5, 20);
+
+		PooSMPMessages.register();
+		PooSMPMessages.registerC2SPackets();
 
 		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
 

@@ -13,15 +13,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public class SussyBlock extends Block {
-    public static final MapCodec<SussyBlock> CODEC = createCodec(SussyBlock::new);
+public class AnnoyanceBlock extends Block {
+    public static final MapCodec<AnnoyanceBlock> CODEC = createCodec(AnnoyanceBlock::new);
 
     @Override
-    public MapCodec<? extends SussyBlock> getCodec() {
+    public MapCodec<? extends AnnoyanceBlock> getCodec() {
         return CODEC;
     }
 
-    public SussyBlock(AbstractBlock.Settings settings) {
+    public AnnoyanceBlock(AbstractBlock.Settings settings) {
         super(settings);
     }
 

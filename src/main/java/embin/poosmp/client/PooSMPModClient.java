@@ -2,6 +2,7 @@ package embin.poosmp.client;
 
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.client.screen.UpgradesScreen;
+import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.util.Id;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -53,5 +54,7 @@ public class PooSMPModClient implements ClientModInitializer {
 			PooSMPBlocks.PALE_MOSS_CARPET,
 			PooSMPBlocks.POTTED_PALE_OAK_SAPLING
 		);
+
+		PooSMPMessages.registerS2CPackets();
 	}
 }

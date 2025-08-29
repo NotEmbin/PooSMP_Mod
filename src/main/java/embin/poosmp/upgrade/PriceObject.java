@@ -3,8 +3,8 @@ package embin.poosmp.upgrade;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.util.IEntityDataSaver;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.dynamic.Codecs;
@@ -32,21 +32,37 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
         return new PriceObject(base_price, 0, Optional.empty());
     }
 
+    public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity, int amountPurchased) {
+        int basePrice = upgrade.price().base_price();
+        int priceIncreaseBase = upgrade.price().price_increase_base();
+
+        int priceIncrease = priceIncreaseBase;
+        if (amountPurchased > 1) {
+            Optional<PriceIncreasePerLevel> pipl = upgrade.price().price_increase_per_level();
+            if (pipl.isPresent()) {
+                priceIncrease = pipl.get().value() * (amountPurchased - 1);
+                if (priceIncrease < priceIncreaseBase) priceIncrease = priceIncreaseBase;
+            }
+        }
+
+        return basePrice + priceIncrease;
+    }
+
     public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity) {
-        IEntityDataSaver player = (IEntityDataSaver) playerEntity;
-        NbtCompound saveData = player.poosmpmod$getPersistentData();
-        String id = PooSMPRegistries.UPGRADE.getId(upgrade).toString();
-        return 2123456789;
+        return getCurrentPrice(upgrade, playerEntity, ServerUpgradeData.INSTANCE.getPurchasedAmount(upgrade));
     }
 
     public static boolean canBeSold(Upgrade upgrade, PlayerEntity playerEntity) {
-        IEntityDataSaver player = (IEntityDataSaver) playerEntity;
-        NbtCompound saveData = player.poosmpmod$getPersistentData();
-        String id = PooSMPRegistries.UPGRADE.getId(upgrade).toString();
-        if (!saveData.getCompound("upgrades").contains(id) || saveData.getCompound("upgrades").getInt(id) <= 0) {
-            return false;
-        }
+        if (ServerUpgradeData.INSTANCE.getPurchasedAmount(upgrade) <= 0) return false;
         return upgrade.can_be_sold();
+    }
+
+    public static int getSellPrice(Upgrade upgrade, PlayerEntity playerEntity, int amountPurchased) {
+        return upgrade.price().base_price();
+    }
+
+    public static int getSellPrice(Upgrade upgrade, PlayerEntity playerEntity) {
+        return getSellPrice(upgrade, playerEntity, upgrade.amountPurchased());
     }
 
     public record PriceIncreasePerLevel(int value, float multiplier) {

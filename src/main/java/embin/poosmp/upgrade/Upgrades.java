@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 
 import java.util.Optional;
 
@@ -22,6 +21,7 @@ public class Upgrades {
                 Registries.ITEM.getEntry(icon),
                 PriceObject.of(base_price, price_increase_base),
                 true,
+                Optional.empty(),
                 Optional.empty()
         ));
     }
@@ -31,11 +31,22 @@ public class Upgrades {
                 Registries.ITEM.getEntry(icon),
                 price,
                 true,
-                Optional.of(max_purchases)
+                Optional.of(max_purchases),
+                Optional.empty()
         ));
     }
 
     public static void init() {
         PooSMPMod.LOGGER.info("Upgrades maybe????");
+
+        for (int i = 1; i <= 64; i++) {
+            Registry.register(PooSMPRegistries.UPGRADE, Id.of("dummy_" + i), new Upgrade(
+                    Registries.ITEM.getEntry(Registries.ITEM.get(i + 5)),
+                    PriceObject.of(1),
+                    true,
+                    Optional.empty(),
+                    Optional.empty()
+            ));
+        }
     }
 }
