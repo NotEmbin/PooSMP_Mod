@@ -3,7 +3,6 @@ package embin.poosmp.networking.payload;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.network.packet.s2c.custom.DebugBeeCustomPayload;
 import net.minecraft.util.Identifier;
 
 public record BuyUpgradePayload(Identifier upgrade) implements CustomPayload {

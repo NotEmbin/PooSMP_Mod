@@ -108,7 +108,8 @@ public class PooSMPItems {
     public static final Item GEAR = register("gear");
     public static final Item SCREW = register("screw");
     public static final Item GLASS_SHARD = register("glass_shard");
-    public static final Item MAGIC_DEVICE = register("magic_device", new MagicDeviceItem(new Item.Settings().maxDamage(1024).attributeModifiers(magicDeviceAttributes(17.0F))));
+    public static final Item MAGIC_DEVICE = register("magic_device", new MagicDeviceItem(new Item.Settings().maxDamage(1024).attributeModifiers(magicDeviceAttributes(17.0F)).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)));
+    public static final Item NULL_SHARD = register("null_shard", Rarity.EPIC);
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);

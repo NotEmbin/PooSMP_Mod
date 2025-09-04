@@ -19,10 +19,7 @@ import net.minecraft.client.gui.screen.StatsScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.option.ControlsListWidget;
 import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.EntryListWidget;
-import net.minecraft.client.gui.widget.NarratedMultilineTextWidget;
+import net.minecraft.client.gui.widget.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
@@ -31,6 +28,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.text.Text;
@@ -134,12 +132,22 @@ public class UpgradesListWidget extends ElementListWidget<UpgradesListWidget.Upg
             context.drawItemWithoutEntity(this.upgrade.icon().value().getDefaultStack(), x + 2, y + 2);
             this.buyButton.setPosition(x + 175, y);
             this.sellButton.setPosition(x + 80, y);
-            String upgradePrice = StatFormatter.DEFAULT.format(PriceObject.getCurrentPrice(this.upgrade, this.player));
             int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(this.upgrade);
+            String upgradePrice = StatFormatter.DEFAULT.format(PriceObject.getCurrentPrice(this.upgrade, this.player, amountPurchased));
             int offset = UpgradesListWidget.this.client.textRenderer.getWidth(upgradePrice) / 2;
             if (amountPurchased > 0) {
                 Tooltip tooltip = Tooltip.of(Text.literal("+" + PriceObject.getCurrentPrice(this.upgrade, this.player, amountPurchased - 1)));
                 this.sellButton.setTooltip(tooltip);
+            } else {
+                this.sellButton.setTooltip(null);
+            }
+            if (!canBeBought(this.upgrade)) {
+                this.buyButton.setTooltip(Tooltip.of(Text.literal("Out of stock!")));
+            } else if (this.upgrade.max_purchases().isPresent()){
+                String tooltip = String.format("%s/%s", amountPurchased, this.upgrade.max_purchases().get());
+                this.buyButton.setTooltip(Tooltip.of(Text.literal(tooltip)));
+            } else {
+                this.buyButton.setTooltip(null);
             }
             //context.fill(x - (offset * 2) + 9, y + 3, x + 103 + offset, y + 16, Colors.WHITE);
             //context.fill(x - (offset * 2) + 10, y + 4, x + 102 + offset, y + 15, Colors.BLACK);
@@ -149,6 +157,7 @@ public class UpgradesListWidget extends ElementListWidget<UpgradesListWidget.Upg
             context.drawCenteredTextWithShadow(UpgradesListWidget.this.client.textRenderer, StatFormatter.DEFAULT.format(amountPurchased), x + 50, y + 6, Colors.WHITE);
             this.buyButton.render(context, mouseX, mouseY, tickDelta);
             this.sellButton.render(context, mouseX, mouseY, tickDelta);
+            context.drawCenteredTextWithShadow(UpgradesListWidget.this.client.textRenderer, "0", UpgradesListWidget.this.width / 2, 10, Colors.WHITE);
             this.update();
         }
 
@@ -161,9 +170,13 @@ public class UpgradesListWidget extends ElementListWidget<UpgradesListWidget.Upg
             return upgrade.can_be_sold();
         }
 
+        protected static boolean canBeBought(Upgrade upgrade) {
+            return ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade) < upgrade.maxPurchases();
+        }
+
         protected void update() {
-            this.sellButton.active = canBeSold(this.upgrade);
-            this.buyButton.active = this.ticksSincePurchase >= 60;
+            this.sellButton.active = canBeSold(this.upgrade) && this.ticksSincePurchase >= 120;
+            this.buyButton.active = canBeBought(this.upgrade) && this.ticksSincePurchase >= 120;
             this.ticksSincePurchase++;
             //this.text.setCentered(true);
             //this.text.setTextColor(Colors.BLACK);

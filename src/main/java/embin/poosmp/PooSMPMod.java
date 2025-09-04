@@ -167,6 +167,7 @@ public class PooSMPMod implements ModInitializer {
 					entries.add(painting);
 					//NbtComponent.DEFAULT.apply((nbtCompound -> nbtCompound.put("variant", )));
 				}
+				entries.add(PooSMPItems.NULL_SHARD);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()

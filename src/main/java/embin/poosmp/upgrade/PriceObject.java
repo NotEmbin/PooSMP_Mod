@@ -21,6 +21,10 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
             ).apply(instance, PriceObject::new)
     );
 
+    public static PriceObject of(int base_price, int price_increase_base, int value, float multiplier) {
+        return new PriceObject(base_price, price_increase_base, Optional.of(new PriceIncreasePerLevel(value, multiplier)));
+    }
+
     public static PriceObject of(int base_price, int price_increase_base, Optional<PriceIncreasePerLevel> price_increase_per_level) {
         return new PriceObject(base_price, price_increase_base, price_increase_per_level);
     }
@@ -34,6 +38,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
     }
 
     public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity, int amountPurchased) {
+        /*
         int basePrice = upgrade.price().base_price();
         int priceIncreaseBase = upgrade.price().price_increase_base();
 
@@ -41,12 +46,17 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
         if (amountPurchased > 1) {
             Optional<PriceIncreasePerLevel> pipl = upgrade.price().price_increase_per_level();
             if (pipl.isPresent()) {
-                priceIncrease = pipl.get().value() * (amountPurchased - 1);
+                priceIncrease = priceIncrease + (pipl.get().value() * (amountPurchased - 1));
                 if (priceIncrease < priceIncreaseBase) priceIncrease = priceIncreaseBase;
             }
         }
 
-        return basePrice + priceIncrease;
+        return (basePrice + priceIncrease);
+         */
+        if (amountPurchased > 0) {
+            return upgrade.price().base_price() + (upgrade.price().price_increase_base() * (amountPurchased));
+        }
+        return upgrade.price().base_price();
     }
 
     public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity) {

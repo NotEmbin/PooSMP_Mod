@@ -148,11 +148,13 @@
 	"item.poosmp.gear": "Gear",
 	"item.poosmp.screw": "Screw",
 	"item.poosmp.glass_shard": "Glass Shard",
-	"item.poosmp.magic_device": "Magic Device",
+	"item.poosmp.magic_device": "The Amazing Magical Device of Comedic Wonders",
 	"category.poosmp.keybinds": "Poo SMP",
 	"upgrade.poosmp.health_increase": "Health Increase Upgrade",
 	"upgrade.poosmp.block_reach_distance": "Block Reach Upgrade",
 	"upgrade.poosmp.entity_reach_distance": "Entity Reach Upgrade",
 	"upgrade.poosmp.fire_resistance": "Fire Resistance",
-	"block.poosmp.ear_destroyer_9000": "Ear Destroyer 9000"
+	"block.poosmp.ear_destroyer_9000": "Ear Destroyer 9000",
+	"upgrade.poosmp.attack_damage_increase": "Attack Damage Upgrade",
+	"item.poosmp.null_shard": "Null Shard"
 }

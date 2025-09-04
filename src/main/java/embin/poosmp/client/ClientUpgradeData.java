@@ -16,9 +16,11 @@ import java.util.Map;
 public class ClientUpgradeData {
     public static final ClientUpgradeData INSTANCE = new ClientUpgradeData();
     public Map<Identifier, Integer> purchases;
+    public int balance;
 
     private ClientUpgradeData() {
         this.purchases = HashMap.newHashMap(32);
+        this.balance = 0;
     }
 
     public int getPurchasedAmount(Upgrade upgrade) {
@@ -33,6 +35,14 @@ public class ClientUpgradeData {
 
     public void setPurchasedAmount(Identifier upgrade, int amount) {
         this.purchases.put(upgrade, amount);
+    }
+
+    public void setBalance(int newAmount) {
+        this.balance = newAmount;
+    }
+
+    public int getBalance() {
+        return this.balance;
     }
 
     public void sync(PacketByteBuf buf) {
