@@ -7,6 +7,7 @@ import embin.poosmp.util.Id;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,25 +31,33 @@ public abstract class EntityDataSaveMixin implements IEntityDataSaver {
 
     @Inject(method = "writeNbt", at = @At("HEAD"))
     protected void injectWrite(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        NbtCompound saveData = new NbtCompound();
-        for (Identifier upgrade : ServerUpgradeData.INSTANCE.savedUpgrades()) {
-            saveData.putInt(upgrade.toString(), ServerUpgradeData.INSTANCE.getPurchasedAmount(upgrade));
+        Entity entity = (Entity)(Object)this;
+        if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+            NbtCompound upgradeData = new NbtCompound();
+            for (Identifier upgrade : ServerUpgradeData.INSTANCE.savedUpgrades(serverPlayerEntity)) {
+                upgradeData.putInt(upgrade.toString(), ServerUpgradeData.INSTANCE.getPurchasedAmount(serverPlayerEntity, upgrade));
+            }
+            nbt.put("poosmp:upgrades", upgradeData);
+            nbt.putDouble("poosmp:balance", ServerUpgradeData.INSTANCE.getBalance(serverPlayerEntity));
         }
-        nbt.put("poosmp:upgrades", saveData);
     }
 
     @Inject(method = "readNbt", at = @At("HEAD"))
     protected void injectRead(NbtCompound nbt, CallbackInfo ci) {
         Entity entity = (Entity)(Object)this;
-        if (nbt.contains("poosmp:upgrades", 10)) {
+        if (nbt.contains("poosmp:upgrades", NbtElement.COMPOUND_TYPE)) {
             NbtCompound upgradeData = nbt.getCompound("poosmp:upgrades");
             for (String upgradeId : upgradeData.getKeys()) {
                 Identifier id = Id.of(upgradeId);
-                if (!entity.getWorld().isClient()) {
-                    ServerUpgradeData.INSTANCE.setPurchasedAmount(id, upgradeData.getInt(upgradeId));
-                } else if (entity instanceof ClientPlayerEntity) {
-                    ClientUpgradeData.INSTANCE.setPurchasedAmount(id, upgradeData.getInt(upgradeId));
+                if (!entity.getWorld().isClient() && entity instanceof ServerPlayerEntity serverPlayerEntity) {
+                    ServerUpgradeData.INSTANCE.setPurchasedAmount(serverPlayerEntity, id, upgradeData.getInt(upgradeId));
                 }
+            }
+        }
+        if (nbt.contains("poosmp:balance", NbtElement.DOUBLE_TYPE)) {
+            double balance = nbt.getDouble("poosmp:balance");
+            if (!entity.getWorld().isClient() && entity instanceof ServerPlayerEntity serverPlayerEntity) {
+                ServerUpgradeData.INSTANCE.setBalance(serverPlayerEntity, balance);
             }
         }
     }

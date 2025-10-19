@@ -1,0 +1,15 @@
+{
+  "icon": "minecraft:water_bucket",
+  "price": {
+    "base_price": 120
+  },
+  "max_purchases": 1,
+  "status_effect": {
+    "id": "minecraft:water_breathing",
+    "amplifier": 0,
+    "duration": -1,
+    "show_particles": false,
+    "show_icon": true,
+    "ambient": true
+  }
+}

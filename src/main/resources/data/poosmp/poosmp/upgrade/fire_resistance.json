@@ -1,8 +1,15 @@
 {
   "icon": "minecraft:magma_block",
   "price": {
-    "base_price": 250,
-    "price_increase_base": 0
+    "base_price": 250
   },
-  "max_purchases": 1
+  "max_purchases": 1,
+  "status_effect": {
+    "id": "minecraft:fire_resistance",
+    "amplifier": 0,
+    "duration": -1,
+    "show_particles": false,
+    "show_icon": true,
+    "ambient": true
+  }
 }

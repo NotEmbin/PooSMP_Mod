@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " # ",
+    "#3#",
+    " # "
+  ],
+  "key": {
+    "3": {
+      "item": "minecraft:glow_ink_sac"
+    },
+    "#": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "id": "poosmp:fake_stone",
+    "count": 4
+  },
+  "show_notification": true
+}

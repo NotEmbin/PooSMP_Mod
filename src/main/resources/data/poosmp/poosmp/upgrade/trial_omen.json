@@ -1,0 +1,15 @@
+{
+  "icon": "minecraft:ominous_trial_key",
+  "price": {
+    "base_price": 250
+  },
+  "max_purchases": 1,
+  "status_effect": {
+    "id": "minecraft:trial_omen",
+    "amplifier": 0,
+    "duration": -1,
+    "show_particles": false,
+    "show_icon": true,
+    "ambient": true
+  }
+}

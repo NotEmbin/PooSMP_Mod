@@ -1,6 +1,6 @@
 package embin.poosmp.items;
 
-import embin.poosmp.PooSMPItemComponents;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,7 +9,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 

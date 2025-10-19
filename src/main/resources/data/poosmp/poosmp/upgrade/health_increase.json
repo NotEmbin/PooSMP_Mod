@@ -1,7 +1,15 @@
 {
   "icon": "minecraft:enchanted_golden_apple",
   "price": {
-    "base_price": 15,
-    "price_increase_base": 10
-  }
+    "base_price": 50,
+    "price_increase_base": 15
+  },
+  "attribute_modifiers": [
+    {
+      "type": "minecraft:generic.max_health",
+      "id": "poosmp:upgrade/health_increase",
+      "amount": 2,
+      "operation": "add_value"
+    }
+  ]
 }

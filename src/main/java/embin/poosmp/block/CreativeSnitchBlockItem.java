@@ -1,6 +1,6 @@
 package embin.poosmp.block;
 
-import embin.poosmp.PooSMPItemComponents;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.BlockItem;

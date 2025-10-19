@@ -16,7 +16,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
     public static final Codec<PriceObject> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     Codecs.rangedInt(0, 500_000_000).fieldOf("base_price").forGetter(PriceObject::base_price),
-                    Codecs.rangedInt(0, 500_000_000).fieldOf("price_increase_base").forGetter(PriceObject::price_increase_base),
+                    Codecs.rangedInt(0, 500_000_000).optionalFieldOf("price_increase_base", 0).forGetter(PriceObject::price_increase_base),
                     PriceIncreasePerLevel.CODEC.optionalFieldOf("price_increase_per_level").forGetter(PriceObject::price_increase_per_level)
             ).apply(instance, PriceObject::new)
     );
@@ -60,20 +60,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
     }
 
     public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity) {
-        return getCurrentPrice(upgrade, playerEntity, ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade));
-    }
-
-    public static boolean canBeSold(Upgrade upgrade, PlayerEntity playerEntity) {
-        if (ServerUpgradeData.INSTANCE.getPurchasedAmount(upgrade) <= 0) return false;
-        return upgrade.can_be_sold();
-    }
-
-    public static int getSellPrice(Upgrade upgrade, PlayerEntity playerEntity, int amountPurchased) {
-        return upgrade.price().base_price();
-    }
-
-    public static int getSellPrice(Upgrade upgrade, PlayerEntity playerEntity) {
-        return getSellPrice(upgrade, playerEntity, upgrade.amountPurchased());
+        return getCurrentPrice(upgrade, playerEntity, ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, playerEntity.getWorld().getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE)));
     }
 
     public record PriceIncreasePerLevel(int value, float multiplier) {

@@ -1,11 +1,10 @@
 package embin.poosmp.items;
 
-import embin.poosmp.PooSMPItemComponents;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

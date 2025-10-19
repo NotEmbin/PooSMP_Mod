@@ -6,6 +6,7 @@ import embin.poosmp.PooSMPMod;
 import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.networking.payload.UpgradeSyncPayload;
 import embin.poosmp.util.IEntityDataSaver;
+import embin.poosmp.util.PooSMPTags;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -13,7 +14,9 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
@@ -45,36 +48,39 @@ public record Upgrade(
             ).apply(instance, Upgrade::new)
     );
 
-    public Text getName() {
-        return Text.translatable(PooSMPRegistries.UPGRADE.getId(this).toTranslationKey("upgrade"));
+    public Text getName(Registry<Upgrade> registry) {
+        return Text.translatable(registry.getId(this).toTranslationKey("upgrade"));
     }
 
-    public Text getIdAsText() {
-        return Text.literal(PooSMPRegistries.UPGRADE.getId(this).toString()).formatted(Formatting.DARK_GRAY);
+    public Text getIdAsText(Registry<Upgrade> registry) {
+        return Text.literal(registry.getId(this).toString()).formatted(Formatting.DARK_GRAY);
     }
 
-    public Identifier getId() {
-        return PooSMPRegistries.UPGRADE.getId(this);
+    public Identifier getId(Registry<Upgrade> registry) {
+        return registry.getId(this);
     }
 
-    public int amountPurchased() {
-        return ServerUpgradeData.INSTANCE.getPurchasedAmount(this);
+    public int amountPurchased(ServerPlayerEntity player) {
+        PooSMPMod.LOGGER.info("Map: {}", ServerUpgradeData.INSTANCE.purchases);
+        return ServerUpgradeData.INSTANCE.getPurchasedAmount(player, this);
     }
 
     public static void syncData(ServerPlayerEntity player) {
         NbtCompound data = new NbtCompound();
-        for (Identifier upgrade : ServerUpgradeData.INSTANCE.savedUpgrades()) {
-            data.putInt(upgrade.toString(), ServerUpgradeData.INSTANCE.getPurchasedAmount(upgrade));
+        for (Identifier upgrade : ServerUpgradeData.INSTANCE.savedUpgrades(player)) {
+            data.putInt(upgrade.toString(), ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade));
         }
         ServerPlayNetworking.send(player, new UpgradeSyncPayload(data));
     }
 
-    public List<AttributeModifiersComponent.Entry> getAttributesForAmount(int amount) {
+    public List<AttributeModifiersComponent.Entry> getAttributesForAmount(int amount, Registry<Upgrade> upgradeRegistry) {
+        PooSMPMod.LOGGER.info("Grabbing attributes for {} | Amount: {}", upgradeRegistry.getId(this), amount);
         if (amount < 0) return List.of();
         if (this.attribute_modifiers.isPresent()) {
+            PooSMPMod.LOGGER.info("Attributes are present!");
             List<AttributeModifiersComponent.Entry> attributes = new ArrayList<>(amount * this.attribute_modifiers.get().size());
             for (AttributeModifiersComponent.Entry attributeEntry : this.attribute_modifiers.get()) {
-                int amountPerLevel = this == Upgrades.HEALTH_INCREASE ? 2 : 1;
+                int amountPerLevel = upgradeRegistry.getEntry(this).isIn(PooSMPTags.Upgrades.DOUBLE_ATTRIBUTE_GIVE) ? 2 : 1;
                 Identifier id = attributeEntry.modifier().id();
                 attributes.addAll(UpgradeAttributeModifiersEntry.of(attributeEntry.attribute(), amountPerLevel).build(id, amount));
             }
@@ -84,7 +90,7 @@ public record Upgrade(
     }
 
     public void onTick(ServerPlayerEntity player) {
-        if (this.statusEffect.isPresent() && ServerUpgradeData.INSTANCE.getPurchasedAmount(this) > 0) {
+        if (this.statusEffect.isPresent() && ServerUpgradeData.INSTANCE.getPurchasedAmount(player, this) > 0) {
             if (!player.getStatusEffects().contains(this.statusEffect.get())) {
                 player.addStatusEffect(this.statusEffect.get());
             }
@@ -97,16 +103,18 @@ public record Upgrade(
             CommandManager commandManager = server.getCommandManager();
             ServerCommandSource commandSource = server.getCommandSource();
 
-            for (AttributeModifiersComponent.Entry entry : this.getAttributesForAmount(this.amountPurchased())) {
+            Registry<Upgrade> upgradeRegistry = server.getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE);
+
+            for (AttributeModifiersComponent.Entry entry : this.getAttributesForAmount(this.amountPurchased(player), upgradeRegistry)) {
                 RegistryEntry<EntityAttribute> attribute = entry.attribute();
                 String attributeId = attribute.getIdAsString();
                 String id = entry.modifier().id().toString();
                 double amount = entry.modifier().value();
                 String playerUuid = player.getUuidAsString();
                 int index = Integer.parseInt(Arrays.stream(entry.modifier().id().toString().split("_")).toList().getLast());
-                //PooSMPMod.LOGGER.info("Index: {}, Amount Purchased: {}, Entry: {}", index, this.amountPurchased(), id);
+                PooSMPMod.LOGGER.info("Index: {}, Amount Purchased: {}, Entry: {}", index, this.amountPurchased(player), id);
 
-                if (index >= this.amountPurchased()) {
+                if (index >= this.amountPurchased(player)) {
                     commandManager.executeWithPrefix(commandSource, String.format("attribute %s %s modifier add %s %s add_value",
                             playerUuid, attributeId, id, amount
                     ));
@@ -123,10 +131,10 @@ public record Upgrade(
             CommandManager commandManager = server.getCommandManager();
             ServerCommandSource commandSource = server.getCommandSource();
 
-            int purchasedAmount = this.amountPurchased();
+            int purchasedAmount = this.amountPurchased(player);
+            Registry<Upgrade> upgradeRegistry = server.getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE);
 
-
-            for (AttributeModifiersComponent.Entry entry : this.getAttributesForAmount(purchasedAmount)) {
+            for (AttributeModifiersComponent.Entry entry : this.getAttributesForAmount(purchasedAmount, upgradeRegistry)) {
                 RegistryEntry<EntityAttribute> attribute = entry.attribute();
                 String attributeId = attribute.getIdAsString();
                 String id = entry.modifier().id().toString();

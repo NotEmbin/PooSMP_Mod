@@ -12,6 +12,8 @@
 	"minecraft:resin_brick_slab",
 	"minecraft:resin_brick_wall",
 	"minecraft:chiseled_resin_bricks",
-	"poosmp:red_poo_block"
+	"poosmp:red_poo_block",
+	"poosmp:fake_stone",
+	"poosmp:rigged_stone"
   ]
 }

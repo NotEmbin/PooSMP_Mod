@@ -1,12 +1,14 @@
-package embin.poosmp;
+package embin.poosmp.items.component;
 
 import com.mojang.serialization.Codec;
+import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.Id;
 import net.minecraft.component.ComponentType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
 
 import java.util.List;
@@ -58,10 +60,10 @@ public class PooSMPItemComponents {
         ComponentType.<ItemStack>builder().codec(ItemStack.OPTIONAL_CODEC).build()
     );
 
-    public static final ComponentType<Integer> MONEY = Registry.register(
+    public static final ComponentType<Double> MONEY = Registry.register(
         Registries.DATA_COMPONENT_TYPE,
         Id.of("money"),
-        ComponentType.<Integer>builder().codec(Codec.INT).build()
+        ComponentType.<Double>builder().codec(Codec.DOUBLE).build()
     );
 
     public static final ComponentType<Integer> STICK_COOLDOWN_OVERRIDE = Registry.register(
@@ -80,5 +82,17 @@ public class PooSMPItemComponents {
             Registries.DATA_COMPONENT_TYPE,
             Id.of("strange/blocks_mined"),
             ComponentType.<Integer>builder().codec(Codec.INT).build()
+    );
+
+    public static final ComponentType<Identifier> DISPLAYED_ID = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Id.of("displayed_id"),
+            ComponentType.<Identifier>builder().codec(Identifier.CODEC).build()
+    );
+
+    public static final ComponentType<ValueComponent> ITEM_VALUE = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Id.of("item_value"),
+            ComponentType.<ValueComponent>builder().codec(ValueComponent.CODEC).build()
     );
 }

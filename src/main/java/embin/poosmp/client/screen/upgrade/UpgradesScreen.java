@@ -1,4 +1,4 @@
-package embin.poosmp.client.screen;
+package embin.poosmp.client.screen.upgrade;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

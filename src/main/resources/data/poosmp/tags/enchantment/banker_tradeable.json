@@ -2,6 +2,7 @@
   "values": [
     "minecraft:mending",
     "minecraft:unbreaking",
-    "minecraft:efficiency"
+    "minecraft:efficiency",
+    "poosmp:melee_protection"
   ]
 }

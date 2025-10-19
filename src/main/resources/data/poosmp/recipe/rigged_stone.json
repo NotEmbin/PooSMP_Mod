@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " # ",
+    "#3#",
+    " # "
+  ],
+  "key": {
+    "3": {
+      "item": "minecraft:stone"
+    },
+    "#": {
+      "item": "minecraft:gunpowder"
+    }
+  },
+  "result": {
+    "id": "poosmp:rigged_stone",
+    "count": 1
+  },
+  "show_notification": true
+}

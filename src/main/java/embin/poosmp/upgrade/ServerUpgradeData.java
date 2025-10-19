@@ -1,70 +1,71 @@
 package embin.poosmp.upgrade;
 
 import embin.poosmp.PooSMPRegistries;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.entity.effect.StatusEffect;
+import embin.poosmp.util.PooUtil;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-//@Environment(EnvType.SERVER)
+//@Environment(EnvType.SERVER) // it's all built on top a house of cards
 public class ServerUpgradeData {
     public static final ServerUpgradeData INSTANCE = new ServerUpgradeData();
-    public Map<Identifier, Integer> purchases;
-    public Map<Identifier, StatusEffectInstance> activeEffects;
-    public int balance;
+    public Map<UUID, Map<Identifier, Integer>> purchases = HashMap.newHashMap(16);
+    public Map<UUID, Map<Identifier, StatusEffectInstance>> activeEffects = HashMap.newHashMap(16);
+    public Map<UUID, Double> balance = HashMap.newHashMap(16);
 
     private ServerUpgradeData() {
-        this.purchases = HashMap.newHashMap(32);
-        this.activeEffects = HashMap.newHashMap(32);
-        this.balance = 0;
     }
 
-    public Set<Identifier> savedUpgrades() {
-        return this.purchases.keySet();
+    public Set<Identifier> savedUpgrades(ServerPlayerEntity player) {
+        if (!this.purchases.containsKey(player.getUuid())) return Set.of();
+        return this.purchases.get(player.getUuid()).keySet();
     }
 
-    public int getPurchasedAmount(Upgrade upgrade) {
-        Identifier id = PooSMPRegistries.UPGRADE.getId(upgrade);
-        return this.purchases.getOrDefault(id, 0);
+    public Map<Identifier, Integer> getPurchasesMap(ServerPlayerEntity player) {
+        if (!this.purchases.containsKey(player.getUuid())) this.purchases.put(player.getUuid(),HashMap.newHashMap(32));
+        return this.purchases.get(player.getUuid());
     }
 
-    public int getPurchasedAmount(Identifier upgrade) {
-        return this.purchases.getOrDefault(upgrade, 0);
+    public int getPurchasedAmount(ServerPlayerEntity player, Upgrade upgrade) {
+        Identifier id = upgrade.getId(player.getServerWorld().getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE));
+        return getPurchasesMap(player).getOrDefault(id, 0);
     }
 
-    public void setPurchasedAmount(Upgrade upgrade, int amount) {
-        Identifier id = PooSMPRegistries.UPGRADE.getId(upgrade);
-        this.purchases.put(id, amount);
+    public int getPurchasedAmount(ServerPlayerEntity player, Identifier upgrade) {
+        return getPurchasesMap(player).getOrDefault(upgrade, 0);
     }
 
-    public void setPurchasedAmount(Identifier upgrade, int amount) {
-        this.purchases.put(upgrade, amount);
+    public void setPurchasedAmount(ServerPlayerEntity player, Upgrade upgrade, int amount) {
+        Identifier id = upgrade.getId(player.getServerWorld().getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE));
+        Map<Identifier, Integer> purchaseMap = getPurchasesMap(player);
+        purchaseMap.put(id, amount);
+        this.purchases.put(player.getUuid(), purchaseMap);
     }
 
-    public void addStatusEffect(Identifier upgrade, StatusEffectInstance instance) {
-        this.activeEffects.put(upgrade, instance);
+    public void setPurchasedAmount(ServerPlayerEntity player, Identifier upgrade, int amount) {
+        Map<Identifier, Integer> purchaseMap = getPurchasesMap(player);
+        purchaseMap.put(upgrade, amount);
+        this.purchases.put(player.getUuid(), purchaseMap);
     }
 
-    @Nullable
-    public StatusEffectInstance getStatusEffect(Identifier upgrade) {
-        if (this.activeEffects.containsKey(upgrade)) {
-            return this.activeEffects.get(upgrade);
-        }
-        return null;
+    public void addStatusEffect(ServerPlayerEntity player, Identifier upgrade, StatusEffectInstance instance) {
+        if (!this.activeEffects.containsKey(player.getUuid())) this.activeEffects.put(player.getUuid(), HashMap.newHashMap(32));
+        this.activeEffects.get(player.getUuid()).put(upgrade, instance);
     }
 
-    public void setBalance(int newAmount) {
-        this.balance = newAmount;
+    public void setBalance(ServerPlayerEntity player, double newAmount) {
+        this.balance.put(player.getUuid(), newAmount);
     }
 
-    public int getBalance() {
-        return this.balance;
+    public void addBalance(ServerPlayerEntity player, double addAmount) {
+        if (!this.balance.containsKey(player.getUuid())) this.balance.put(player.getUuid(), 0.0);
+        this.balance.replace(player.getUuid(), PooUtil.roundTwo(this.balance.get(player.getUuid()) + addAmount));
+    }
+
+    public double getBalance(ServerPlayerEntity player) {
+        if (!this.balance.containsKey(player.getUuid())) this.balance.put(player.getUuid(), 0.0);
+        return this.balance.get(player.getUuid());
     }
 }

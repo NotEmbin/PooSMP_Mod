@@ -1,6 +1,7 @@
 package embin.poosmp.util;
 
 import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.economy.shop.ShopCategory;
 import embin.poosmp.upgrade.Upgrade;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -54,5 +55,14 @@ public class PooSMPTags {
         }
 
         public static final TagKey<Upgrade> LIST_ORDER = createTag("poosmp:list_order");
+        public static final TagKey<Upgrade> DOUBLE_ATTRIBUTE_GIVE = createTag("poosmp:double_attribute_give");
+    }
+
+    public static class ShopCategories {
+        private static TagKey<ShopCategory> createTag(String name) {
+            return TagKey.of(PooSMPRegistries.Keys.SHOP_CATEGORY, Id.of(name));
+        }
+
+        public static final TagKey<ShopCategory> HIDDEN = createTag("poosmp:hidden_from_shop_command");
     }
 }

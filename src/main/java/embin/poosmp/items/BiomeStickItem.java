@@ -1,8 +1,7 @@
 package embin.poosmp.items;
 
-import embin.poosmp.PooSMPItemComponents;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.util.Id;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
@@ -170,8 +170,8 @@ public class BiomeStickItem extends Item {
                 } else {
                     tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(biome_id.toString()));
                 }
-                World world = MinecraftClient.getInstance().world;
-                if (!world.getRegistryManager().get(RegistryKeys.BIOME).containsId(biome_id)) {
+                boolean exists = context.getRegistryLookup().createRegistryLookup().getOrThrow(RegistryKeys.BIOME).getOptional(RegistryKey.of(RegistryKeys.BIOME, biome_id)).isPresent();
+                if (!exists) {
                     tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.not_valid").formatted(Formatting.RED, Formatting.ITALIC));
                 }
             } else {

@@ -60,6 +60,10 @@ public class PooSMPBlocks {
     // i can't bother with this right now
     public static final Block RED_POO_BLOCK = register("red_poo_block", new Block(AbstractBlock.Settings.create().requiresTool().mapColor(DyeColor.RED).strength(2.5F).sounds(BlockSoundGroup.BONE)), new Item.Settings().rarity(Rarity.UNCOMMON));
     public static final Block DRAGON_ANNOYANCE = register("ear_destroyer_9000", new AnnoyanceBlock(Annoyances.DRAGON, AbstractBlock.Settings.create().mapColor(DyeColor.WHITE).strength(1.0F)));
+    public static final Block FAKE_DIRT = register("fake_dirt", fakeBlock(Blocks.DIRT));
+    public static final Block FAKE_GRASS_BLOCK = register("fake_grass_block", fakeBlock(Blocks.GRASS_BLOCK));
+    public static final Block FAKE_STONE = register("fake_stone", fakeBlock(Blocks.STONE));
+    public static final Block RIGGED_STONE = register("rigged_stone", new RiggedBlock(copyBlock(Blocks.STONE)));
 
 
     public static Block register(Block block, String name, Item.Settings settings, boolean should_register_item) {
@@ -97,6 +101,10 @@ public class PooSMPBlocks {
 
     public static Block wallBlock(Block block) {
         return new WallBlock(copyBlock(block).solid());
+    }
+
+    public static Block fakeBlock(Block block) {
+        return new FakeBlock(block, copyBlock(block).breakInstantly());
     }
 
     public static void init() {

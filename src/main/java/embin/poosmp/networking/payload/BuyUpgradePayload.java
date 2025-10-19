@@ -5,12 +5,12 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public record BuyUpgradePayload(Identifier upgrade) implements CustomPayload {
+public record BuyUpgradePayload(int upgrade) implements CustomPayload {
     public static final PacketCodec<PacketByteBuf, BuyUpgradePayload> CODEC = CustomPayload.codecOf(BuyUpgradePayload::write, BuyUpgradePayload::new);
     public static final Id<BuyUpgradePayload> ID = new Id<>(embin.poosmp.util.Id.of("poosmp:buy_upgrade"));
 
     public BuyUpgradePayload(PacketByteBuf buf) {
-        this(buf.readIdentifier());
+        this(buf.readInt());
     }
 
     @Override
@@ -19,6 +19,6 @@ public record BuyUpgradePayload(Identifier upgrade) implements CustomPayload {
     }
 
     private void write(PacketByteBuf buf) {
-        buf.writeIdentifier(upgrade);
+        buf.writeInt(upgrade);
     }
 }

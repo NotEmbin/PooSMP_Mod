@@ -1,11 +1,15 @@
 package embin.poosmp;
 
 import embin.poosmp.block.PooSMPBlocks;
+import embin.poosmp.client.screen.PooSMPScreenHandlers;
+import embin.poosmp.economy.ItemWorth;
+import embin.poosmp.economy.shop.ShopCategories;
 import embin.poosmp.items.BiomeStickItem;
 import embin.poosmp.items.MobStickItem;
 import embin.poosmp.items.PooSMPItems;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.networking.PooSMPMessages;
-import embin.poosmp.upgrade.Upgrades;
+import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.Id;
 import embin.poosmp.util.PooSMPTags;
 import embin.poosmp.util.TradeConstructors;
@@ -13,7 +17,11 @@ import embin.poosmp.villager.PooSMPPoi;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
+import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -26,20 +34,24 @@ import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.function.Predicate;
 
 public class PooSMPMod implements ModInitializer {
 	public static final String MOD_ID = "poosmp";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final PooSMPLogFilter filter = new PooSMPLogFilter();
 	public static final boolean componentless_installed = FabricLoader.getInstance().isModLoaded("componentless");
+	public static final boolean SHOP_ENABLED = false; // not ready yet
 
 	public static final class PooSMPItemGroups {
 		public static void init() {
@@ -168,6 +180,10 @@ public class PooSMPMod implements ModInitializer {
 					//NbtComponent.DEFAULT.apply((nbtCompound -> nbtCompound.put("variant", )));
 				}
 				entries.add(PooSMPItems.NULL_SHARD);
+				entries.add(PooSMPBlocks.FAKE_DIRT);
+				entries.add(PooSMPBlocks.FAKE_GRASS_BLOCK);
+				entries.add(PooSMPBlocks.FAKE_STONE);
+				entries.add(PooSMPBlocks.RIGGED_STONE);
 			})).build();
 
 		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
@@ -222,11 +238,12 @@ public class PooSMPMod implements ModInitializer {
 	public void onInitialize() {
 		PooSMPRegistries.acknowledge();
 		PooSMPSoundEvents.init(); // so that music discs actually work
-		Upgrades.init();
+		//Upgrades.init();
 		PooSMPBlocks.init();
 		PooSMPItems.init();
 		PooSMPItemComponents.init();
 		PooSMPItemGroups.init();
+		ShopCategories.registerCategories();
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
 			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_LOG.asItem());
@@ -278,9 +295,70 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPMessages.register();
 		PooSMPMessages.registerC2SPackets();
 
-		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
+		DynamicRegistries.registerSynced(PooSMPRegistries.Keys.UPGRADE, Upgrade.CODEC);
 
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, registrationEnvironment) -> {
+			//dispatcher.register(
+			//		CommandManager.literal("getbal").executes(context -> {
+			//			ServerCommandSource source = context.getSource();
+			//			PlayerInventory inv = source.getPlayer().getInventory();
+			//			source.getClient().setScreen(new ShopScreen(new ShopScreenHandler(0, inv), inv));
+			//			return 1;
+			//		})
+			//);
+			//dispatcher.register(
+			//		ClientCommandManager.literal("setbal").requires(source -> source.hasPermissionLevel(2)).executes(context -> {
+			//			FabricClientCommandSource source = context.getSource();
+			//			PlayerInventory inv = source.getPlayer().getInventory();
+			//			source.getClient().setScreen(new ShopScreen(new ShopScreenHandler(0, inv), inv));
+			//			return 1;
+			//		})
+			//);
 		});
+
+		DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:displayed_id"), modifyContext -> {
+			modifyContext.modify(Predicate.not(i -> false), (builder, item) -> {
+				Identifier itemId = Registries.ITEM.getId(item);
+				builder.add(PooSMPItemComponents.DISPLAYED_ID, itemId);
+				//if (itemId.getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
+				//	builder.add(PooSMPItemComponents.DISPLAYED_ID, Identifier.of("mojang", itemId.getPath()));
+				//} else {
+				//	builder.add(PooSMPItemComponents.DISPLAYED_ID, itemId);
+				//}
+			});
+		});
+
+		DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:set_item_prices"), ItemWorth::setPrices);
+
+		ItemTooltipCallback.EVENT.register(
+			Id.of("poosmp:adjust_tooltip"),
+			(itemStack, tooltipContext, tooltipType, list) -> {
+				if (tooltipType.isAdvanced()) {
+					Text disabledText = Text.translatable("item.disabled").formatted(Formatting.RED);
+					boolean wasDisabled = false; // cant actually check if item is disabled in this callback
+					if (list.getLast().equals(disabledText)) {
+						list.removeLast();
+						wasDisabled = true;
+					}
+					if (!itemStack.getComponents().isEmpty()) {
+						list.removeLast();
+					}
+					list.removeLast();
+					if (itemStack.contains(PooSMPItemComponents.ITEM_VALUE)) {
+						itemStack.get(PooSMPItemComponents.ITEM_VALUE).appendTooltip(tooltipContext, list::add, tooltipType);
+					}
+					Identifier displayedId = itemStack.getOrDefault(PooSMPItemComponents.DISPLAYED_ID, Registries.ITEM.getId(itemStack.getItem()));
+					boolean hasComponent = itemStack.contains(PooSMPItemComponents.DISPLAYED_ID);
+					list.add(Text.literal(displayedId.toString()).formatted(hasComponent ? Formatting.DARK_GRAY : Formatting.RED));
+					if (!itemStack.getComponents().isEmpty()) {
+						list.add(Text.translatable("item.components", itemStack.getComponents().size()).formatted(Formatting.DARK_GRAY));
+					}
+					if (wasDisabled) {
+						list.add(disabledText);
+					}
+				}
+			}
+		);
 
 		LOGGER.info("im all pooped up");
 	}

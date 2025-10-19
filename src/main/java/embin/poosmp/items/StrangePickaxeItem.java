@@ -1,6 +1,6 @@
 package embin.poosmp.items;
 
-import embin.poosmp.PooSMPItemComponents;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

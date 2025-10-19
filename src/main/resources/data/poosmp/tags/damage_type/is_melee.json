@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:mob_attack",
+    "minecraft:player_attack",
+    "minecraft:sting",
+    "minecraft:sweet_berry_bush",
+    "minecraft:thorns",
+    "minecraft:mob_attack_no_aggro",
+    "minecraft:generic",
+    "minecraft:fly_into_wall",
+    "minecraft:falling_stalactite",
+    "minecraft:stalagmite",
+    "minecraft:falling_block",
+    "minecraft:falling_anvil",
+    "minecraft:cramming"
+  ]
+}

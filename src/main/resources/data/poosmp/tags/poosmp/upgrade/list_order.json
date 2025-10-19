@@ -1,0 +1,10 @@
+{
+  "values": [
+    "poosmp:health_increase",
+    "poosmp:block_reach_increase",
+    "poosmp:entity_reach_increase",
+    "poosmp:fire_resistance",
+    "poosmp:water_breathing",
+    "poosmp:trial_omen"
+  ]
+}

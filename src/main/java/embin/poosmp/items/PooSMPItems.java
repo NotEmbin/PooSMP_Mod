@@ -1,6 +1,6 @@
 package embin.poosmp.items;
 
-import embin.poosmp.PooSMPItemComponents;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.Id;
 import net.minecraft.block.jukebox.JukeboxSong;
@@ -117,11 +117,11 @@ public class PooSMPItems {
         return stack;
     }
 
-    private static Item moneyItem(String name, int value) {
-        return register(name, new MoneyItem(new Item.Settings().component(PooSMPItemComponents.MONEY, (value * 100)).maxCount(99)));
+    private static Item moneyItem(String name, double value) {
+        return register(name, new MoneyItem(new Item.Settings().component(PooSMPItemComponents.MONEY, value).maxCount(99)));
     }
 
-    private static Item coinItem(String name, int value) {
+    private static Item coinItem(String name, double value) {
         return register(name, new MoneyItem(new Item.Settings().component(PooSMPItemComponents.MONEY, value).maxCount(99)));
     }
 

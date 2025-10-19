@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -16,20 +17,20 @@ import java.util.Map;
 public class ClientUpgradeData {
     public static final ClientUpgradeData INSTANCE = new ClientUpgradeData();
     public Map<Identifier, Integer> purchases;
-    public int balance;
+    public double balance;
 
     private ClientUpgradeData() {
         this.purchases = HashMap.newHashMap(32);
         this.balance = 0;
     }
 
-    public int getPurchasedAmount(Upgrade upgrade) {
-        Identifier id = PooSMPRegistries.UPGRADE.getId(upgrade);
+    public int getPurchasedAmount(Upgrade upgrade, Registry<Upgrade> upgradeRegistry) {
+        Identifier id = upgrade.getId(upgradeRegistry);
         return this.purchases.getOrDefault(id, 0);
     }
 
-    public void setPurchasedAmount(Upgrade upgrade, int amount) {
-        Identifier id = PooSMPRegistries.UPGRADE.getId(upgrade);
+    public void setPurchasedAmount(Upgrade upgrade, int amount, Registry<Upgrade> upgradeRegistry) {
+        Identifier id = upgrade.getId(upgradeRegistry);
         this.purchases.put(id, amount);
     }
 
@@ -37,11 +38,11 @@ public class ClientUpgradeData {
         this.purchases.put(upgrade, amount);
     }
 
-    public void setBalance(int newAmount) {
+    public void setBalance(double newAmount) {
         this.balance = newAmount;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return this.balance;
     }
 
