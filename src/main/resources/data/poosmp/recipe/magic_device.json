@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " 4 ",
+    "535",
+    "#6#"
+  ],
+  "key": {
+    "6": {
+      "item": "minecraft:gunpowder"
+    },
+    "5": {
+      "item": "poosmp:screw"
+    },
+    "4": {
+      "item": "minecraft:iron_ingot"
+    },
+    "3": {
+      "item": "minecraft:redstone"
+    },
+    "#": {
+      "item": "poosmp:gear"
+    }
+  },
+  "result": {
+    "id": "poosmp:magic_device",
+    "count": 1
+  },
+  "show_notification": true
+}

@@ -42,7 +42,6 @@ public class MagicDeviceItem extends Item {
             Vec3d size = new Vec3d(1, 1, 1);
             Vec3d size2 = new Vec3d(20, 20, 20);
             EntityHitResult entityHitResult = ProjectileUtil.raycast(user, size, size2, user.getBoundingBox(), e -> !e.isSpectator() && e.canHit(), 20);
-            PooSMPMod.LOGGER.info(Boolean.toString(entityHitResult != null));
             if (itemStack.contains(DataComponentTypes.CUSTOM_NAME)) {
                 String victim_name = itemStack.get(DataComponentTypes.CUSTOM_NAME).getString();
                 PlayerEntity victim = getPlayerByName(victim_name, world);

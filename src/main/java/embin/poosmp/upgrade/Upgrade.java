@@ -61,7 +61,6 @@ public record Upgrade(
     }
 
     public int amountPurchased(ServerPlayerEntity player) {
-        PooSMPMod.LOGGER.info("Map: {}", ServerUpgradeData.INSTANCE.purchases);
         return ServerUpgradeData.INSTANCE.getPurchasedAmount(player, this);
     }
 
@@ -74,10 +73,8 @@ public record Upgrade(
     }
 
     public List<AttributeModifiersComponent.Entry> getAttributesForAmount(int amount, Registry<Upgrade> upgradeRegistry) {
-        PooSMPMod.LOGGER.info("Grabbing attributes for {} | Amount: {}", upgradeRegistry.getId(this), amount);
         if (amount < 0) return List.of();
         if (this.attribute_modifiers.isPresent()) {
-            PooSMPMod.LOGGER.info("Attributes are present!");
             List<AttributeModifiersComponent.Entry> attributes = new ArrayList<>(amount * this.attribute_modifiers.get().size());
             for (AttributeModifiersComponent.Entry attributeEntry : this.attribute_modifiers.get()) {
                 int amountPerLevel = upgradeRegistry.getEntry(this).isIn(PooSMPTags.Upgrades.DOUBLE_ATTRIBUTE_GIVE) ? 2 : 1;
@@ -112,7 +109,6 @@ public record Upgrade(
                 double amount = entry.modifier().value();
                 String playerUuid = player.getUuidAsString();
                 int index = Integer.parseInt(Arrays.stream(entry.modifier().id().toString().split("_")).toList().getLast());
-                PooSMPMod.LOGGER.info("Index: {}, Amount Purchased: {}, Entry: {}", index, this.amountPurchased(player), id);
 
                 if (index >= this.amountPurchased(player)) {
                     commandManager.executeWithPrefix(commandSource, String.format("attribute %s %s modifier add %s %s add_value",

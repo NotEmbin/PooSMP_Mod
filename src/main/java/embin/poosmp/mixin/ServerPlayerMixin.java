@@ -57,7 +57,6 @@ public abstract class ServerPlayerMixin {
                 if (modifier.id().getPath().startsWith("upgrade/")) {
                     if (player.getAttributes().hasAttribute(eai.getAttribute())) {
                         player.getAttributeInstance(eai.getAttribute()).addPersistentModifier(modifier);
-                        PooSMPMod.LOGGER.info("Reapplying attribute {} to {} for {}", modifier.id(), player.getNameForScoreboard(), eai.getAttribute().getIdAsString());
                     }
                 }
             }

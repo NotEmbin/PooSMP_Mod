@@ -1,7 +1,6 @@
 package embin.poosmp;
 
 import embin.poosmp.block.PooSMPBlocks;
-import embin.poosmp.client.screen.PooSMPScreenHandlers;
 import embin.poosmp.economy.ItemWorth;
 import embin.poosmp.economy.shop.ShopCategories;
 import embin.poosmp.items.BiomeStickItem;
@@ -19,7 +18,6 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -328,7 +326,9 @@ public class PooSMPMod implements ModInitializer {
 			});
 		});
 
-		DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:set_item_prices"), ItemWorth::setPrices);
+		if (PooSMPMod.SHOP_ENABLED) {
+			DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:set_item_prices"), ItemWorth::setPrices);
+		}
 
 		ItemTooltipCallback.EVENT.register(
 			Id.of("poosmp:adjust_tooltip"),
