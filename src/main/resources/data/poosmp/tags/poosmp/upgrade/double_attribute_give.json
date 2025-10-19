@@ -1,5 +1,6 @@
 {
   "values": [
-    "poosmp:health_increase"
+    "poosmp:health_increase",
+    "poosmp:mining_speed_increase"
   ]
 }

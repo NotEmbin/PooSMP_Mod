@@ -16,7 +16,6 @@ import embin.poosmp.villager.PooSMPPoi;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
@@ -37,7 +36,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -329,36 +327,6 @@ public class PooSMPMod implements ModInitializer {
 		if (PooSMPMod.SHOP_ENABLED) {
 			DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:set_item_prices"), ItemWorth::setPrices);
 		}
-
-		ItemTooltipCallback.EVENT.register(
-			Id.of("poosmp:adjust_tooltip"),
-			(itemStack, tooltipContext, tooltipType, list) -> {
-				if (tooltipType.isAdvanced()) {
-					Text disabledText = Text.translatable("item.disabled").formatted(Formatting.RED);
-					boolean wasDisabled = false; // cant actually check if item is disabled in this callback
-					if (list.getLast().equals(disabledText)) {
-						list.removeLast();
-						wasDisabled = true;
-					}
-					if (!itemStack.getComponents().isEmpty()) {
-						list.removeLast();
-					}
-					list.removeLast();
-					if (itemStack.contains(PooSMPItemComponents.ITEM_VALUE)) {
-						itemStack.get(PooSMPItemComponents.ITEM_VALUE).appendTooltip(tooltipContext, list::add, tooltipType);
-					}
-					Identifier displayedId = itemStack.getOrDefault(PooSMPItemComponents.DISPLAYED_ID, Registries.ITEM.getId(itemStack.getItem()));
-					boolean hasComponent = itemStack.contains(PooSMPItemComponents.DISPLAYED_ID);
-					list.add(Text.literal(displayedId.toString()).formatted(hasComponent ? Formatting.DARK_GRAY : Formatting.RED));
-					if (!itemStack.getComponents().isEmpty()) {
-						list.add(Text.translatable("item.components", itemStack.getComponents().size()).formatted(Formatting.DARK_GRAY));
-					}
-					if (wasDisabled) {
-						list.add(disabledText);
-					}
-				}
-			}
-		);
 
 		LOGGER.info("im all pooped up");
 	}

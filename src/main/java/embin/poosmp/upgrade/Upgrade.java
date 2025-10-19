@@ -77,9 +77,9 @@ public record Upgrade(
         if (this.attribute_modifiers.isPresent()) {
             List<AttributeModifiersComponent.Entry> attributes = new ArrayList<>(amount * this.attribute_modifiers.get().size());
             for (AttributeModifiersComponent.Entry attributeEntry : this.attribute_modifiers.get()) {
-                int amountPerLevel = upgradeRegistry.getEntry(this).isIn(PooSMPTags.Upgrades.DOUBLE_ATTRIBUTE_GIVE) ? 2 : 1;
+                //int amountPerLevel = upgradeRegistry.getEntry(this).isIn(PooSMPTags.Upgrades.DOUBLE_ATTRIBUTE_GIVE) ? 2 : 1;
                 Identifier id = attributeEntry.modifier().id();
-                attributes.addAll(UpgradeAttributeModifiersEntry.of(attributeEntry.attribute(), amountPerLevel).build(id, amount));
+                attributes.addAll(UpgradeAttributeModifiersEntry.of(attributeEntry.attribute(), attributeEntry.modifier().value()).build(id, amount));
             }
             return attributes;
         }

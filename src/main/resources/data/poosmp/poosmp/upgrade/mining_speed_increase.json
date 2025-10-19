@@ -1,0 +1,16 @@
+{
+  "icon": "minecraft:iron_pickaxe",
+  "price": {
+    "base_price": 40,
+    "price_increase_base": 20
+  },
+  "max_purchases": 20,
+  "attribute_modifiers": [
+    {
+      "type": "minecraft:player.mining_efficiency",
+      "id": "poosmp:upgrade/mining_speed_increase",
+      "amount": 2,
+      "operation": "add_value"
+    }
+  ]
+}

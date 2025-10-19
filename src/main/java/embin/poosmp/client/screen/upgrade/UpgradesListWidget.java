@@ -136,8 +136,8 @@ public class UpgradesListWidget extends ElementListWidget<UpgradesListWidget.Upg
             } else {
                 this.sellButton.setTooltip(null);
             }
-            if (!canBeBought(this.upgrade, upgradeRegistry)) {
-                this.buyButton.setTooltip(Tooltip.of(Text.literal("Out of stock!")));
+            if (!canBeBought(this.upgrade, upgradeRegistry, this.player)) {
+                this.buyButton.setTooltip(Tooltip.of(Text.literal("Out of stock or insufficient xp level!")));
             } else if (this.upgrade.max_purchases().isPresent()){
                 String tooltip = String.format("%s/%s", amountPurchased, this.upgrade.max_purchases().get());
                 this.buyButton.setTooltip(Tooltip.of(Text.literal(tooltip)));
@@ -165,13 +165,17 @@ public class UpgradesListWidget extends ElementListWidget<UpgradesListWidget.Upg
             return upgrade.can_be_sold();
         }
 
-        protected static boolean canBeBought(Upgrade upgrade, Registry<Upgrade> upgradeRegistry) {
+        // client side check :trollface:
+        protected static boolean canBeBought(Upgrade upgrade, Registry<Upgrade> upgradeRegistry, PlayerEntity player) {
+            int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, upgradeRegistry);
+            int upgradePrice = PriceObject.getCurrentPrice(upgrade, player, amountPurchased);
+            if (player.experienceLevel < upgradePrice) return false;
             return ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, upgradeRegistry) < upgrade.maxPurchases();
         }
 
         protected void update() {
             this.sellButton.active = canBeSold(this.upgrade, upgradeRegistry) && this.ticksSincePurchase >= 120;
-            this.buyButton.active = canBeBought(this.upgrade, upgradeRegistry) && this.ticksSincePurchase >= 120;
+            this.buyButton.active = canBeBought(this.upgrade, upgradeRegistry, this.player) && this.ticksSincePurchase >= 120;
             this.ticksSincePurchase++;
             //this.text.setCentered(true);
             //this.text.setTextColor(Colors.BLACK);

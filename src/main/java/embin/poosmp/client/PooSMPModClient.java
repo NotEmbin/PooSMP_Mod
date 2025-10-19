@@ -4,6 +4,7 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.client.screen.shop.ShopScreenOld;
 import embin.poosmp.client.screen.shop.ShopScreenHandler;
 import embin.poosmp.client.screen.upgrade.UpgradesScreen;
+import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.util.Id;
 import net.fabricmc.api.ClientModInitializer;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.block.Blocks;
@@ -23,7 +25,10 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.GrassColors;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -106,6 +111,36 @@ public class PooSMPModClient implements ClientModInitializer {
 		ColorProviderRegistry.ITEM.register(
 			(stack, tintIndex) -> GrassColors.getColor(0.5, 1.0),
 			PooSMPBlocks.FAKE_GRASS_BLOCK
+		);
+
+		ItemTooltipCallback.EVENT.register(
+				Id.of("poosmp:adjust_tooltip"),
+				(itemStack, tooltipContext, tooltipType, list) -> {
+					if (tooltipType.isAdvanced()) {
+						Text disabledText = Text.translatable("item.disabled").formatted(Formatting.RED);
+						boolean wasDisabled = false; // cant actually check if item is disabled in this callback
+						if (list.getLast().equals(disabledText)) {
+							list.removeLast();
+							wasDisabled = true;
+						}
+						if (!itemStack.getComponents().isEmpty()) {
+							list.removeLast();
+						}
+						list.removeLast();
+						if (itemStack.contains(PooSMPItemComponents.ITEM_VALUE)) {
+							itemStack.get(PooSMPItemComponents.ITEM_VALUE).appendTooltip(tooltipContext, list::add, tooltipType);
+						}
+						Identifier displayedId = itemStack.getOrDefault(PooSMPItemComponents.DISPLAYED_ID, Registries.ITEM.getId(itemStack.getItem()));
+						boolean hasComponent = itemStack.contains(PooSMPItemComponents.DISPLAYED_ID);
+						list.add(Text.literal(displayedId.toString()).formatted(hasComponent ? Formatting.DARK_GRAY : Formatting.RED));
+						if (!itemStack.getComponents().isEmpty()) {
+							list.add(Text.translatable("item.components", itemStack.getComponents().size()).formatted(Formatting.DARK_GRAY));
+						}
+						if (wasDisabled) {
+							list.add(disabledText);
+						}
+					}
+				}
 		);
 
 		PooSMPMessages.registerS2CPackets();

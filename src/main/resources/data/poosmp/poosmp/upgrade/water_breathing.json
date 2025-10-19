@@ -1,7 +1,7 @@
 {
   "icon": "minecraft:water_bucket",
   "price": {
-    "base_price": 120
+    "base_price": 125
   },
   "max_purchases": 1,
   "status_effect": {

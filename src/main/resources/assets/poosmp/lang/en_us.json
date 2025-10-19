@@ -169,5 +169,6 @@
 	"block.poosmp.fake_grass_block": "Fake Grass Block",
 	"block.poosmp.fake_stone": "Fake Stone",
 	"block.poosmp.rigged_stone": "Rigged Stone",
-	"tooltip.poosmp.item_value.sell_price": "Sells for $%s"
+	"tooltip.poosmp.item_value.sell_price": "Sells for $%s",
+	"upgrade.poosmp.mining_speed_increase": "Mining Speed Upgrade"
 }
