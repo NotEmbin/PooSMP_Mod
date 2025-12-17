@@ -4,12 +4,12 @@ import com.mojang.logging.LogUtils;
 import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.util.Id;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public class ShopCategories {
     public static final ShopCategory MISC = register("misc", Items.SADDLE);
@@ -21,7 +21,7 @@ public class ShopCategories {
 
     public static ShopCategory register(String id, Item icon) {
         Identifier id2 = Id.of(id);
-        Text translatedText = Text.translatable(id2.toTranslationKey("shop_category"));
+        Component translatedText = Component.translatable(id2.toLanguageKey("shop_category"));
         return Registry.register(PooSMPRegistries.SHOP_CATEGORY, id2, new ShopCategory(translatedText, icon));
     }
 

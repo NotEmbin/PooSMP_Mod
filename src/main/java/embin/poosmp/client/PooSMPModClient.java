@@ -1,5 +1,6 @@
 package embin.poosmp.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.client.screen.shop.ShopScreenOld;
 import embin.poosmp.client.screen.shop.ShopScreenHandler;
@@ -16,35 +17,33 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.color.world.BiomeColors;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.GrassColors;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.DeathScreen;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.level.block.Blocks;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PooSMPModClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("poosmp/client");
-	public static KeyBinding openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+	public static KeyMapping openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_upgrades_screen",
-			InputUtil.Type.KEYSYM,
+			InputConstants.Type.KEYSYM,
 			GLFW.GLFW_KEY_0,
 			"category.poosmp.keybinds"
 	));
-	public static KeyBinding openDeathScreen = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+	public static KeyMapping openDeathScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_death_screen",
-			InputUtil.Type.KEYSYM,
+			InputConstants.Type.KEYSYM,
 			GLFW.GLFW_KEY_KP_DIVIDE,
 			"category.poosmp.keybinds"
 	));
@@ -52,14 +51,14 @@ public class PooSMPModClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ClientTickEvents.END_CLIENT_TICK.register(Id.of("open_upgrades_screen"), client -> {
-			while (openUpgradesScreen.wasPressed()) {
-				client.setScreen(new UpgradesScreen(client.currentScreen));
+			while (openUpgradesScreen.consumeClick()) {
+				client.setScreen(new UpgradesScreen(client.screen));
 			}
-			while (openDeathScreen.wasPressed()) {
-				client.setScreen(new DeathScreen(Text.literal("nah jk (click title screen to respawn)"), false));
-				for (EntityAttributeInstance attribute : client.player.getAttributes().getAttributesToSend()) {
-					for (EntityAttributeModifier modifier : attribute.getModifiers()) {
-						LOGGER.info("{} / {}", attribute.getAttribute().getIdAsString(), modifier.id().toString());
+			while (openDeathScreen.consumeClick()) {
+				client.setScreen(new DeathScreen(Component.literal("nah jk (click title screen to respawn)"), false));
+				for (AttributeInstance attribute : client.player.getAttributes().getSyncableAttributes()) {
+					for (AttributeModifier modifier : attribute.getModifiers()) {
+						LOGGER.info("{} / {}", attribute.getAttribute().getRegisteredName(), modifier.id().toString());
 					}
 				}
 			}
@@ -76,7 +75,7 @@ public class PooSMPModClient implements ClientModInitializer {
 		//	);
 		//});
 
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.getCutout(),
 			Blocks.MOSS_CARPET,
 			Blocks.RED_CARPET,
 			Blocks.YELLOW_CARPET,
@@ -101,10 +100,10 @@ public class PooSMPModClient implements ClientModInitializer {
 			PooSMPBlocks.POTTED_PALE_OAK_SAPLING
 		);
 
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(), PooSMPBlocks.FAKE_GRASS_BLOCK);
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.getCutoutMipped(), PooSMPBlocks.FAKE_GRASS_BLOCK);
 
 		ColorProviderRegistry.BLOCK.register(
-			(state, world, pos, tintIndex) -> world != null && pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.getDefaultColor(),
+			(state, world, pos, tintIndex) -> world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
 			PooSMPBlocks.FAKE_GRASS_BLOCK
 		);
 
@@ -117,7 +116,7 @@ public class PooSMPModClient implements ClientModInitializer {
 				Id.of("poosmp:adjust_tooltip"),
 				(itemStack, tooltipContext, tooltipType, list) -> {
 					if (tooltipType.isAdvanced()) {
-						Text disabledText = Text.translatable("item.disabled").formatted(Formatting.RED);
+						Component disabledText = Component.translatable("item.disabled").withStyle(ChatFormatting.RED);
 						boolean wasDisabled = false; // cant actually check if item is disabled in this callback
 						if (list.getLast().equals(disabledText)) {
 							list.removeLast();
@@ -127,14 +126,14 @@ public class PooSMPModClient implements ClientModInitializer {
 							list.removeLast();
 						}
 						list.removeLast();
-						if (itemStack.contains(PooSMPItemComponents.ITEM_VALUE)) {
+						if (itemStack.has(PooSMPItemComponents.ITEM_VALUE)) {
 							itemStack.get(PooSMPItemComponents.ITEM_VALUE).appendTooltip(tooltipContext, list::add, tooltipType);
 						}
-						Identifier displayedId = itemStack.getOrDefault(PooSMPItemComponents.DISPLAYED_ID, Registries.ITEM.getId(itemStack.getItem()));
-						boolean hasComponent = itemStack.contains(PooSMPItemComponents.DISPLAYED_ID);
-						list.add(Text.literal(displayedId.toString()).formatted(hasComponent ? Formatting.DARK_GRAY : Formatting.RED));
+						Identifier displayedId = itemStack.getOrDefault(PooSMPItemComponents.DISPLAYED_ID, BuiltInRegistries.ITEM.getKey(itemStack.getItem()));
+						boolean hasComponent = itemStack.has(PooSMPItemComponents.DISPLAYED_ID);
+						list.add(Component.literal(displayedId.toString()).withStyle(hasComponent ? ChatFormatting.DARK_GRAY : ChatFormatting.RED));
 						if (!itemStack.getComponents().isEmpty()) {
-							list.add(Text.translatable("item.components", itemStack.getComponents().size()).formatted(Formatting.DARK_GRAY));
+							list.add(Component.translatable("item.components", itemStack.getComponents().size()).withStyle(ChatFormatting.DARK_GRAY));
 						}
 						if (wasDisabled) {
 							list.add(disabledText);

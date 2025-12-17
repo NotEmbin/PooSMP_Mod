@@ -4,10 +4,10 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.PooSMPItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
+import net.minecraft.world.level.block.Blocks;
 
 public class PooSMPModelProvider extends FabricModelProvider {
     public PooSMPModelProvider(FabricDataOutput output) {

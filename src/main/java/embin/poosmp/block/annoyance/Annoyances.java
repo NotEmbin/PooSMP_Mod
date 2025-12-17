@@ -3,13 +3,13 @@ package embin.poosmp.block.annoyance;
 import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.PooSMPSoundEvents;
 import embin.poosmp.util.Id;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.core.Registry;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 
 public class Annoyances {
     public static final Annoyance SUS = register("sus", PooSMPSoundEvents.SUS, 1, 1);
-    public static final Annoyance DRAGON = register("dragon", SoundEvents.ENTITY_ENDER_DRAGON_DEATH, 1.25F, 1, 35);
+    public static final Annoyance DRAGON = register("dragon", SoundEvents.ENDER_DRAGON_DEATH, 1.25F, 1, 35);
 
     public static Annoyance register(String id, SoundEvent soundEvent, float volume, float pitch, int chance) {
         return Registry.register(PooSMPRegistries.ANNOYANCE, Id.of(id), new Annoyance(soundEvent, volume, pitch, chance));

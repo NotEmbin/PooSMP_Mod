@@ -1,36 +1,34 @@
 package embin.poosmp.upgrade;
 
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 public class UpgradeAttributeModifiersEntry {
-    private final RegistryEntry<EntityAttribute> attribute;
+    private final Holder<Attribute> attribute;
     private final double amountPerLevel;
 
-    private UpgradeAttributeModifiersEntry(RegistryEntry<EntityAttribute> attribute, double amountPerLevel) {
+    private UpgradeAttributeModifiersEntry(Holder<Attribute> attribute, double amountPerLevel) {
         this.attribute = attribute;
         this.amountPerLevel = amountPerLevel;
     }
 
-    public static UpgradeAttributeModifiersEntry of(RegistryEntry<EntityAttribute> attribute, double amountPerLevel) {
+    public static UpgradeAttributeModifiersEntry of(Holder<Attribute> attribute, double amountPerLevel) {
         return new UpgradeAttributeModifiersEntry(attribute, amountPerLevel);
     }
 
-    public List<AttributeModifiersComponent.Entry> build(Identifier upgrade, int amountPurchased) {
-        List<AttributeModifiersComponent.Entry> attributes = new ArrayList<>(amountPurchased);
+    public List<ItemAttributeModifiers.Entry> build(Identifier upgrade, int amountPurchased) {
+        List<ItemAttributeModifiers.Entry> attributes = new ArrayList<>(amountPurchased);
         for (int i = 1; i <= amountPurchased; i++) {
-            attributes.add(new AttributeModifiersComponent.Entry(
+            attributes.add(new ItemAttributeModifiers.Entry(
                     this.attribute,
-                    new EntityAttributeModifier(upgrade.withSuffixedPath("_" + i), this.amountPerLevel, EntityAttributeModifier.Operation.ADD_VALUE),
-                    AttributeModifierSlot.ANY
+                    new AttributeModifier(upgrade.withSuffix("_" + i), this.amountPerLevel, AttributeModifier.Operation.ADD_VALUE),
+                    EquipmentSlotGroup.ANY
             ));
         }
         return attributes;

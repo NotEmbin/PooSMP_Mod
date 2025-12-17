@@ -1,39 +1,38 @@
 package embin.poosmp.items;
 
 import embin.poosmp.items.component.PooSMPItemComponents;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
-
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import java.util.Arrays;
 
 public class CreativeSnitchItem extends Item {
     public static final String[] known_operators = {"_thecubic_", "ddededodediamant", "Embin", "whentheapple"};
-    public CreativeSnitchItem(Settings settings, boolean snitch) {
+    public CreativeSnitchItem(Properties settings, boolean snitch) {
         super(settings.component(PooSMPItemComponents.FROM_CREATIVE, snitch));
     }
-    public CreativeSnitchItem(Settings settings) {
+    public CreativeSnitchItem(Properties settings) {
         super(settings.component(PooSMPItemComponents.FROM_CREATIVE, true));
     }
 
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if (!world.isClient && entity.isPlayer()) {
-            if (stack.contains(PooSMPItemComponents.FROM_CREATIVE)) {
+        if (!world.isClientSide && entity.isAlwaysTicking()) {
+            if (stack.has(PooSMPItemComponents.FROM_CREATIVE)) {
                 if (stack.getOrDefault(PooSMPItemComponents.FROM_CREATIVE, false)) {
                     MinecraftServer server = world.getServer();
-                    ServerCommandSource source = server.getCommandSource().withSilent();
-                    CommandManager commandManager = server.getCommandManager();
-                    Text item_name = Text.translatable(stack.getTranslationKey());
+                    CommandSourceStack source = server.createCommandSourceStack().withSuppressedOutput();
+                    Commands commandManager = server.getCommands();
+                    Component item_name = Component.translatable(stack.getTranslationKey());
                     String player_name = entity.getName().getString();
-                    Text message = Text.literal(player_name).append(" took a ").append(item_name).append(" from Creative Mode or /give");
+                    Component message = Component.literal(player_name).append(" took a ").append(item_name).append(" from Creative Mode or /give");
                     if (Arrays.asList(known_operators).contains(player_name) || player_name.startsWith("Player")) {
                         commandManager.executeWithPrefix(source, "tellraw @a \"" + message.getString() + "\"");
                     }

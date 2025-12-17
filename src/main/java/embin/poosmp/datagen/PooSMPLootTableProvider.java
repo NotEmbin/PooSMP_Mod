@@ -3,20 +3,19 @@ package embin.poosmp.datagen;
 import embin.poosmp.block.PooSMPBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.core.HolderLookup;
 import java.util.concurrent.CompletableFuture;
 
 public class PooSMPLootTableProvider extends FabricBlockLootTableProvider {
-    public PooSMPLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public PooSMPLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(dataOutput, registryLookup);
     }
 
     @Override
     public void generate() {
-        addDrop(PooSMPBlocks.POOP_BRICK_STAIRS);
-        addDrop(PooSMPBlocks.POOP_BRICK_WALL);
-        addDrop(PooSMPBlocks.POOP_BRICK_SLAB, slabDrops(PooSMPBlocks.POOP_BRICK_SLAB));
-        addDrop(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
+        dropSelf(PooSMPBlocks.POOP_BRICK_STAIRS);
+        dropSelf(PooSMPBlocks.POOP_BRICK_WALL);
+        add(PooSMPBlocks.POOP_BRICK_SLAB, createSlabItemTable(PooSMPBlocks.POOP_BRICK_SLAB));
+        dropSelf(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
     }
 }

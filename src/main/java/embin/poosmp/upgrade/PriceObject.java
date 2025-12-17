@@ -6,17 +6,15 @@ import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.client.ClientUpgradeData;
 import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.util.IEntityDataSaver;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.dynamic.Codecs;
-
 import java.util.Optional;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.player.Player;
 
 public record PriceObject(int base_price, int price_increase_base, Optional<PriceIncreasePerLevel> price_increase_per_level) {
     public static final Codec<PriceObject> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    Codecs.rangedInt(0, 500_000_000).fieldOf("base_price").forGetter(PriceObject::base_price),
-                    Codecs.rangedInt(0, 500_000_000).optionalFieldOf("price_increase_base", 0).forGetter(PriceObject::price_increase_base),
+                    ExtraCodecs.intRange(0, 500_000_000).fieldOf("base_price").forGetter(PriceObject::base_price),
+                    ExtraCodecs.intRange(0, 500_000_000).optionalFieldOf("price_increase_base", 0).forGetter(PriceObject::price_increase_base),
                     PriceIncreasePerLevel.CODEC.optionalFieldOf("price_increase_per_level").forGetter(PriceObject::price_increase_per_level)
             ).apply(instance, PriceObject::new)
     );
@@ -37,7 +35,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
         return new PriceObject(base_price, 0, Optional.empty());
     }
 
-    public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity, int amountPurchased) {
+    public static int getCurrentPrice(Upgrade upgrade, Player playerEntity, int amountPurchased) {
         /*
         int basePrice = upgrade.price().base_price();
         int priceIncreaseBase = upgrade.price().price_increase_base();
@@ -59,15 +57,15 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
         return upgrade.price().base_price();
     }
 
-    public static int getCurrentPrice(Upgrade upgrade, PlayerEntity playerEntity) {
+    public static int getCurrentPrice(Upgrade upgrade, Player playerEntity) {
         return getCurrentPrice(upgrade, playerEntity, ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, playerEntity.getWorld().getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE)));
     }
 
     public record PriceIncreasePerLevel(int value, float multiplier) {
         public static final Codec<PriceIncreasePerLevel> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        Codecs.rangedInt(0, 500_000_000).fieldOf("value").forGetter(PriceIncreasePerLevel::value),
-                        Codecs.POSITIVE_FLOAT.fieldOf("multiplier").forGetter(PriceIncreasePerLevel::multiplier)
+                        ExtraCodecs.intRange(0, 500_000_000).fieldOf("value").forGetter(PriceIncreasePerLevel::value),
+                        ExtraCodecs.POSITIVE_FLOAT.fieldOf("multiplier").forGetter(PriceIncreasePerLevel::multiplier)
                 ).apply(instance, PriceIncreasePerLevel::new)
         );
     }

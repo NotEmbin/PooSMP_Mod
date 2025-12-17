@@ -1,10 +1,10 @@
 package embin.poosmp;
 
 import embin.poosmp.util.Id;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvent;
 
 public class PooSMPSoundEvents {
     private PooSMPSoundEvents() {}
@@ -24,7 +24,7 @@ public class PooSMPSoundEvents {
 
     private static SoundEvent registerSound(String namespace) {
         Identifier id = Id.of(namespace);
-        return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
+        return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
     }
 
     public static void init() {

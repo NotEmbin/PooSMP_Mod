@@ -1,41 +1,39 @@
 package embin.poosmp.items;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class ServerSaysWhatItem extends Item {
-    public ServerSaysWhatItem(Settings settings) {
+    public ServerSaysWhatItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
         String message = "What?";
-        ItemStack stack = user.getStackInHand(hand);
-        Text customItemName = stack.get(DataComponentTypes.CUSTOM_NAME);
+        ItemStack stack = user.getItemInHand(hand);
+        Component customItemName = stack.get(DataComponents.CUSTOM_NAME);
         if (customItemName != null) {
             message = customItemName.getString();
         }
         if (message.contains("testicle") || message.contains("rubbing") || message.contains("Rubbing")) {
             message = "cubey smells";
         }
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             MinecraftServer server = user.getServer();
-            CommandManager commandManager = server.getCommandManager();
-            ServerCommandSource commandSource = server.getCommandSource();
+            Commands commandManager = server.getCommands();
+            CommandSourceStack commandSource = server.createCommandSourceStack();
             commandManager.executeWithPrefix(commandSource, "say " + message);
         }
-        return TypedActionResult.success(user.getStackInHand(hand));
+        return TypedActionResult.success(user.getItemInHand(hand));
     }
 }

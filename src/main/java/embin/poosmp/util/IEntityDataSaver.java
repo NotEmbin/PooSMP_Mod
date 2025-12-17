@@ -1,7 +1,7 @@
 package embin.poosmp.util;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 public interface IEntityDataSaver {
-    NbtCompound poosmpmod$getPersistentData();
+    CompoundTag poosmpmod$getPersistentData();
 }

@@ -12,15 +12,15 @@ import embin.poosmp.util.Id;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 public class PooSMPMessages {
     public static final Identifier BUY_UPGRADE = Id.of("buy_upgrade");
@@ -36,43 +36,43 @@ public class PooSMPMessages {
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(BuyUpgradePayload.ID, (payload, context) -> {
-            ServerPlayerEntity player = context.player();
+            ServerPlayer player = context.player();
             MinecraftServer server = player.getServer();
 
             if (server != null && !player.getWorld().isClient()) {
                 server.execute(() -> {
-                    Registry<Upgrade> upgradeRegistry = server.getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE);
-                    if (upgradeRegistry.getEntry(payload.upgrade()).isPresent()) {
-                        RegistryEntry<Upgrade> upgrade = upgradeRegistry.getEntry(payload.upgrade()).get();
+                    Registry<Upgrade> upgradeRegistry = server.registryAccess().get(PooSMPRegistries.Keys.UPGRADE);
+                    if (upgradeRegistry.get(payload.upgrade()).isPresent()) {
+                        Holder<Upgrade> upgrade = upgradeRegistry.get(payload.upgrade()).get();
                         int currentPurchasedAmount = ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade.value());
-                        player.setExperienceLevel(player.experienceLevel - PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount));
+                        player.setExperienceLevels(player.experienceLevel - PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount));
                         ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount + 1);
                         upgrade.value().onPurchase(player);
-                        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS);
+                        player.getServerWorld().playSound(null, player.blockPosition(), SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS);
                         Upgrade.syncData(player);
                     } else {
-                        server.sendMessage(Text.literal("Invalid upgrade").formatted(Formatting.RED));
+                        server.sendSystemMessage(Component.literal("Invalid upgrade").withStyle(ChatFormatting.RED));
                     }
                 });
             }
         });
 
         ServerPlayNetworking.registerGlobalReceiver(SellUpgradePayload.ID, (payload, context) -> {
-            ServerPlayerEntity player = context.player();
+            ServerPlayer player = context.player();
             MinecraftServer server = player.getServer();
 
             if (server != null && !player.getWorld().isClient()) {
                 server.execute(() -> {
-                    Registry<Upgrade> upgradeRegistry = server.getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE);
-                    if (upgradeRegistry.getEntry(payload.upgrade()).isPresent()) {
-                        RegistryEntry<Upgrade> upgrade = upgradeRegistry.getEntry(payload.upgrade()).get();
+                    Registry<Upgrade> upgradeRegistry = server.registryAccess().get(PooSMPRegistries.Keys.UPGRADE);
+                    if (upgradeRegistry.get(payload.upgrade()).isPresent()) {
+                        Holder<Upgrade> upgrade = upgradeRegistry.get(payload.upgrade()).get();
                         upgrade.value().onSell(player);
                         int currentPurchasedAmount = ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade.value());
-                        player.setExperienceLevel(player.experienceLevel + PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount - 1));
+                        player.setExperienceLevels(player.experienceLevel + PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount - 1));
                         ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount - 1);
                         Upgrade.syncData(player);
                     } else {
-                        server.sendMessage(Text.literal("Invalid upgrade").formatted(Formatting.RED));
+                        server.sendSystemMessage(Component.literal("Invalid upgrade").withStyle(ChatFormatting.RED));
                     }
                 });
             }
@@ -82,7 +82,7 @@ public class PooSMPMessages {
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(UpgradeSyncPayload.ID, (payload, context) -> {
             context.client().execute(() -> {
-                for (String upgradeId : payload.nbt().getKeys()) {
+                for (String upgradeId : payload.nbt().keySet()) {
                     Identifier id = Id.of(upgradeId);
                     ClientUpgradeData.INSTANCE.setPurchasedAmount(id, payload.nbt().getInt(upgradeId));
                     ClientUpgradeData.INSTANCE.setBalance(payload.nbt().getDouble("poosmp:balance"));

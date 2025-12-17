@@ -5,22 +5,20 @@ import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.util.PooSMPTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.block.Blocks;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import java.util.concurrent.CompletableFuture;
 
 public class PooSMPRecipeProvider extends FabricRecipeProvider {
-    public PooSMPRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public PooSMPRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
@@ -56,40 +54,40 @@ public class PooSMPRecipeProvider extends FabricRecipeProvider {
         offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.CHISELED_RESIN_BRICKS, PooSMPBlocks.RESIN_BRICKS);
     }
 
-    public static void offerStairsRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input) {
-        createStairsRecipe(output, Ingredient.ofItems(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
+    public static void offerStairsRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {
+        createStairsRecipe(output, Ingredient.of(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
     }
 
-    public static void offerRedNetherFenceRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input) {
-        createRedNetherFenceRecipe(output, Ingredient.ofItems(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
+    public static void offerRedNetherFenceRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {
+        createRedNetherFenceRecipe(output, Ingredient.of(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
     }
 
-    public static void offerDoorRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input) {
-        createDoorRecipe(output, Ingredient.ofItems(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
+    public static void offerDoorRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {
+        createDoorRecipe(output, Ingredient.of(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
     }
 
-    public static void offerTrapdoorRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input) {
-        createTrapdoorRecipe(output, Ingredient.ofItems(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
+    public static void offerTrapdoorRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {
+        createTrapdoorRecipe(output, Ingredient.of(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
     }
 
-    public static void offerFenceRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input) {
-        createFenceRecipe(output, Ingredient.ofItems(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
+    public static void offerFenceRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {
+        createFenceRecipe(output, Ingredient.of(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
     }
 
-    public static void offerFenceGateRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input) {
-        createFenceGateRecipe(output, Ingredient.ofItems(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
+    public static void offerFenceGateRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {
+        createFenceGateRecipe(output, Ingredient.of(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
     }
 
-    public static void offerButtonRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input) {
-        createButtonRecipe(output, Ingredient.ofItems(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
+    public static void offerButtonRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {
+        createButtonRecipe(output, Ingredient.of(input)).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter);
     }
 
-    public static CraftingRecipeJsonBuilder createRedNetherFenceRecipe(ItemConvertible output, Ingredient input) {
+    public static CraftingRecipeJsonBuilder createRedNetherFenceRecipe(ItemLike output, Ingredient input) {
         Item item = PooSMPItems.RED_NETHER_BRICK;
         return ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, output, 6).input('W', input).input('#', item).pattern("W#W").pattern("W#W");
     }
 
-    public static CraftingRecipeJsonBuilder createButtonRecipe(ItemConvertible output, Ingredient input) {
+    public static CraftingRecipeJsonBuilder createButtonRecipe(ItemLike output, Ingredient input) {
         return ShapelessRecipeJsonBuilder.create(RecipeCategory.REDSTONE, output, 1).input(input);
     }
 }

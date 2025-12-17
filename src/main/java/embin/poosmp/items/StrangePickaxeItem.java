@@ -1,17 +1,16 @@
 package embin.poosmp.items;
 
 import embin.poosmp.items.component.PooSMPItemComponents;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 
 public class StrangePickaxeItem extends PickaxeItem {
@@ -20,20 +19,20 @@ public class StrangePickaxeItem extends PickaxeItem {
     }
 
     @Override
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+    public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
         int count = stack.getOrDefault(PooSMPItemComponents.BLOCKS_MINED, 0);
         stack.set(PooSMPItemComponents.BLOCKS_MINED, count + 1);
         return super.postMine(stack, world, state, pos, miner);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
         int count = stack.getOrDefault(PooSMPItemComponents.BLOCKS_MINED, 0);
-        tooltip.add(Text.translatable("tooltip.poosmp.blocks_mined", count));
+        tooltip.add(Component.translatable("tooltip.poosmp.blocks_mined", count));
     }
 
     @Override
-    public Text getName() {
-        return Text.translatable(this.getTranslationKey()).formatted(Formatting.GOLD);
+    public Component getName() {
+        return Component.translatable(this.getTranslationKey()).formatted(ChatFormatting.GOLD);
     }
 }

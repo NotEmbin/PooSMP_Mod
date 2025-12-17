@@ -1,44 +1,43 @@
 package embin.poosmp.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class RiggedBlock extends Block {
-    public RiggedBlock(Settings settings) {
+    public RiggedBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
-        if (player.isSneaking()) return super.onBreak(world, pos, state, player);
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        if (player.isShiftKeyDown()) return super.playerWillDestroy(world, pos, state, player);
 
-        this.spawnBreakParticles(world, player, pos, state);
-        Vec3d vec3d = pos.toCenterPos();
-        world.createExplosion(null, world.getDamageSources().badRespawnPoint(vec3d), null, vec3d, 4.0F, true, World.ExplosionSourceType.BLOCK);
+        this.spawnDestroyParticles(world, player, pos, state);
+        Vec3 vec3d = pos.getCenter();
+        world.explode(null, world.damageSources().badRespawnPointExplosion(vec3d), null, vec3d, 4.0F, true, Level.ExplosionInteraction.BLOCK);
         return state;
     }
 
     @Override
-    protected void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
-        world.breakBlock(hit.getBlockPos(), false, projectile.getOwner());
-        Vec3d vec3d = hit.getBlockPos().toCenterPos();
-        world.createExplosion(projectile, world.getDamageSources().badRespawnPoint(vec3d), null, vec3d, 4.0F, true, World.ExplosionSourceType.BLOCK);
+    protected void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
+        world.destroyBlock(hit.getBlockPos(), false, projectile.getOwner());
+        Vec3 vec3d = hit.getBlockPos().getCenter();
+        world.explode(projectile, world.damageSources().badRespawnPointExplosion(vec3d), null, vec3d, 4.0F, true, Level.ExplosionInteraction.BLOCK);
     }
 
     @Override
     protected List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {
-        return List.of(this.asItem().getDefaultStack());
+        return List.of(this.asItem().getDefaultInstance());
     }
 }

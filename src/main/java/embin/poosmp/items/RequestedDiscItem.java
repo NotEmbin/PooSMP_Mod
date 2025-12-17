@@ -1,31 +1,30 @@
 package embin.poosmp.items;
 
 import embin.poosmp.util.PooSMPTags;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
 import java.util.List;
 import java.util.Objects;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
 public class RequestedDiscItem extends Item {
     private final String requester;
-    public RequestedDiscItem(String requester, Settings settings) {
+    public RequestedDiscItem(String requester, Properties settings) {
         super(settings);
         this.requester = requester;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        if (stack.isIn(PooSMPTags.Items.STEREO_DISCS)) {
-            tooltip.add(Text.literal("This song is stereo, so the sound created by").formatted(Formatting.LIGHT_PURPLE, Formatting.ITALIC));
-            tooltip.add(Text.literal("the jukebox will not be played locationally.").formatted(Formatting.LIGHT_PURPLE, Formatting.ITALIC));
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
+        super.appendHoverText(stack, context, tooltip, type);
+        if (stack.is(PooSMPTags.Items.STEREO_DISCS)) {
+            tooltip.add(Component.literal("This song is stereo, so the sound created by").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
+            tooltip.add(Component.literal("the jukebox will not be played locationally.").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
         }
         if (!Objects.equals(this.requester, "Embin")) {
-            tooltip.add(Text.literal("Requested by ").append(this.requester).formatted(Formatting.GRAY));
+            tooltip.add(Component.literal("Requested by ").append(this.requester).withStyle(ChatFormatting.GRAY));
         }
     }
 }

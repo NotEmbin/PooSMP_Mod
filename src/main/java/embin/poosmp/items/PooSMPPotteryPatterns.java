@@ -2,10 +2,10 @@ package embin.poosmp.items;
 
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.Id;
-import net.minecraft.block.DecoratedPotPattern;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 
 public class PooSMPPotteryPatterns {
     // aaaaaaaAAAAAAAAAAAAAAAAAAA
@@ -16,7 +16,7 @@ public class PooSMPPotteryPatterns {
     private static DecoratedPotPattern register(String name) {
         Identifier pot_id = Id.of(name);
         Identifier pot_pattern_id = Id.of(name + "_pottery_pattern");
-        return Registry.register(Registries.DECORATED_POT_PATTERN, pot_id, new DecoratedPotPattern(pot_pattern_id));
+        return Registry.register(BuiltInRegistries.DECORATED_POT_PATTERN, pot_id, new DecoratedPotPattern(pot_pattern_id));
     }
 
     public static final DecoratedPotPattern CUBE = register("cube");

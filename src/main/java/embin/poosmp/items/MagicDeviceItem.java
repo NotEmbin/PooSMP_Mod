@@ -1,26 +1,26 @@
 package embin.poosmp.items;
 
 import embin.poosmp.PooSMPMod;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.explosion.ExplosionBehavior;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ExplosionDamageCalculator;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -28,72 +28,72 @@ import java.util.Objects;
 public class MagicDeviceItem extends Item {
     public static final float EXPLOSION_POWER = 3.25f;
 
-    public MagicDeviceItem(Settings settings) {
+    public MagicDeviceItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        if (!world.isClient) {
-            HitResult hitResult = user.raycast(20.0D, 0.0F, false);
-            DamageSources damageSources = new DamageSources(world.getRegistryManager());
-            ExplosionBehavior eb = new ExplosionBehavior();
-            Vec3d size = new Vec3d(1, 1, 1);
-            Vec3d size2 = new Vec3d(20, 20, 20);
-            EntityHitResult entityHitResult = ProjectileUtil.raycast(user, size, size2, user.getBoundingBox(), e -> !e.isSpectator() && e.canHit(), 20);
-            if (itemStack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                String victim_name = itemStack.get(DataComponentTypes.CUSTOM_NAME).getString();
-                PlayerEntity victim = getPlayerByName(victim_name, world);
+    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
+        if (!world.isClientSide) {
+            HitResult hitResult = user.pick(20.0D, 0.0F, false);
+            DamageSources damageSources = new DamageSources(world.registryAccess());
+            ExplosionDamageCalculator eb = new ExplosionDamageCalculator();
+            Vec3 size = new Vec3(1, 1, 1);
+            Vec3 size2 = new Vec3(20, 20, 20);
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(user, size, size2, user.getBoundingBox(), e -> !e.isSpectator() && e.isPickable(), 20);
+            if (itemStack.has(DataComponents.CUSTOM_NAME)) {
+                String victim_name = itemStack.get(DataComponents.CUSTOM_NAME).getString();
+                Player victim = getPlayerByName(victim_name, world);
                 if (victim != null) {
-                    world.createExplosion(null, damageSources.explosion(null, null), eb, victim.getPos(), EXPLOSION_POWER, false, World.ExplosionSourceType.TRIGGER);
+                    world.explode(null, damageSources.explosion(null, null), eb, victim.getPos(), EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
                 } else {
-                    user.sendMessage(Text.literal("No player with such name exists!").formatted(Formatting.YELLOW), true);
+                    user.displayClientMessage(Component.literal("No player with such name exists!").withStyle(ChatFormatting.YELLOW), true);
                 }
             } else if (entityHitResult != null && entityHitResult.getEntity() != null) {
-                Vec3d pos = entityHitResult.getEntity().getPos();
-                world.createExplosion(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, World.ExplosionSourceType.TRIGGER);
+                Vec3 pos = entityHitResult.getEntity().getPos();
+                world.explode(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
             } else if (hitResult.getType() == HitResult.Type.BLOCK) {
                 explodeBlock(hitResult, world);
             } else {
-                Vec3d pos = hitResult.getPos();
-                world.createExplosion(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, World.ExplosionSourceType.TRIGGER);
+                Vec3 pos = hitResult.getLocation();
+                world.explode(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
             }
-            itemStack.damage(1, user, LivingEntity.getSlotForHand(hand));
+            itemStack.hurtAndBreak(1, user, LivingEntity.getSlotForHand(hand));
         }
-        user.incrementStat(Stats.USED.getOrCreateStat(this));
+        user.awardStat(Stats.ITEM_USED.get(this));
         return TypedActionResult.success(itemStack);
     }
 
     @Override
-    public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        World world = user.getWorld();
-        if (!world.isClient()) {
-            Vec3d pos = entity.getPos();
-            DamageSources damageSources = new DamageSources(world.getRegistryManager());
-            ExplosionBehavior eb = new ExplosionBehavior();
-            world.createExplosion(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, World.ExplosionSourceType.TRIGGER);
-            stack.damage(1, user, LivingEntity.getSlotForHand(hand));
-            return ActionResult.SUCCESS;
+    public InteractionResult interactLivingEntity(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand) {
+        Level world = user.getWorld();
+        if (!world.isClientSide()) {
+            Vec3 pos = entity.getPos();
+            DamageSources damageSources = new DamageSources(world.registryAccess());
+            ExplosionDamageCalculator eb = new ExplosionDamageCalculator();
+            world.explode(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
+            stack.hurtAndBreak(1, user, LivingEntity.getSlotForHand(hand));
+            return InteractionResult.SUCCESS;
         }
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 
     @Nullable
-    public static PlayerEntity getPlayerByName(String name, World world) {
-        for (PlayerEntity player : world.getPlayers()) {
-            if (Objects.equals(name, player.getNameForScoreboard())) {
+    public static Player getPlayerByName(String name, Level world) {
+        for (Player player : world.players()) {
+            if (Objects.equals(name, player.getScoreboardName())) {
                 return player;
             }
         }
         return null;
     }
 
-    private static void explodeBlock(HitResult hitResult, World world) {
+    private static void explodeBlock(HitResult hitResult, Level world) {
         BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
         double x = blockPos.getX();
         double y = blockPos.getY() + 1.0D;
         double z = blockPos.getZ();
-        world.createExplosion(null, x, y, z, EXPLOSION_POWER, World.ExplosionSourceType.TRIGGER);
+        world.explode(null, x, y, z, EXPLOSION_POWER, Level.ExplosionInteraction.TRIGGER);
     }
 }

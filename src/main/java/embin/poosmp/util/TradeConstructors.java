@@ -4,32 +4,21 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradeOffers;
-import net.minecraft.village.TradedItem;
-import net.minecraft.village.VillagerProfession;
-
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.ItemLike;
 import java.util.Optional;
 
 public class TradeConstructors {
-    public static final ComponentMap TRADED_BOOK_ENCHANTS = ComponentMap.builder().build();
+    public static final DataComponentMap TRADED_BOOK_ENCHANTS = DataComponentMap.builder().build();
 
     public static void register_villager_trades() {
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.MASON, 1, factories -> {
@@ -129,14 +118,14 @@ public class TradeConstructors {
         });
     }
 
-    public static class ToMoney implements TradeOffers.Factory {
-        private final TradedItem stack;
+    public static class ToMoney implements VillagerTrades.ItemListing {
+        private final ItemCost stack;
         private final int max_uses;
         private final int experience;
         private final ItemStack price;
         private final float multiplier;
 
-        public ToMoney(TradedItem stack, ItemStack price) {
+        public ToMoney(ItemCost stack, ItemStack price) {
             this.stack = stack;
             this.max_uses = 999999;
             this.experience = 20;
@@ -144,35 +133,35 @@ public class TradeConstructors {
             this.multiplier = 0.05F;
         }
 
-        public ToMoney(ItemConvertible item, ItemConvertible sell_price) {
-            this(new TradedItem(sell_price.asItem(), 1), new ItemStack(item));
+        public ToMoney(ItemLike item, ItemLike sell_price) {
+            this(new ItemCost(sell_price.asItem(), 1), new ItemStack(item));
         }
 
-        public ToMoney(ItemConvertible item, int amount, ItemConvertible sell_price) {
-            this(new TradedItem(sell_price.asItem(), 1), new ItemStack(item, amount));
+        public ToMoney(ItemLike item, int amount, ItemLike sell_price) {
+            this(new ItemCost(sell_price.asItem(), 1), new ItemStack(item, amount));
         }
 
-        public ToMoney(ItemConvertible item, int amount, ItemConvertible sell_price, int amount2) {
-            this(new TradedItem(sell_price.asItem(), amount2), new ItemStack(item, amount));
+        public ToMoney(ItemLike item, int amount, ItemLike sell_price, int amount2) {
+            this(new ItemCost(sell_price.asItem(), amount2), new ItemStack(item, amount));
         }
 
-        public ToMoney(ItemStack item, ItemConvertible sell_price, int amount2) {
-            this(new TradedItem(sell_price.asItem(), amount2), item);
+        public ToMoney(ItemStack item, ItemLike sell_price, int amount2) {
+            this(new ItemCost(sell_price.asItem(), amount2), item);
         }
 
         @Override
-        public TradeOffer create(Entity entity, Random random) {
-            return new TradeOffer(this.stack, this.price, this.max_uses, this.experience, this.multiplier);
+        public MerchantOffer create(Entity entity, RandomSource random) {
+            return new MerchantOffer(this.stack, this.price, this.max_uses, this.experience, this.multiplier);
         }
     }
-    public static class FromMoney implements TradeOffers.Factory {
-        private final TradedItem stack;
+    public static class FromMoney implements VillagerTrades.ItemListing {
+        private final ItemCost stack;
         private final int max_uses;
         private final int experience;
         private final ItemStack price;
         private final float multiplier;
 
-        public FromMoney(TradedItem stack, ItemStack price) {
+        public FromMoney(ItemCost stack, ItemStack price) {
             this.stack = stack;
             this.max_uses = 999999;
             this.experience = 20;
@@ -180,21 +169,21 @@ public class TradeConstructors {
             this.multiplier = 0.05F;
         }
 
-        public FromMoney(ItemConvertible item, ItemConvertible buy_price) {
-            this(new TradedItem(item.asItem(), 1), new ItemStack(buy_price));
+        public FromMoney(ItemLike item, ItemLike buy_price) {
+            this(new ItemCost(item.asItem(), 1), new ItemStack(buy_price));
         }
 
-        public FromMoney(ItemConvertible item, int amount, ItemConvertible buy_price) {
-            this(new TradedItem(item.asItem(), amount), new ItemStack(buy_price));
+        public FromMoney(ItemLike item, int amount, ItemLike buy_price) {
+            this(new ItemCost(item.asItem(), amount), new ItemStack(buy_price));
         }
 
-        public FromMoney(ItemConvertible item, int amount, ItemConvertible buy_price, int amount2) {
-            this(new TradedItem(item.asItem(), amount), new ItemStack(buy_price, amount2));
+        public FromMoney(ItemLike item, int amount, ItemLike buy_price, int amount2) {
+            this(new ItemCost(item.asItem(), amount), new ItemStack(buy_price, amount2));
         }
 
         @Override
-        public TradeOffer create(Entity entity, Random random) {
-            return new TradeOffer(this.stack, this.price, this.max_uses, this.experience, this.multiplier);
+        public MerchantOffer create(Entity entity, RandomSource random) {
+            return new MerchantOffer(this.stack, this.price, this.max_uses, this.experience, this.multiplier);
         }
     }
 }

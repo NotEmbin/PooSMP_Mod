@@ -2,55 +2,60 @@ package embin.poosmp.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.MultifaceSpreadeableBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class HangingMossBlock extends Block implements Fertilizable {
-    public static final MapCodec<HangingMossBlock> CODEC = createCodec(HangingMossBlock::new);
-    public static final BooleanProperty TIP = BooleanProperty.of("tip");
-    private static final VoxelShape TIP_SHAPE = Block.createCuboidShape((double)1.0F, (double)2.0F, (double)1.0F, (double)15.0F, (double)16.0F, (double)15.0F);
-    private static final VoxelShape SHAPE = Block.createCuboidShape((double)1.0F, (double)0.0F, (double)1.0F, (double)15.0F, (double)16.0F, (double)15.0F);
+public class HangingMossBlock extends Block implements BonemealableBlock {
+    public static final MapCodec<HangingMossBlock> CODEC = simpleCodec(HangingMossBlock::new);
+    public static final BooleanProperty TIP = BooleanProperty.create("tip");
+    private static final VoxelShape TIP_SHAPE = Block.box((double)1.0F, (double)2.0F, (double)1.0F, (double)15.0F, (double)16.0F, (double)15.0F);
+    private static final VoxelShape SHAPE = Block.box((double)1.0F, (double)0.0F, (double)1.0F, (double)15.0F, (double)16.0F, (double)15.0F);
 
-    public HangingMossBlock(Settings settings) {
+    public HangingMossBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.getStateManager().getDefaultState().with(TIP, true));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(TIP, true));
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
-        return this.canGrowInto(world.getBlockState(this.getTipPos(world, pos).down()));
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
+        return this.canGrowInto(world.getBlockState(this.getTipPos(world, pos).below()));
     }
 
     @Override
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
-        BlockPos blockPos = this.getTipPos(world, pos).down();
+    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
+        BlockPos blockPos = this.getTipPos(world, pos).below();
         if (this.canGrowInto(world.getBlockState(blockPos))) {
-            world.setBlockState(blockPos, (BlockState) state.with(TIP, true));
+            world.setBlockAndUpdate(blockPos, (BlockState) state.setValue(TIP, true));
         }
     }
 
-    public BlockPos getTipPos(BlockView world, BlockPos pos) {
-        BlockPos.Mutable mutable = pos.mutableCopy();
+    public BlockPos getTipPos(BlockGetter world, BlockPos pos) {
+        BlockPos.MutableBlockPos mutable = pos.mutable();
         BlockState blockState;
         do {
             mutable.move(Direction.DOWN);
             blockState = world.getBlockState(mutable);
-        } while (blockState.isOf(this));
-        return mutable.offset(Direction.UP).toImmutable();
+        } while (blockState.is(this));
+        return mutable.relative(Direction.UP).immutable();
     }
 
     private boolean canGrowInto(BlockState state) {
@@ -58,48 +63,48 @@ public class HangingMossBlock extends Block implements Fertilizable {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(TIP);
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!this.canPlaceAt(world, pos)) {
-            world.breakBlock(pos, true);
+            world.destroyBlock(pos, true);
         }
     }
 
-    private boolean canPlaceAt(BlockView world, BlockPos pos) {
-        BlockPos blockPos = pos.offset(Direction.UP);
+    private boolean canPlaceAt(BlockGetter world, BlockPos pos) {
+        BlockPos blockPos = pos.relative(Direction.UP);
         BlockState blockState = world.getBlockState(blockPos);
-        return MultifaceGrowthBlock.canGrowOn(world, Direction.UP, blockPos, blockState) || blockState.isOf(PooSMPBlocks.PALE_HANGING_MOSS);
+        return MultifaceSpreadeableBlock.canAttachTo(world, Direction.UP, blockPos, blockState) || blockState.is(PooSMPBlocks.PALE_HANGING_MOSS);
     }
 
 
     @Override
-    protected boolean isTransparent(BlockState state, BlockView world, BlockPos pos) {
+    protected boolean isTransparent(BlockState state, BlockGetter world, BlockPos pos) {
         return true;
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return state.get(TIP) ? TIP_SHAPE : SHAPE;
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return state.getValue(TIP) ? TIP_SHAPE : SHAPE;
     }
 
-    public MapCodec<HangingMossBlock> getCodec() {
+    public MapCodec<HangingMossBlock> codec() {
         return CODEC;
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         return this.canPlaceAt(world, pos);
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (!this.canPlaceAt(world, pos)) {
-            world.scheduleBlockTick(pos, this, 1);
+            world.scheduleTick(pos, this, 1);
         }
-        return state.with(TIP, !world.getBlockState(pos.down()).isOf(this));
+        return state.setValue(TIP, !world.getBlockState(pos.below()).is(this));
     }
 }

@@ -2,18 +2,16 @@ package embin.poosmp.items;
 
 import embin.poosmp.util.Id;
 import embin.poosmp.util.PooSMPTags;
-import net.minecraft.block.Block;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Util;
-
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Supplier;
@@ -47,22 +45,22 @@ public class PooSMPMaterials {
 
         @Override
         public Ingredient getRepairIngredient() {
-            return Ingredient.ofItems(PooSMPItems.RED_POO_INGOT);
+            return Ingredient.of(PooSMPItems.RED_POO_INGOT);
         }
     };
 
-    public static RegistryEntry<ArmorMaterial> register(String name, Supplier<ArmorMaterial> material) {
-        return Registry.registerReference(Registries.ARMOR_MATERIAL, Id.of(name), material.get());
+    public static Holder<ArmorMaterial> register(String name, Supplier<ArmorMaterial> material) {
+        return Registry.registerForHolder(Registries.ARMOR_MATERIAL, Id.of(name), material.get());
     }
 
-    public static final RegistryEntry<ArmorMaterial> A_RED_POO = register("red_poo",
+    public static final Holder<ArmorMaterial> A_RED_POO = register("red_poo",
             () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 4);
                 map.put(ArmorItem.Type.LEGGINGS, 7);
                 map.put(ArmorItem.Type.CHESTPLATE, 9);
                 map.put(ArmorItem.Type.HELMET, 4);
                 map.put(ArmorItem.Type.BODY, 16);
-            }), 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, () -> Ingredient.ofItems(PooSMPItems.RED_POO_INGOT),
+            }), 25, SoundEvents.ARMOR_EQUIP_DIAMOND, () -> Ingredient.ofItems(PooSMPItems.RED_POO_INGOT),
                 List.of(new ArmorMaterial.Layer(Id.of("red_poo"))), 4.5f, 0.1f
             )
     );

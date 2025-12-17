@@ -7,15 +7,15 @@ import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.items.component.ValueComponent;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public final class ItemWorth {
 
     public static void setPrice(DefaultItemComponentEvents.ModifyContext modifyContext, ShopCategory category, Item item, double price, double sellPrice) {
-        RegistryEntry<ShopCategory> categoryEntry = PooSMPRegistries.SHOP_CATEGORY.getEntry(category);
-        modifyContext.modify(item, builder -> builder.add(PooSMPItemComponents.ITEM_VALUE, new ValueComponent(price, sellPrice, categoryEntry)));
+        Holder<ShopCategory> categoryEntry = PooSMPRegistries.SHOP_CATEGORY.wrapAsHolder(category);
+        modifyContext.modify(item, builder -> builder.set(PooSMPItemComponents.ITEM_VALUE, new ValueComponent(price, sellPrice, categoryEntry)));
     }
 
     public static void setPrice(DefaultItemComponentEvents.ModifyContext modifyContext, ShopCategory category, Item item, double price) {

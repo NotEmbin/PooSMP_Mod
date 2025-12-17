@@ -1,7 +1,7 @@
 package embin.poosmp.util;
 
 import embin.poosmp.PooSMPMod;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class Id {
 
@@ -9,9 +9,9 @@ public class Id {
         String name = removeInvalidCharactersFromString(namespace);
         String[] splitted = name.split(String.valueOf(Identifier.NAMESPACE_SEPARATOR)); // Identifier.NAMESPACE_SEPARATOR = ":"
         if (splitted.length == 1) {
-            return Identifier.of(default_namespace, namespace);
+            return Identifier.fromNamespaceAndPath(default_namespace, namespace);
         }
-        return Identifier.of(splitted[0], splitted[1]);
+        return Identifier.fromNamespaceAndPath(splitted[0], splitted[1]);
     }
 
     public static Identifier of(String namespace) {

@@ -1,33 +1,33 @@
 package embin.poosmp.block.entity;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 @Deprecated
 public class ItemShopBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(22, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(22, ItemStack.EMPTY);
     private static final int payment_slot = 0;
-    protected final PropertyDelegate propertyDelegate;
+    protected final ContainerData propertyDelegate;
     private int progress = 0;
     private int max_progress = 20;
 
     public ItemShopBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        this.propertyDelegate = new PropertyDelegate() {
+        this.propertyDelegate = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -46,35 +46,35 @@ public class ItemShopBlockEntity extends BlockEntity implements ExtendedScreenHa
             }
 
             @Override
-            public int size() {
+            public int getCount() {
                 return 2;
             }
         };
     }
 
     //@Override
-    public DefaultedList<ItemStack> getItems() {
+    public NonNullList<ItemStack> getItems() {
         return inventory;
     }
 
     @Override
-    public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+    public Object getScreenOpeningData(ServerPlayer serverPlayerEntity) {
         return null;
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+    protected void writeNbt(CompoundTag nbt, HolderLookup.Provider registryLookup) {
         super.writeNbt(nbt, registryLookup);
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.literal("Item Shop");
+    public Component getDisplayName() {
+        return Component.literal("Item Shop");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return null;
     }
 }

@@ -1,34 +1,39 @@
 package embin.poosmp.items;
 
+import TypedActionResult;
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.util.Id;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.ChatFormatting;
+import net.minecraft.IdentifierException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
-import net.minecraft.world.World;
-
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class BiomeStickItem extends Item {
-    public BiomeStickItem(Settings settings) {
+    public BiomeStickItem(Properties settings) {
         super(settings);
     }
     public static final int default_radius = 8;
-    public final ComponentType<String> selected_biome_component = PooSMPItemComponents.SELECTED_BIOME;
+    public final DataComponentType<String> selected_biome_component = PooSMPItemComponents.SELECTED_BIOME;
     public final String default_biome = "minecraft:plains";
     public static final String[] vanilla_biomes = {
         // used purely for the tooltip and item group
@@ -107,83 +112,83 @@ public class BiomeStickItem extends Item {
     };
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
+    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack stack = user.getItemInHand(hand);
         try {
-            if (stack.contains(selected_biome_component) || stack.contains(DataComponentTypes.CUSTOM_NAME)) {
+            if (stack.has(selected_biome_component) || stack.has(DataComponents.CUSTOM_NAME)) {
                 int radius = stack.getOrDefault(PooSMPItemComponents.BIOME_STICK_RADIUS_OVERRIDE, default_radius);
-                DynamicRegistryManager registryManager = world.getRegistryManager();
+                RegistryAccess registryManager = world.registryAccess();
                 String biome_id = Id.ofVanilla(Id.removeInvalidCharactersFromString(stack.getOrDefault(selected_biome_component, default_biome))).toString();
-                if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                    biome_id = Id.ofVanilla(Id.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString())).toString();
+                if (stack.has(DataComponents.CUSTOM_NAME)) {
+                    biome_id = Id.ofVanilla(Id.removeInvalidCharactersFromString(stack.getOrDefault(DataComponents.CUSTOM_NAME, Component.literal(default_biome)).getString())).toString();
                 }
-                if (registryManager.get(RegistryKeys.BIOME).containsId(Id.ofVanilla(biome_id))) {
-                    if (!world.isClient) {
+                if (registryManager.get(Registries.BIOME).containsId(Id.ofVanilla(biome_id))) {
+                    if (!world.isClientSide) {
                         MinecraftServer server = user.getServer();
-                        CommandManager commandManager = server.getCommandManager();
-                        ServerCommandSource commandSource = server.getCommandSource().withSilent();
+                        Commands commandManager = server.getCommands();
+                        CommandSourceStack commandSource = server.createCommandSourceStack().withSuppressedOutput();
                         String name = user.getName().getString();
-                        int build_limit = world.getTopY();
-                        int build_limit_bottom = world.getBottomY();
+                        int build_limit = world.getHeight();
+                        int build_limit_bottom = world.getMinY();
                         int player_y = (int) Math.clamp(user.getY(), build_limit_bottom + radius, build_limit - radius);
                         String negative_relative = "~-" + radius + " " + (player_y - radius) + " ~-" + radius;
                         String positive_relative = "~" + radius + " " + (player_y + radius) + " ~" + radius;
                         commandManager.executeWithPrefix(commandSource,
                             "execute at " + name + " run fillbiome " + negative_relative + " " + positive_relative + " " + biome_id
                         );
-                        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
+                        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
                     }
                 } else {
-                    world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS);
-                    if (world.isClient) {
-                        user.sendMessage(Text.literal("Biome \"" + biome_id + "\" is invalid!").formatted(Formatting.RED, Formatting.ITALIC));
+                    world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS);
+                    if (world.isClientSide) {
+                        user.displayClientMessage(Component.literal("Biome \"" + biome_id + "\" is invalid!").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
                     }
                 }
             }
-        } catch (InvalidIdentifierException e) {
-            world.playSound(null, user.getX(), user.getY() + 3, user.getZ(), SoundEvents.ENTITY_HORSE_DEATH, SoundCategory.PLAYERS);
-            if (world.isClient) {
-                user.sendMessage(Text.literal(String.valueOf(e)).formatted(Formatting.RED));
+        } catch (IdentifierException e) {
+            world.playSound(null, user.getX(), user.getY() + 3, user.getZ(), SoundEvents.HORSE_DEATH, SoundSource.PLAYERS);
+            if (world.isClientSide) {
+                user.displayClientMessage(Component.literal(String.valueOf(e)).withStyle(ChatFormatting.RED));
             }
         }
-        user.incrementStat(Stats.USED.getOrCreateStat(this));
-        user.getItemCooldownManager().set(this, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 5));
-        return TypedActionResult.success(user.getStackInHand(hand));
+        user.awardStat(Stats.ITEM_USED.get(this));
+        user.getCooldowns().addCooldown(this, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 5));
+        return TypedActionResult.success(user.getItemInHand(hand));
     }
 
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
+        super.appendHoverText(stack, context, tooltip, type);
         try {
-            if (stack.contains(selected_biome_component) || stack.contains(DataComponentTypes.CUSTOM_NAME)) {
+            if (stack.has(selected_biome_component) || stack.has(DataComponents.CUSTOM_NAME)) {
                 String biome = stack.getOrDefault(selected_biome_component, default_biome);
-                if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                    biome = Id.removeInvalidCharactersFromString(stack.getOrDefault(DataComponentTypes.CUSTOM_NAME, Text.literal(default_biome)).getString());
+                if (stack.has(DataComponents.CUSTOM_NAME)) {
+                    biome = Id.removeInvalidCharactersFromString(stack.getOrDefault(DataComponents.CUSTOM_NAME, Component.literal(default_biome)).getString());
                 }
-                String biome_name = Id.ofVanilla(biome).toTranslationKey("biome");
+                String biome_name = Id.ofVanilla(biome).toLanguageKey("biome");
                 Identifier biome_id = Id.ofVanilla(biome);
-                tooltip.add(Text.translatable("tooltip.poosmp.selected_biome").formatted(Formatting.GREEN).append(":"));
-                if (Language.getInstance().hasTranslation(biome_name)) {
-                    tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(Text.translatable(biome_name)));
+                tooltip.add(Component.translatable("tooltip.poosmp.selected_biome").withStyle(ChatFormatting.GREEN).append(":"));
+                if (Language.getInstance().has(biome_name)) {
+                    tooltip.add(Component.literal(" ").withStyle(ChatFormatting.GRAY).append(Component.translatable(biome_name)));
                     if (type.isAdvanced()) {
-                        tooltip.add(Text.literal(" ").formatted(Formatting.DARK_GRAY).append(biome_id.toString()));
+                        tooltip.add(Component.literal(" ").withStyle(ChatFormatting.DARK_GRAY).append(biome_id.toString()));
                     }
                 } else {
-                    tooltip.add(Text.literal(" ").formatted(Formatting.GRAY).append(biome_id.toString()));
+                    tooltip.add(Component.literal(" ").withStyle(ChatFormatting.GRAY).append(biome_id.toString()));
                 }
-                boolean exists = context.getRegistryLookup().createRegistryLookup().getOrThrow(RegistryKeys.BIOME).getOptional(RegistryKey.of(RegistryKeys.BIOME, biome_id)).isPresent();
+                boolean exists = context.registries().createRegistryLookup().getOrThrow(Registries.BIOME).getOptional(ResourceKey.create(Registries.BIOME, biome_id)).isPresent();
                 if (!exists) {
-                    tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.not_valid").formatted(Formatting.RED, Formatting.ITALIC));
+                    tooltip.add(Component.translatable("tooltip.poosmp.selected_biome.not_valid").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
                 }
             } else {
-                tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.none_selected").formatted(Formatting.LIGHT_PURPLE, Formatting.ITALIC));
+                tooltip.add(Component.translatable("tooltip.poosmp.selected_biome.none_selected").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
             }
-        } catch (InvalidIdentifierException e) {
-            tooltip.add(Text.translatable("tooltip.poosmp.selected_biome.invalid").formatted(Formatting.RED));
-            tooltip.add(Text.literal("").formatted(Formatting.RED));
-            tooltip.add(Text.literal("InvalidIdentifierException:").formatted(Formatting.RED));
-            tooltip.add(Text.literal(e.getMessage()).formatted(Formatting.RED, Formatting.ITALIC));
+        } catch (IdentifierException e) {
+            tooltip.add(Component.translatable("tooltip.poosmp.selected_biome.invalid").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.literal("").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.literal("InvalidIdentifierException:").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.literal(e.getMessage()).withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
         } catch (NullPointerException e) {
-            tooltip.add(Text.literal("NullPointerException").formatted(Formatting.RED, Formatting.ITALIC));
+            tooltip.add(Component.literal("NullPointerException").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
         }
     }
 }

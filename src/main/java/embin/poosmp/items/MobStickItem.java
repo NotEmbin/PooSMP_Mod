@@ -2,170 +2,169 @@ package embin.poosmp.items;
 
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.Random;
 
 public class MobStickItem extends CreativeSnitchItem {
-    public EntityType<MobEntity> mob;
+    public EntityType<Mob> mob;
     public String[] names;
 
-    public MobStickItem(Settings settings, EntityType<?> mob, String[] name_list, boolean snitch) {
+    public MobStickItem(Properties settings, EntityType<?> mob, String[] name_list, boolean snitch) {
         super(settings, snitch);
-        this.mob = (EntityType<MobEntity>) mob;
+        this.mob = (EntityType<Mob>) mob;
         this.names = name_list;
     }
 
-    public MobStickItem(Settings settings, EntityType<?> mob, String[] name_list) {
+    public MobStickItem(Properties settings, EntityType<?> mob, String[] name_list) {
         super(settings);
-        this.mob = (EntityType<MobEntity>) mob;
+        this.mob = (EntityType<Mob>) mob;
         this.names = name_list;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
         double player_x = user.getPos().getX();
         double player_z = user.getPos().getZ();
         double player_y = user.getPos().getY();
-        BlockPos pos = BlockPos.ofFloored(player_x, player_y, player_z);
-        EntityType<MobEntity> selected_mob = this.mob;
+        BlockPos pos = BlockPos.containing(player_x, player_y, player_z);
+        EntityType<Mob> selected_mob = this.mob;
         List<String> name_list = List.of(this.names);
-        ItemStack stack = user.getStackInHand(user.getActiveHand());
+        ItemStack stack = user.getItemInHand(user.getUsedItemHand());
         try {
-            if (stack.contains(PooSMPItemComponents.MOB_OVERRIDE)) {
-                selected_mob = (EntityType<MobEntity>) stack.get(PooSMPItemComponents.MOB_OVERRIDE);
+            if (stack.has(PooSMPItemComponents.MOB_OVERRIDE)) {
+                selected_mob = (EntityType<Mob>) stack.get(PooSMPItemComponents.MOB_OVERRIDE);
             }
         } catch (ClassCastException exception) {
-            if (world.isClient) {
-                user.sendMessage(Text.literal("Mob override failed!").formatted(Formatting.RED));
-                user.sendMessage(Text.literal(exception.toString()).formatted(Formatting.RED));
+            if (world.isClientSide) {
+                user.displayClientMessage(Component.literal("Mob override failed!").withStyle(ChatFormatting.RED));
+                user.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED));
             }
         }
         try {
-            if (stack.contains(PooSMPItemComponents.MOB_NAMES)) {
+            if (stack.has(PooSMPItemComponents.MOB_NAMES)) {
                 name_list = stack.get(PooSMPItemComponents.MOB_NAMES);
             }
         } catch (Exception exception) {
-            if (world.isClient) {
-                user.sendMessage(Text.literal("Mob name list override failed!").formatted(Formatting.RED));
-                user.sendMessage(Text.literal(exception.toString()).formatted(Formatting.RED));
+            if (world.isClientSide) {
+                user.displayClientMessage(Component.literal("Mob name list override failed!").withStyle(ChatFormatting.RED));
+                user.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED));
             }
         }
 
-        if (!world.isClient) {
-            EntityType<MobEntity> default_mob = this.mob;
+        if (!world.isClientSide) {
+            EntityType<Mob> default_mob = this.mob;
             ItemStack offhand_item = stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             if (offhand_item == null) {
                 offhand_item = new ItemStack(Items.TOTEM_OF_UNDYING);;
-                user.sendMessage(Text.literal("Invalid offhand override item! Using default instead...").formatted(Formatting.RED));
+                user.displayClientMessage(Component.literal("Invalid offhand override item! Using default instead...").withStyle(ChatFormatting.RED));
             }
-            MobEntity mob = selected_mob.spawn(world.getServer().getWorld(world.getRegistryKey()), pos, SpawnReason.COMMAND);
+            Mob mob = selected_mob.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
             if (mob == null) {
-                user.sendMessage(Text.literal("Mob override failed because mob is null! Using default instead...").formatted(Formatting.RED));
-                mob = default_mob.spawn(world.getServer().getWorld(world.getRegistryKey()), pos, SpawnReason.COMMAND);
+                user.displayClientMessage(Component.literal("Mob override failed because mob is null! Using default instead...").withStyle(ChatFormatting.RED));
+                mob = default_mob.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
             }
-            String zombie_uuid = mob.getUuidAsString();
-            String player_uuid = user.getUuidAsString();
+            String zombie_uuid = mob.getStringUUID();
+            String player_uuid = user.getStringUUID();
             Random random = new Random();
             if (name_list != null) {
                 if (!name_list.isEmpty()) {
                     try {
-                        mob.setCustomName(Text.literal(user.getName().getString()).append("'s ").append(name_list.get(random.nextInt(0, name_list.size()))));
+                        mob.setCustomName(Component.literal(user.getName().getString()).append("'s ").append(name_list.get(random.nextInt(0, name_list.size()))));
                     } catch (IllegalArgumentException exception) {
-                        user.sendMessage(Text.literal("Mob could not be given a custom name!").formatted(Formatting.RED));
-                        user.sendMessage(Text.literal(exception.toString()).formatted(Formatting.RED));
-                        mob.setCustomName(Text.literal(user.getName().getString()).append("'s Mob"));
+                        user.displayClientMessage(Component.literal("Mob could not be given a custom name!").withStyle(ChatFormatting.RED));
+                        user.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED));
+                        mob.setCustomName(Component.literal(user.getName().getString()).append("'s Mob"));
                     } catch (NullPointerException exception) {
-                        mob.setCustomName(Text.literal(user.getName().getString()).append("'s Mob"));
+                        mob.setCustomName(Component.literal(user.getName().getString()).append("'s Mob"));
                     }
                     mob.setCustomNameVisible(true);
                 }
             }
-            mob.setStackInHand(Hand.OFF_HAND, offhand_item.copy());
-            CommandManager commandManager = world.getServer().getCommandManager();
-            ServerCommandSource commandSource = world.getServer().getCommandSource().withSilent();
+            mob.setItemInHand(InteractionHand.OFF_HAND, offhand_item.copy());
+            Commands commandManager = world.getServer().getCommands();
+            CommandSourceStack commandSource = world.getServer().createCommandSourceStack().withSuppressedOutput();
             commandManager.executeWithPrefix(commandSource, "team add " + player_uuid + " \"" + user.getName().getString() + "\"");
             commandManager.executeWithPrefix(commandSource, "team join " + player_uuid + " " + player_uuid);
             commandManager.executeWithPrefix(commandSource, "team join " + player_uuid + " " + zombie_uuid);
         }
 
-        user.incrementStat(Stats.USED.getOrCreateStat(this));
-        user.getItemCooldownManager().set(this, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 20));
-        return TypedActionResult.success(user.getStackInHand(hand));
+        user.awardStat(Stats.ITEM_USED.get(this));
+        user.getCooldowns().addCooldown(this, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 20));
+        return TypedActionResult.success(user.getItemInHand(hand));
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        if (stack.contains(PooSMPItemComponents.MOB_OVERRIDE)) {
-            Text mob_name = Text.translatable(stack.get(PooSMPItemComponents.MOB_OVERRIDE).getTranslationKey());
-            Text mob_id = Text.literal(stack.get(PooSMPItemComponents.MOB_OVERRIDE).getRegistryEntry().getIdAsString());
-            tooltip.add(Text.translatable("tooltip.poosmp.selected_mob").append(":").formatted(Formatting.GREEN));
-            tooltip.add(Text.literal(" ").append(mob_name).formatted(Formatting.GRAY));
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
+        super.appendHoverText(stack, context, tooltip, type);
+        if (stack.has(PooSMPItemComponents.MOB_OVERRIDE)) {
+            Component mob_name = Component.translatable(stack.get(PooSMPItemComponents.MOB_OVERRIDE).getDescriptionId());
+            Component mob_id = Component.literal(stack.get(PooSMPItemComponents.MOB_OVERRIDE).builtInRegistryHolder().getRegisteredName());
+            tooltip.add(Component.translatable("tooltip.poosmp.selected_mob").append(":").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.literal(" ").append(mob_name).withStyle(ChatFormatting.GRAY));
             if (type.isAdvanced()) {
-                tooltip.add(Text.literal(" ").append(mob_id).formatted(Formatting.DARK_GRAY));
+                tooltip.add(Component.literal(" ").append(mob_id).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
-        if (stack.contains(PooSMPItemComponents.MOB_OFFHAND)) {
+        if (stack.has(PooSMPItemComponents.MOB_OFFHAND)) {
             ItemStack override_stack = stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             if (!(override_stack.getItem() == Items.TOTEM_OF_UNDYING) || override_stack.getCount() != 1) {
-                tooltip.add(Text.translatable("tooltip.poosmp.selected_mob_offhand_item").append(":").formatted(Formatting.GREEN));
+                tooltip.add(Component.translatable("tooltip.poosmp.selected_mob_offhand_item").append(":").withStyle(ChatFormatting.GREEN));
                 if (override_stack != null) {
-                    Formatting item_rarity = override_stack.getRarity().getFormatting();
-                    Text name = Text.empty().append(override_stack.getName()).formatted(item_rarity);
+                    ChatFormatting item_rarity = override_stack.getRarity().color();
+                    Component name = Component.empty().append(override_stack.getHoverName()).withStyle(item_rarity);
                     if (override_stack.getCount() > 1) {
-                        name = Text.empty().append(name).append(" x").append(String.valueOf(override_stack.getCount())).formatted(Formatting.GRAY);
+                        name = Component.empty().append(name).append(" x").append(String.valueOf(override_stack.getCount())).withStyle(ChatFormatting.GRAY);
                     }
-                    String id = Registries.ITEM.getId(override_stack.getItem()).toString();
-                    tooltip.add(Text.literal(" ").append(name));
+                    String id = BuiltInRegistries.ITEM.getKey(override_stack.getItem()).toString();
+                    tooltip.add(Component.literal(" ").append(name));
                     if (type.isAdvanced()) {
-                        tooltip.add(Text.literal(" ").append(id).formatted(Formatting.DARK_GRAY));
+                        tooltip.add(Component.literal(" ").append(id).withStyle(ChatFormatting.DARK_GRAY));
                         if (!override_stack.isEmpty()) {
                             int component_count = override_stack.getComponents().size();
                             if (PooSMPMod.componentless_installed) {
-                                int component_base = override_stack.getItem().getComponents().size();
+                                int component_base = override_stack.getItem().components().size();
                                 int component_diff = component_count - component_base;
                                 String component_display = String.valueOf(component_diff);
                                 if (!component_display.startsWith("-")) component_display = "+" + component_diff;
                                 if (component_diff != 0) {
-                                    tooltip.add(Text.literal(" ").append(Text.translatable("item.components", component_display)).formatted(Formatting.DARK_GRAY));
+                                    tooltip.add(Component.literal(" ").append(Component.translatable("item.components", component_display)).withStyle(ChatFormatting.DARK_GRAY));
                                 }
                             } else {
-                                tooltip.add(Text.literal(" ").append(Text.translatable("item.components", component_count)).formatted(Formatting.DARK_GRAY));
+                                tooltip.add(Component.literal(" ").append(Component.translatable("item.components", component_count)).withStyle(ChatFormatting.DARK_GRAY));
                             }
                         }
                     }
                 } else {
-                    tooltip.add(Text.literal(" ").append(Text.translatable("tooltip.poosmp.selected_mob_offhand_item.invalid")).formatted(Formatting.RED));
+                    tooltip.add(Component.literal(" ").append(Component.translatable("tooltip.poosmp.selected_mob_offhand_item.invalid")).withStyle(ChatFormatting.RED));
                 }
             }
         }
-        if (stack.contains(PooSMPItemComponents.MOB_NAMES)) {
+        if (stack.has(PooSMPItemComponents.MOB_NAMES)) {
             List<String> name_list = stack.get(PooSMPItemComponents.MOB_NAMES);
-            tooltip.add(Text.translatable("tooltip.poosmp.selected_mob_names").append(":").formatted(Formatting.GREEN));
+            tooltip.add(Component.translatable("tooltip.poosmp.selected_mob_names").append(":").withStyle(ChatFormatting.GREEN));
             for (String name : name_list) {
-                tooltip.add(Text.literal(" ").append(name).formatted(Formatting.GRAY));
+                tooltip.add(Component.literal(" ").append(name).withStyle(ChatFormatting.GRAY));
             }
             if (name_list.isEmpty()) {
-                tooltip.add(Text.literal(" ").append(Text.translatable("tooltip.poosmp.selected_mob_names.none")).formatted(Formatting.RED));
+                tooltip.add(Component.literal(" ").append(Component.translatable("tooltip.poosmp.selected_mob_names.none")).withStyle(ChatFormatting.RED));
             }
         }
     }
@@ -189,7 +188,7 @@ public class MobStickItem extends CreativeSnitchItem {
     }
 
     public static final class Stack {
-        public static ItemStack getMobStick(EntityType<MobEntity> mob) {
+        public static ItemStack getMobStick(EntityType<Mob> mob) {
             ItemStack stack = new ItemStack(PooSMPItems.ZOMBIE_STICK);
             stack.set(PooSMPItemComponents.MOB_OVERRIDE, mob);
             return stack;
@@ -274,7 +273,7 @@ public class MobStickItem extends CreativeSnitchItem {
         };
     }
 
-    public static StatusEffectInstance copy(StatusEffectInstance instance) {
-        return new StatusEffectInstance(instance);
+    public static MobEffectInstance copy(MobEffectInstance instance) {
+        return new MobEffectInstance(instance);
     }
 }

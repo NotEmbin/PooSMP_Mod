@@ -24,19 +24,28 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.painting.PaintingEntity;
-import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.decoration.painting.PaintingVariant;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,177 +60,177 @@ public class PooSMPMod implements ModInitializer {
 
 	public static final class PooSMPItemGroups {
 		public static void init() {
-			Registry.register(Registries.ITEM_GROUP, Id.of("poosmp_items"), POOSMP_ITEMS);
+			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_items"), POOSMP_ITEMS);
 			//Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_biome_sticks"), BIOME_STICKS);
-			Registry.register(Registries.ITEM_GROUP, Id.of("poosmp_music_discs"), MUSIC_DISCS);
+			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_music_discs"), MUSIC_DISCS);
 			//Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_mob_sticks"), MOB_STICKS);
-			Registry.register(Registries.ITEM_GROUP, Id.of("poosmp_money"), MONEY);
+			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_money"), MONEY);
 		}
 
 		@Deprecated
-		public static void add_empty(ItemGroup.Entries entries, int amount) { // it dooo not work sad face
+		public static void add_empty(CreativeModeTab.Output entries, int amount) { // it dooo not work sad face
 			for (int i = 0; i < (amount - 1); i++) {
-				entries.add(ItemStack.EMPTY);
+				entries.accept(ItemStack.EMPTY);
 			}
 		}
 
-		public static final ItemGroup POOSMP_ITEMS = FabricItemGroup.builder()
+		public static final CreativeModeTab POOSMP_ITEMS = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(PooSMPItems.POOPLET))
-			.displayName(Text.literal("PooSMP"))
-			.entries(((displayContext, entries) -> {
-				entries.add(PooSMPBlocks.POOP_BLOCK);
-				entries.add(PooSMPItems.POOP_STICK);
-				entries.add(PooSMPItems.SERVER_SAYS_WHAT_STICK);
-				entries.add(PooSMPItems.BIOME_STICK);
-				entries.add(PooSMPItems.BOOM_STICK);
-				entries.add(PooSMPItems.ZOMBIE_STICK);
-				entries.add(PooSMPItems.DIAMOND_SHARD);
-				entries.add(PooSMPBlocks.MISSINGNO_BLOCK);
-				entries.add(PooSMPItems.WEDDING_RING);
-				entries.add(PooSMPItems.RED_NETHER_BRICK);
-				entries.add(PooSMPItems.POOP_BRICK);
-				entries.add(PooSMPBlocks.POOP_BRICKS);
-				entries.add(PooSMPItems.POOPLET);
-				entries.add(PooSMPBlocks.POOP_BRICK_STAIRS);
-				entries.add(PooSMPBlocks.POOP_BRICK_SLAB);
-				entries.add(PooSMPBlocks.POOP_BRICK_WALL);
-				entries.add(PooSMPItems.RING);
-				entries.add(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
-				entries.add(PooSMPItems.TOTEM_OF_HEALTH);
-				entries.add(PooSMPItems.WARP_STICK);
-				entries.add(PooSMPItems.FILL_ARMOR_TRIM_TEMPLATE);
-				entries.add(PooSMPItems.DISC_TRIFECTA_CAP);
-				entries.add(PooSMPItems.DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL);
-				entries.add(PooSMPItems.DISC_BUDDY_HOLLY);
-				entries.add(PooSMPItems.DISC_STEREO_MADNESS);
-				entries.add(PooSMPItems.DISC_NOT_LIKE_US);
-				entries.add(PooSMPItems.DISC_RESISTANCE_INSTRUMENTAL);
-				entries.add(PooSMPItems.TOTEM_OF_REACH);
-				entries.add(PooSMPItems.BLANK_MUSIC_DISC);
-				entries.add(PooSMPItems.ENCHANTED_TOTEM_OF_HEALTH);
-				entries.add(PooSMPItems.ENCHANTED_TOTEM_OF_REACH);
-				entries.add(PooSMPItems.DISC_BLISS_INSTRUMENTAL);
-				entries.add(PooSMPItems.DISC_ENDLESSLY_INSTRUMENTAL);
-				entries.add(PooSMPItems.DISC_ENDLESSLY);
-				entries.add(PooSMPItems.DISC_ENDLESSLY_STEREO);
-				entries.add(PooSMPItems.ZAP_STICK);
-				entries.add(PooSMPItems.VILLAGER_STICK);
-				entries.add(PooSMPBlocks.SUS);
-				entries.add(PooSMPBlocks.DDEDEDODEDIAMANTE_BLOCK);
-				entries.add(PooSMPItems.BACON_BUCKET);
-				entries.add(PooSMPItems.COW_STICK);
-				entries.add(PooSMPBlocks.BANKERS_TABLE);
-				entries.add(PooSMPBlocks.PALE_MOSS_BLOCK);
-				entries.add(PooSMPBlocks.PALE_MOSS_CARPET);
-				entries.add(PooSMPBlocks.PALE_HANGING_MOSS);
-				entries.add(PooSMPBlocks.PALE_OAK_LOG);
-				entries.add(PooSMPBlocks.PALE_OAK_WOOD);
-				entries.add(PooSMPBlocks.STRIPPED_PALE_OAK_LOG);
-				entries.add(PooSMPBlocks.STRIPPED_PALE_OAK_WOOD);
-				entries.add(PooSMPBlocks.PALE_OAK_PLANKS);
-				entries.add(PooSMPBlocks.PALE_OAK_STAIRS);
-				entries.add(PooSMPBlocks.PALE_OAK_SLAB);
-				entries.add(PooSMPBlocks.PALE_OAK_FENCE);
-				entries.add(PooSMPBlocks.PALE_OAK_FENCE_GATE);
-				entries.add(PooSMPBlocks.PALE_OAK_DOOR);
-				entries.add(PooSMPBlocks.PALE_OAK_TRAPDOOR);
-				entries.add(PooSMPBlocks.PALE_OAK_PRESSURE_PLATE);
-				entries.add(PooSMPBlocks.PALE_OAK_BUTTON);
-				entries.add(PooSMPBlocks.RESIN_BLOCK);
-				entries.add(PooSMPBlocks.RESIN_BRICKS);
-				entries.add(PooSMPBlocks.RESIN_BRICK_STAIRS);
-				entries.add(PooSMPBlocks.RESIN_BRICK_SLAB);
-				entries.add(PooSMPBlocks.RESIN_BRICK_WALL);
-				entries.add(PooSMPBlocks.CHISELED_RESIN_BRICKS);
-				entries.add(PooSMPBlocks.RESIN_CLUMP);
-				entries.add(PooSMPItems.RESIN_BRICK);
-				entries.add(PooSMPBlocks.PALE_OAK_SAPLING);
+			.title(Component.literal("PooSMP"))
+			.displayItems(((displayContext, entries) -> {
+				entries.accept(PooSMPBlocks.POOP_BLOCK);
+				entries.accept(PooSMPItems.POOP_STICK);
+				entries.accept(PooSMPItems.SERVER_SAYS_WHAT_STICK);
+				entries.accept(PooSMPItems.BIOME_STICK);
+				entries.accept(PooSMPItems.BOOM_STICK);
+				entries.accept(PooSMPItems.ZOMBIE_STICK);
+				entries.accept(PooSMPItems.DIAMOND_SHARD);
+				entries.accept(PooSMPBlocks.MISSINGNO_BLOCK);
+				entries.accept(PooSMPItems.WEDDING_RING);
+				entries.accept(PooSMPItems.RED_NETHER_BRICK);
+				entries.accept(PooSMPItems.POOP_BRICK);
+				entries.accept(PooSMPBlocks.POOP_BRICKS);
+				entries.accept(PooSMPItems.POOPLET);
+				entries.accept(PooSMPBlocks.POOP_BRICK_STAIRS);
+				entries.accept(PooSMPBlocks.POOP_BRICK_SLAB);
+				entries.accept(PooSMPBlocks.POOP_BRICK_WALL);
+				entries.accept(PooSMPItems.RING);
+				entries.accept(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
+				entries.accept(PooSMPItems.TOTEM_OF_HEALTH);
+				entries.accept(PooSMPItems.WARP_STICK);
+				entries.accept(PooSMPItems.FILL_ARMOR_TRIM_TEMPLATE);
+				entries.accept(PooSMPItems.DISC_TRIFECTA_CAP);
+				entries.accept(PooSMPItems.DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL);
+				entries.accept(PooSMPItems.DISC_BUDDY_HOLLY);
+				entries.accept(PooSMPItems.DISC_STEREO_MADNESS);
+				entries.accept(PooSMPItems.DISC_NOT_LIKE_US);
+				entries.accept(PooSMPItems.DISC_RESISTANCE_INSTRUMENTAL);
+				entries.accept(PooSMPItems.TOTEM_OF_REACH);
+				entries.accept(PooSMPItems.BLANK_MUSIC_DISC);
+				entries.accept(PooSMPItems.ENCHANTED_TOTEM_OF_HEALTH);
+				entries.accept(PooSMPItems.ENCHANTED_TOTEM_OF_REACH);
+				entries.accept(PooSMPItems.DISC_BLISS_INSTRUMENTAL);
+				entries.accept(PooSMPItems.DISC_ENDLESSLY_INSTRUMENTAL);
+				entries.accept(PooSMPItems.DISC_ENDLESSLY);
+				entries.accept(PooSMPItems.DISC_ENDLESSLY_STEREO);
+				entries.accept(PooSMPItems.ZAP_STICK);
+				entries.accept(PooSMPItems.VILLAGER_STICK);
+				entries.accept(PooSMPBlocks.SUS);
+				entries.accept(PooSMPBlocks.DDEDEDODEDIAMANTE_BLOCK);
+				entries.accept(PooSMPItems.BACON_BUCKET);
+				entries.accept(PooSMPItems.COW_STICK);
+				entries.accept(PooSMPBlocks.BANKERS_TABLE);
+				entries.accept(PooSMPBlocks.PALE_MOSS_BLOCK);
+				entries.accept(PooSMPBlocks.PALE_MOSS_CARPET);
+				entries.accept(PooSMPBlocks.PALE_HANGING_MOSS);
+				entries.accept(PooSMPBlocks.PALE_OAK_LOG);
+				entries.accept(PooSMPBlocks.PALE_OAK_WOOD);
+				entries.accept(PooSMPBlocks.STRIPPED_PALE_OAK_LOG);
+				entries.accept(PooSMPBlocks.STRIPPED_PALE_OAK_WOOD);
+				entries.accept(PooSMPBlocks.PALE_OAK_PLANKS);
+				entries.accept(PooSMPBlocks.PALE_OAK_STAIRS);
+				entries.accept(PooSMPBlocks.PALE_OAK_SLAB);
+				entries.accept(PooSMPBlocks.PALE_OAK_FENCE);
+				entries.accept(PooSMPBlocks.PALE_OAK_FENCE_GATE);
+				entries.accept(PooSMPBlocks.PALE_OAK_DOOR);
+				entries.accept(PooSMPBlocks.PALE_OAK_TRAPDOOR);
+				entries.accept(PooSMPBlocks.PALE_OAK_PRESSURE_PLATE);
+				entries.accept(PooSMPBlocks.PALE_OAK_BUTTON);
+				entries.accept(PooSMPBlocks.RESIN_BLOCK);
+				entries.accept(PooSMPBlocks.RESIN_BRICKS);
+				entries.accept(PooSMPBlocks.RESIN_BRICK_STAIRS);
+				entries.accept(PooSMPBlocks.RESIN_BRICK_SLAB);
+				entries.accept(PooSMPBlocks.RESIN_BRICK_WALL);
+				entries.accept(PooSMPBlocks.CHISELED_RESIN_BRICKS);
+				entries.accept(PooSMPBlocks.RESIN_CLUMP);
+				entries.accept(PooSMPItems.RESIN_BRICK);
+				entries.accept(PooSMPBlocks.PALE_OAK_SAPLING);
 				//entries.add(PooSMPItems.STRANGE_DIAMOND_PICKAXE);
 				//entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
 				//entries.add(PooSMPItems.STRANGE_UPGRADE_SMITHING_TEMPLATE);
-				entries.add(PooSMPBlocks.PALE_OAK_LEAVES);
-				RegistryEntryLookup<PaintingVariant> registryEntryLookup = displayContext.lookup().createRegistryLookup().getOrThrow(RegistryKeys.PAINTING_VARIANT);
-				RegistryOps<NbtElement> registryOps = displayContext.lookup().getOps(NbtOps.INSTANCE);
-				for (RegistryEntry<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.PLACEABLE_PAINTINGS).stream().toList()) {
-					NbtComponent nbtComponent = NbtComponent.DEFAULT.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
+				entries.accept(PooSMPBlocks.PALE_OAK_LEAVES);
+				HolderGetter<PaintingVariant> registryEntryLookup = displayContext.holders().createRegistryLookup().getOrThrow(Registries.PAINTING_VARIANT);
+				RegistryOps<Tag> registryOps = displayContext.holders().createSerializationContext(NbtOps.INSTANCE);
+				for (Holder<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.PLACEABLE_PAINTINGS).stream().toList()) {
+					CustomData nbtComponent = CustomData.EMPTY.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
 					ItemStack painting = new ItemStack(Items.PAINTING);
-					painting.set(DataComponentTypes.ENTITY_DATA, nbtComponent);
-					entries.add(painting);
+					painting.set(DataComponents.ENTITY_DATA, nbtComponent);
+					entries.accept(painting);
 				}
-				entries.add(PooSMPItems.DISC_STORY_OF_UNDERTALE);
-                entries.add(PooSMPItems.RAW_RED_POO);
-                entries.add(PooSMPItems.RED_POO_INGOT);
-                entries.add(PooSMPBlocks.RED_POO_BLOCK);
-				entries.add(PooSMPItems.RED_POO_UPGRADE_SMITHING_TEMPLATE);
-                entries.add(PooSMPItems.BANANA);
-                entries.add(PooSMPItems.RED_POO_SWORD);
-                entries.add(PooSMPItems.RED_POO_PICKAXE);
-                entries.add(PooSMPItems.RED_POO_AXE);
-                entries.add(PooSMPItems.RED_POO_SHOVEL);
-                entries.add(PooSMPItems.RED_POO_HOE);
-				entries.add(PooSMPItems.RED_POO_HELMET);
-				entries.add(PooSMPItems.RED_POO_CHESTPLATE);
-				entries.add(PooSMPItems.RED_POO_LEGGINGS);
-				entries.add(PooSMPItems.RED_POO_BOOTS);
-				entries.add(PooSMPItems.GEAR);
-				entries.add(PooSMPItems.SCREW);
-				entries.add(PooSMPItems.GLASS_SHARD);
-				entries.add(PooSMPItems.MAGIC_DEVICE);
-				entries.add(PooSMPBlocks.DRAGON_ANNOYANCE);
-				for (RegistryEntry<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.NON_PLACEABLE_PAINTINGS).stream().toList()) {
-					NbtComponent nbtComponent = NbtComponent.DEFAULT.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
+				entries.accept(PooSMPItems.DISC_STORY_OF_UNDERTALE);
+                entries.accept(PooSMPItems.RAW_RED_POO);
+                entries.accept(PooSMPItems.RED_POO_INGOT);
+                entries.accept(PooSMPBlocks.RED_POO_BLOCK);
+				entries.accept(PooSMPItems.RED_POO_UPGRADE_SMITHING_TEMPLATE);
+                entries.accept(PooSMPItems.BANANA);
+                entries.accept(PooSMPItems.RED_POO_SWORD);
+                entries.accept(PooSMPItems.RED_POO_PICKAXE);
+                entries.accept(PooSMPItems.RED_POO_AXE);
+                entries.accept(PooSMPItems.RED_POO_SHOVEL);
+                entries.accept(PooSMPItems.RED_POO_HOE);
+				entries.accept(PooSMPItems.RED_POO_HELMET);
+				entries.accept(PooSMPItems.RED_POO_CHESTPLATE);
+				entries.accept(PooSMPItems.RED_POO_LEGGINGS);
+				entries.accept(PooSMPItems.RED_POO_BOOTS);
+				entries.accept(PooSMPItems.GEAR);
+				entries.accept(PooSMPItems.SCREW);
+				entries.accept(PooSMPItems.GLASS_SHARD);
+				entries.accept(PooSMPItems.MAGIC_DEVICE);
+				entries.accept(PooSMPBlocks.DRAGON_ANNOYANCE);
+				for (Holder<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.NON_PLACEABLE_PAINTINGS).stream().toList()) {
+					CustomData nbtComponent = CustomData.EMPTY.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
 					ItemStack painting = new ItemStack(Items.PAINTING);
-					painting.set(DataComponentTypes.ENTITY_DATA, nbtComponent);
-					entries.add(painting);
+					painting.set(DataComponents.ENTITY_DATA, nbtComponent);
+					entries.accept(painting);
 					//NbtComponent.DEFAULT.apply((nbtCompound -> nbtCompound.put("variant", )));
 				}
-				entries.add(PooSMPItems.NULL_SHARD);
-				entries.add(PooSMPBlocks.FAKE_DIRT);
-				entries.add(PooSMPBlocks.FAKE_GRASS_BLOCK);
-				entries.add(PooSMPBlocks.FAKE_STONE);
-				entries.add(PooSMPBlocks.RIGGED_STONE);
+				entries.accept(PooSMPItems.NULL_SHARD);
+				entries.accept(PooSMPBlocks.FAKE_DIRT);
+				entries.accept(PooSMPBlocks.FAKE_GRASS_BLOCK);
+				entries.accept(PooSMPBlocks.FAKE_STONE);
+				entries.accept(PooSMPBlocks.RIGGED_STONE);
 			})).build();
 
-		public static final ItemGroup BIOME_STICKS = FabricItemGroup.builder()
+		public static final CreativeModeTab BIOME_STICKS = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(PooSMPItems.BIOME_STICK))
-			.displayName(Text.literal("PooSMP: Biome Sticks"))
-			.entries((displayContext, entries) -> {
+			.title(Component.literal("PooSMP: Biome Sticks"))
+			.displayItems((displayContext, entries) -> {
                 for (String vanilla_biome : BiomeStickItem.vanilla_biomes) {
-                    entries.add(PooSMPItems.getBiomeStickStack(vanilla_biome));
+                    entries.accept(PooSMPItems.getBiomeStickStack(vanilla_biome));
                 }
 			}).build();
 
-		public static final ItemGroup MUSIC_DISCS = FabricItemGroup.builder()
+		public static final CreativeModeTab MUSIC_DISCS = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(PooSMPItems.DISC_TRIFECTA_CAP))
-			.displayName(Text.literal("PooSMP: Music Discs"))
-			.entries((displayContext, entries) -> {
-				RegistryEntryLookup<Item> registryEntryLookup = displayContext.lookup().createRegistryLookup().getOrThrow(RegistryKeys.ITEM);
-				for (RegistryEntry<Item> i : registryEntryLookup.getOrThrow(PooSMPTags.Items.POOSMP_DISCS).stream().toList()) {
-					entries.add(i.value());
+			.title(Component.literal("PooSMP: Music Discs"))
+			.displayItems((displayContext, entries) -> {
+				HolderGetter<Item> registryEntryLookup = displayContext.holders().createRegistryLookup().getOrThrow(Registries.ITEM);
+				for (Holder<Item> i : registryEntryLookup.getOrThrow(PooSMPTags.Items.POOSMP_DISCS).stream().toList()) {
+					entries.accept(i.value());
 				}
 			}).build();
 
-		public static final ItemGroup MOB_STICKS = FabricItemGroup.builder()
+		public static final CreativeModeTab MOB_STICKS = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(Items.ZOMBIE_HEAD))
-			.displayName(Text.literal("PooSMP: Mob Sticks"))
-			.entries((displayContext, entries) -> {
+			.title(Component.literal("PooSMP: Mob Sticks"))
+			.displayItems((displayContext, entries) -> {
 				for (EntityType<?> entity : MobStickItem.Stack.mob_list) {
-					entries.add(MobStickItem.Stack.getMobStick((EntityType<MobEntity>) entity));
+					entries.accept(MobStickItem.Stack.getMobStick((EntityType<Mob>) entity));
 				}
 			}).build();
 
-		public static final ItemGroup MONEY = FabricItemGroup.builder()
+		public static final CreativeModeTab MONEY = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(PooSMPItems.ONE_DOLLAR_BILL))
-			.displayName(Text.literal("PooSMP: Money"))
-			.entries((displayContext, entries) -> {
-				entries.add(PooSMPBlocks.BANKERS_TABLE);
-				entries.add(PooSMPItems.ONE_DOLLAR_BILL);
-				entries.add(PooSMPItems.TWO_DOLLAR_BILL);
-				entries.add(PooSMPItems.FIVE_DOLLAR_BILL);
-				entries.add(PooSMPItems.TEN_DOLLAR_BILL);
-				entries.add(PooSMPItems.TWENTY_FIVE_DOLLAR_BILL);
-				entries.add(PooSMPItems.FIFTY_DOLLAR_BILL);
-				entries.add(PooSMPItems.HUNDRED_DOLLAR_BILL);
+			.title(Component.literal("PooSMP: Money"))
+			.displayItems((displayContext, entries) -> {
+				entries.accept(PooSMPBlocks.BANKERS_TABLE);
+				entries.accept(PooSMPItems.ONE_DOLLAR_BILL);
+				entries.accept(PooSMPItems.TWO_DOLLAR_BILL);
+				entries.accept(PooSMPItems.FIVE_DOLLAR_BILL);
+				entries.accept(PooSMPItems.TEN_DOLLAR_BILL);
+				entries.accept(PooSMPItems.TWENTY_FIVE_DOLLAR_BILL);
+				entries.accept(PooSMPItems.FIFTY_DOLLAR_BILL);
+				entries.accept(PooSMPItems.HUNDRED_DOLLAR_BILL);
 				//entries.add(PooSMPItems.ONE_CENT_COIN);
 				//entries.add(PooSMPItems.FIVE_CENT_COIN);
 				//entries.add(PooSMPItems.TEN_CENT_COIN);
@@ -240,7 +249,7 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPItemComponents.init();
 		PooSMPItemGroups.init();
 		ShopCategories.registerCategories();
-		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
 			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_LOG.asItem());
 			entries.addBefore(Items.BAMBOO_BLOCK, PooSMPBlocks.PALE_OAK_WOOD.asItem());
@@ -261,14 +270,14 @@ public class PooSMPMod implements ModInitializer {
 			entries.addBefore(Items.SANDSTONE, PooSMPBlocks.RESIN_BRICK_WALL.asItem());
 			entries.addBefore(Items.SANDSTONE, PooSMPBlocks.CHISELED_RESIN_BRICKS.asItem());
 		});
-		ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> {
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> {
 			entries.addAfter(Items.HONEY_BLOCK, PooSMPBlocks.RESIN_BLOCK.asItem());
 			entries.addAfter(Items.CHERRY_SAPLING, PooSMPBlocks.PALE_OAK_SAPLING.asItem());
 			entries.addAfter(Items.MOSS_CARPET, PooSMPBlocks.PALE_HANGING_MOSS.asItem());
 			entries.addAfter(Items.MOSS_CARPET, PooSMPBlocks.PALE_MOSS_CARPET.asItem());
 			entries.addAfter(Items.MOSS_CARPET, PooSMPBlocks.PALE_MOSS_BLOCK.asItem());
 		});
-		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
 			entries.addAfter(Items.HONEYCOMB, PooSMPBlocks.RESIN_CLUMP.asItem());
 			entries.addAfter(Items.NETHER_BRICK, PooSMPItems.RESIN_BRICK);
 		});
@@ -314,8 +323,8 @@ public class PooSMPMod implements ModInitializer {
 
 		DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:displayed_id"), modifyContext -> {
 			modifyContext.modify(Predicate.not(i -> false), (builder, item) -> {
-				Identifier itemId = Registries.ITEM.getId(item);
-				builder.add(PooSMPItemComponents.DISPLAYED_ID, itemId);
+				Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
+				builder.set(PooSMPItemComponents.DISPLAYED_ID, itemId);
 				//if (itemId.getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
 				//	builder.add(PooSMPItemComponents.DISPLAYED_ID, Identifier.of("mojang", itemId.getPath()));
 				//} else {
