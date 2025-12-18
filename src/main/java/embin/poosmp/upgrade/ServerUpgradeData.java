@@ -8,14 +8,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 
 //@Environment(EnvType.SERVER) // it's all built on top a house of cards
+@Deprecated
 public class ServerUpgradeData {
     public static final ServerUpgradeData INSTANCE = new ServerUpgradeData();
     public Map<UUID, Map<Identifier, Integer>> purchases = HashMap.newHashMap(16);
     public Map<UUID, Map<Identifier, MobEffectInstance>> activeEffects = HashMap.newHashMap(16);
     public Map<UUID, Double> balance = HashMap.newHashMap(16);
-
-    private ServerUpgradeData() {
-    }
 
     public Set<Identifier> savedUpgrades(ServerPlayer player) {
         if (!this.purchases.containsKey(player.getUUID())) return Set.of();

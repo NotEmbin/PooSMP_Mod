@@ -30,12 +30,12 @@ import java.util.List;
 import java.util.Optional;
 
 public record Upgrade(
-        Holder<Item> icon, PriceObject price, boolean can_be_sold, Optional<Integer> max_purchases,
+        Item icon, PriceObject price, boolean can_be_sold, Optional<Integer> max_purchases,
         Optional<List<ItemAttributeModifiers.Entry>> attribute_modifiers, Optional<MobEffectInstance> statusEffect
 ) {
     public static final Codec<Upgrade> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("icon").forGetter(Upgrade::icon),
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(Upgrade::icon),
                     PriceObject.CODEC.fieldOf("price").forGetter(Upgrade::price),
                     Codec.BOOL.optionalFieldOf("can_be_sold", true).forGetter(Upgrade::can_be_sold),
                     ExtraCodecs.POSITIVE_INT.optionalFieldOf("max_purchases").forGetter(Upgrade::max_purchases),

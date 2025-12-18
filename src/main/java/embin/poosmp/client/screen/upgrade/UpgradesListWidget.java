@@ -16,7 +16,7 @@ import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
-import net.minecraft.client.gui.widget.*;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -42,7 +42,7 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
         super(client, parent.width, parent.layout.getContentHeight(), parent.layout.getHeaderHeight(), 22);
         this.parent = parent;
         RegistryAccess registryLookup = client.player.registryAccess();
-        this.upgradeRegistry = registryLookup.get(PooSMPRegistries.Keys.UPGRADE);
+        this.upgradeRegistry = registryLookup.lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
 
         HolderSet<Upgrade> list = getTooltipOrder(registryLookup, PooSMPRegistries.Keys.UPGRADE, PooSMPTags.Upgrades.LIST_ORDER);
         for (Holder<Upgrade> upgrade : list) {
@@ -63,7 +63,7 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
 
     public static HolderSet<Upgrade> getTooltipOrder(@Nullable RegistryAccess registries, ResourceKey<Registry<Upgrade>> key, TagKey<Upgrade> tag) {
         if (registries != null) {
-            Optional<HolderSet.Named<Upgrade>> optional = registries.getWrapperOrThrow(key).getOptional(tag);
+            Optional<HolderSet.Named<Upgrade>> optional = registries.getOrThrow(key).value().get(tag);
             if (optional.isPresent()) {
                 return optional.get();
             }
@@ -71,7 +71,6 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
         return HolderSet.direct();
     }
 
-    @Override
     protected void renderDecorations(GuiGraphics context, int mouseX, int mouseY) {
         if (mouseY >= this.getY() && mouseY <= this.getBottom()) {
             UpgradeEntry entry = this.getHovered();
@@ -124,9 +123,11 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
         }
 
         @Override
-        public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            context.blitSprite(SLOT_TEXTURE, x + 1, y + 1, 18, 18);
-            context.renderFakeItem(this.upgrade.icon().value().getDefaultInstance(), x + 2, y + 2);
+        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float f) {
+            final int x = this.getX();
+            final int y = this.getY();
+            guiGraphics.blitSprite(RenderPipelines.GUI, SLOT_TEXTURE, x + 1, y + 1, 18, 18);
+            guiGraphics.renderFakeItem(this.upgrade.icon().getDefaultInstance(), x + 2, y + 2);
             this.buyButton.setPosition(x + 175, y);
             this.sellButton.setPosition(x + 80, y);
             int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(this.upgrade, upgradeRegistry);
@@ -150,11 +151,11 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
             //context.fill(x - (offset * 2) + 10, y + 4, x + 102 + offset, y + 15, Colors.BLACK);
             //this.text.setPosition(x + 100 - offset, y + 5);
             //this.text.render(context, mouseX, mouseY, tickDelta);
-            context.drawString(UpgradesListWidget.this.minecraft.font, Component.literal(upgradePrice), x + 138 - offset, y + 6, CommonColors.WHITE);
-            context.drawCenteredString(UpgradesListWidget.this.minecraft.font, StatFormatter.DEFAULT.format(amountPurchased), x + 50, y + 6, CommonColors.WHITE);
-            this.buyButton.render(context, mouseX, mouseY, tickDelta);
-            this.sellButton.render(context, mouseX, mouseY, tickDelta);
-            context.drawCenteredString(UpgradesListWidget.this.minecraft.font, "0", UpgradesListWidget.this.width / 2, 10, CommonColors.WHITE);
+            guiGraphics.drawString(UpgradesListWidget.this.minecraft.font, Component.literal(upgradePrice), x + 138 - offset, y + 6, CommonColors.WHITE);
+            guiGraphics.drawCenteredString(UpgradesListWidget.this.minecraft.font, StatFormatter.DEFAULT.format(amountPurchased), x + 50, y + 6, CommonColors.WHITE);
+            this.buyButton.render(guiGraphics, mouseX, mouseY, f);
+            this.sellButton.render(guiGraphics, mouseX, mouseY, f);
+            guiGraphics.drawCenteredString(UpgradesListWidget.this.minecraft.font, "0", UpgradesListWidget.this.width / 2, 10, CommonColors.WHITE);
             this.update();
         }
 

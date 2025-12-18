@@ -52,7 +52,7 @@ public class ShopScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            public void renderContent(GuiGraphics guiGraphics, int i, int j, boolean bl, float f) {
 
             }
         }
@@ -84,7 +84,7 @@ public class ShopScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            public void renderContent(GuiGraphics guiGraphics, int i, int j, boolean bl, float f) {
 
             }
         }
