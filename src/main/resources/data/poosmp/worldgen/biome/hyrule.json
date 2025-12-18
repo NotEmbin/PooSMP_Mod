@@ -1,10 +1,12 @@
 {
+  "attributes": {
+    "minecraft:visual/water_fog_color": "#050533"
+  },
   "temperature": 0.8,
   "downfall": 0.5,
   "has_precipitation": false,
   "effects": {
     "water_color": 1793246,
-    "water_fog_color": 329011,
     "grass_color": 2802176,
     "foliage_color": 1355008
   },

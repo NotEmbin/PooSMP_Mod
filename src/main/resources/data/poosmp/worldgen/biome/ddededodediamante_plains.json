@@ -1,14 +1,4 @@
 {
-  "temperature": 0.85,
-  "downfall": 0.8,
-  "has_precipitation": true,
-  "creature_spawn_probability": 0.2,
-  "effects": {
-    "water_color": 14237668,
-    "water_fog_color": 3343666,
-    "foliage_color": 16098068,
-    "grass_color_modifier": "none"
-  },
   "attributes": {
     "minecraft:visual/ambient_particles": [
       {
@@ -31,7 +21,17 @@
       }
     },
     "minecraft:visual/sky_color": "#f07aff",
-    "minecraft:visual/fog_color": "#ffc2fd"
+    "minecraft:visual/fog_color": "#ffc2fd",
+    "minecraft:visual/water_fog_color": "#330532"
+  },
+  "temperature": 0.85,
+  "downfall": 0.8,
+  "has_precipitation": true,
+  "creature_spawn_probability": 0.2,
+  "effects": {
+    "water_color": 14237668,
+    "foliage_color": 16098068,
+    "grass_color_modifier": "none"
   },
   "spawners": {
     "misc": [

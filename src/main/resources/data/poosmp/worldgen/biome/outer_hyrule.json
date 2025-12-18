@@ -11,5 +11,8 @@
   "spawners": {},
   "spawn_costs": {},
   "carvers": {},
-  "features": []
+  "features": [],
+  "attributes": {
+    "minecraft:visual/water_fog_color": "#050533"
+  }
 }

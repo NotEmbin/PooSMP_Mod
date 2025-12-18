@@ -4,7 +4,6 @@
   "has_precipitation": true,
   "effects": {
     "water_color": 1662177,
-    "water_fog_color": 329011,
     "grass_color": 16762880,
     "foliage_color": 16303894
   },
@@ -18,7 +17,8 @@
     },
     "minecraft:visual/cloud_height": 480.0,
     "minecraft:visual/sky_color": "#c9ddfd",
-    "minecraft:visual/fog_color": "#c3d4ee"
+    "minecraft:visual/fog_color": "#c3d4ee",
+    "minecraft:visual/water_fog_color": "#050533"
   },
   "spawners": {},
   "spawn_costs": {},
