@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "poosmp:poop_block"
-    }
+    "poosmp:poop_block"
   ],
   "result": {
     "count": 4,

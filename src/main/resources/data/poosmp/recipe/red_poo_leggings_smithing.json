@@ -1,16 +1,10 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "poosmp:red_poo_ingot"
-  },
-  "base": {
-    "tag": "poosmp:red_poo_convertibles/leggings"
-  },
+  "addition": "poosmp:red_poo_ingot",
+  "base": "#poosmp:red_poo_convertibles/leggings",
   "result": {
     "count": 1,
     "id": "poosmp:red_poo_leggings"
   },
-  "template": {
-    "item": "poosmp:red_poo_upgrade_smithing_template"
-  }
+  "template": "poosmp:red_poo_upgrade_smithing_template"
 }

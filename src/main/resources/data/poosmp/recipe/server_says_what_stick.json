@@ -7,15 +7,9 @@
     "4#4"
   ],
   "key": {
-    "3": {
-      "tag": "c:rods/wooden"
-    },
-    "#": {
-      "item": "poosmp:diamond_shard"
-    },
-    "4": {
-      "item": "minecraft:diamond"
-    }
+    "3": "#c:rods/wooden",
+    "#": "poosmp:diamond_shard",
+    "4": "minecraft:diamond"
   },
   "result": {
     "id": "poosmp:server_says_what_stick",

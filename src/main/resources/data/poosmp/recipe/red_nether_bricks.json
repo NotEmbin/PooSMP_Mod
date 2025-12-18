@@ -3,9 +3,7 @@
   "category": "building",
   "group": "red_nether_bricks",
   "key": {
-    "N": {
-      "item": "poosmp:red_nether_brick"
-    }
+    "N": "poosmp:red_nether_brick"
   },
   "pattern": [
     "NN",

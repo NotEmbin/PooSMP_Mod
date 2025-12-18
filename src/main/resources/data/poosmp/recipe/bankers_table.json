@@ -7,12 +7,8 @@
     "33"
   ],
   "key": {
-    "3": {
-      "tag": "minecraft:planks"
-    },
-    "#": {
-      "tag": "poosmp:bank_notes"
-    }
+    "3": "#minecraft:planks",
+    "#": "#poosmp:bank_notes"
   },
   "result": {
     "id": "poosmp:bankers_table",

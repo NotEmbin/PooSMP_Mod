@@ -6,12 +6,8 @@
     "#"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:bucket"
-    },
-    "4": {
-      "item": "minecraft:porkchop"
-    }
+    "#": "minecraft:bucket",
+    "4": "minecraft:porkchop"
   },
   "result": {
     "id": "poosmp:bacon_bucket",

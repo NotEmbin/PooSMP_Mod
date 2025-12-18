@@ -7,12 +7,8 @@
     "###"
   ],
   "key": {
-    "3": {
-      "tag": "c:rods/wooden"
-    },
-    "#": {
-      "tag": "minecraft:dirt"
-    }
+    "3": "#c:rods/wooden",
+    "#": "#minecraft:dirt"
   },
   "result": {
     "id": "poosmp:biome_stick",

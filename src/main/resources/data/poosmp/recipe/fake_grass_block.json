@@ -7,12 +7,8 @@
     " # "
   ],
   "key": {
-    "3": {
-      "item": "minecraft:glow_ink_sac"
-    },
-    "#": {
-      "item": "minecraft:grass_block"
-    }
+    "3": "minecraft:glow_ink_sac",
+    "#": "minecraft:grass_block"
   },
   "result": {
     "id": "poosmp:fake_grass_block",

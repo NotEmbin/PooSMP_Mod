@@ -7,15 +7,9 @@
     "4#4"
   ],
   "key": {
-    "3": {
-      "tag": "c:rods/wooden"
-    },
-    "#": {
-      "tag": "c:gems/emerald"
-    },
-    "4": {
-      "item": "minecraft:netherite_scrap"
-    }
+    "3": "#c:rods/wooden",
+    "#": "#c:gems/emerald",
+    "4": "minecraft:netherite_scrap"
   },
   "result": {
     "id": "poosmp:villager_stick",
