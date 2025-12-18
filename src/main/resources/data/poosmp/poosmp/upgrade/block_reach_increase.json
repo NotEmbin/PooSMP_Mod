@@ -7,7 +7,7 @@
   "max_purchases": 10,
   "attribute_modifiers": [
     {
-      "type": "minecraft:player.block_interaction_range",
+      "type": "minecraft:block_interaction_range",
       "id": "poosmp:upgrade/block_reach_distance",
       "amount": 1,
       "operation": "add_value"
