@@ -2,11 +2,15 @@ package embin.poosmp.items;
 
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
+import embin.poosmp.util.PooUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -190,89 +194,19 @@ public class MobStickItem extends CreativeSnitchItem {
     }
 
     public static final class Stack {
-        public static ItemStack getMobStick(EntityType<Mob> mob) {
+        public static ItemStack getMobStick(EntityType<?> mob) {
             ItemStack stack = new ItemStack(PooSMPItems.ZOMBIE_STICK);
             stack.set(PooSMPItemComponents.MOB_OVERRIDE, mob);
             return stack;
         }
 
-        public static final EntityType<?>[] mob_list = {
-            EntityType.PIG,
-            EntityType.COW,
-            EntityType.SHEEP,
-            EntityType.CHICKEN,
-            EntityType.CREEPER,
-            EntityType.SKELETON,
-            EntityType.SPIDER,
-            EntityType.WITCH,
-            EntityType.IRON_GOLEM,
-            EntityType.CAVE_SPIDER,
-            EntityType.BOGGED,
-            EntityType.HUSK,
-            EntityType.STRAY,
-            EntityType.DROWNED,
-            EntityType.WITHER_SKELETON,
-            EntityType.ZOMBIE_VILLAGER,
-            EntityType.ZOMBIFIED_PIGLIN,
-            EntityType.PIGLIN,
-            EntityType.PIGLIN_BRUTE,
-            EntityType.HOGLIN,
-            EntityType.ZOGLIN,
-            EntityType.BLAZE,
-            EntityType.BREEZE,
-            EntityType.ALLAY,
-            EntityType.ARMADILLO,
-            EntityType.AXOLOTL,
-            EntityType.BAT,
-            EntityType.BEE,
-            EntityType.CAMEL,
-            EntityType.CAT,
-            EntityType.OCELOT,
-            EntityType.PANDA,
-            EntityType.PARROT,
-            EntityType.PILLAGER,
-            EntityType.VINDICATOR,
-            EntityType.EVOKER,
-            EntityType.COD,
-            EntityType.SALMON,
-            EntityType.TROPICAL_FISH,
-            EntityType.SQUID,
-            EntityType.GLOW_SQUID,
-            EntityType.DOLPHIN,
-            EntityType.GUARDIAN,
-            EntityType.ELDER_GUARDIAN,
-            EntityType.HORSE,
-            EntityType.DONKEY,
-            EntityType.MULE,
-            EntityType.SKELETON_HORSE,
-            EntityType.ZOMBIE_HORSE,
-            EntityType.GIANT,
-            EntityType.ENDERMAN,
-            EntityType.ENDERMITE,
-            EntityType.SHULKER,
-            EntityType.FOX,
-            EntityType.FROG,
-            EntityType.GHAST,
-            EntityType.GOAT,
-            EntityType.SNOW_GOLEM,
-            EntityType.LLAMA,
-            EntityType.TRADER_LLAMA,
-            EntityType.PUFFERFISH,
-            EntityType.WANDERING_TRADER,
-            EntityType.SLIME,
-            EntityType.MAGMA_CUBE,
-            EntityType.WOLF,
-            EntityType.MOOSHROOM,
-            EntityType.RABBIT,
-            EntityType.RAVAGER,
-            EntityType.PHANTOM,
-            EntityType.POLAR_BEAR,
-            EntityType.SILVERFISH,
-            EntityType.TADPOLE,
-            EntityType.SNIFFER,
-            EntityType.STRIDER,
-            EntityType.TURTLE
-        };
+        public static void getStacks(HolderLookup.Provider provider, Consumer<ItemStack> consumer) {
+            PooUtil.forEachEntry(provider, Registries.ENTITY_TYPE, entityTypeHolder -> {
+                if (entityTypeHolder.value().canSummon()) {
+                    consumer.accept(Stack.getMobStick(entityTypeHolder.value()));
+                }
+            });
+        }
     }
 
     public static MobEffectInstance copy(MobEffectInstance instance) {

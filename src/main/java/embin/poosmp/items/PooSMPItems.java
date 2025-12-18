@@ -100,7 +100,7 @@ public class PooSMPItems {
     public static final Item RED_POO_INGOT = register("red_poo_ingot", Rarity.UNCOMMON);
     public static final Item RED_POO_UPGRADE_SMITHING_TEMPLATE = register("red_poo_upgrade_smithing_template", Rarity.RARE);
     public static final Item BANANA = register("banana", new Item(new Item.Properties().food(PooSMPFoods.BANANA)));
-    public static final Item RED_POO_SWORD = register("red_poo_sword", new SwordItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(SwordItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 3, -2.4F))));
+    public static final Item RED_POO_SWORD = register("red_poo_sword", new Item(new Item.Properties().sword(PooSMPMaterials.RED_POO, 3, -2.4f)));
     public static final Item RED_POO_SHOVEL = register("red_poo_shovel", new ShovelItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(ShovelItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 1.5F, -3.0F))));
     public static final Item RED_POO_PICKAXE = register("red_poo_pickaxe", new PickaxeItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(PickaxeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 1.0F, -2.8F))));
     public static final Item RED_POO_AXE = register("red_poo_axe", new AxeItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(AxeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 5.0F, -3.0F))));

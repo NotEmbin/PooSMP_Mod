@@ -9,30 +9,31 @@ import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.upgrade.Upgrade;
-import embin.poosmp.util.Id;
-import embin.poosmp.util.PooSMPTags;
-import embin.poosmp.util.TradeConstructors;
+import embin.poosmp.util.*;
 import embin.poosmp.villager.PooSMPPoi;
 import embin.poosmp.villager.PooSMPVillagers;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.impl.biome.modification.BiomeModificationImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryOps;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.attribute.BedRule;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
@@ -41,10 +42,10 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class PooSMPMod implements ModInitializer {
@@ -57,13 +58,13 @@ public class PooSMPMod implements ModInitializer {
 	public static final class PooSMPItemGroups {
 		public static void init() {
 			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_items"), POOSMP_ITEMS);
-			//Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_biome_sticks"), BIOME_STICKS);
+			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_biome_sticks"), BIOME_STICKS);
 			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_music_discs"), MUSIC_DISCS);
-			//Registry.register(Registries.ITEM_GROUP, ConvertNamespace.convert("poosmp_mob_sticks"), MOB_STICKS);
+			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_mob_sticks"), MOB_STICKS);
 			Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Id.of("poosmp_money"), MONEY);
 		}
 
-		@Deprecated
+		@Deprecated(forRemoval = true)
 		public static void add_empty(CreativeModeTab.Output entries, int amount) { // it dooo not work sad face
 			for (int i = 0; i < (amount - 1); i++) {
 				entries.accept(ItemStack.EMPTY);
@@ -74,6 +75,7 @@ public class PooSMPMod implements ModInitializer {
 			.icon(() -> new ItemStack(PooSMPItems.POOPLET))
 			.title(Component.literal("PooSMP"))
 			.displayItems(((displayContext, entries) -> {
+                HolderLookup.Provider provider = displayContext.holders();
 				entries.accept(PooSMPBlocks.POOP_BLOCK);
 				entries.accept(PooSMPItems.POOP_STICK);
 				entries.accept(PooSMPItems.SERVER_SAYS_WHAT_STICK);
@@ -116,17 +118,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.accept(PooSMPItems.BACON_BUCKET);
 				entries.accept(PooSMPItems.COW_STICK);
 				entries.accept(PooSMPBlocks.BANKERS_TABLE);
-				//entries.add(PooSMPItems.STRANGE_DIAMOND_PICKAXE);
-				//entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
-				//entries.add(PooSMPItems.STRANGE_UPGRADE_SMITHING_TEMPLATE);
-				HolderGetter<PaintingVariant> registryEntryLookup = displayContext.holders().createRegistryLookup().getOrThrow(Registries.PAINTING_VARIANT);
-				RegistryOps<Tag> registryOps = displayContext.holders().createSerializationContext(NbtOps.INSTANCE);
-				for (Holder<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.PLACEABLE_PAINTINGS).stream().toList()) {
-					CustomData nbtComponent = CustomData.EMPTY.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
-					ItemStack painting = new ItemStack(Items.PAINTING);
-					painting.set(DataComponents.ENTITY_DATA, nbtComponent);
-					entries.accept(painting);
-				}
+                PooUtil.getPaintingStacks(PooSMPTags.PaintingVariants.PLACEABLE_PAINTINGS, provider, entries::accept);
 				entries.accept(PooSMPItems.DISC_STORY_OF_UNDERTALE);
                 entries.accept(PooSMPItems.RAW_RED_POO);
                 entries.accept(PooSMPItems.RED_POO_INGOT);
@@ -147,13 +139,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.accept(PooSMPItems.GLASS_SHARD);
 				entries.accept(PooSMPItems.MAGIC_DEVICE);
 				entries.accept(PooSMPBlocks.DRAGON_ANNOYANCE);
-				for (Holder<PaintingVariant> p : registryEntryLookup.getOrThrow(PooSMPTags.PaintingVariants.NON_PLACEABLE_PAINTINGS).stream().toList()) {
-					CustomData nbtComponent = CustomData.EMPTY.with(registryOps, PaintingEntity.VARIANT_MAP_CODEC, p).getOrThrow().apply((nbt) -> nbt.putString("id", "minecraft:painting"));
-					ItemStack painting = new ItemStack(Items.PAINTING);
-					painting.set(DataComponents.ENTITY_DATA, nbtComponent);
-					entries.accept(painting);
-					//NbtComponent.DEFAULT.apply((nbtCompound -> nbtCompound.put("variant", )));
-				}
+				PooUtil.getPaintingStacks(PooSMPTags.PaintingVariants.NON_PLACEABLE_PAINTINGS, provider, entries::accept);
 				entries.accept(PooSMPItems.NULL_SHARD);
 				entries.accept(PooSMPBlocks.FAKE_DIRT);
 				entries.accept(PooSMPBlocks.FAKE_GRASS_BLOCK);
@@ -165,28 +151,28 @@ public class PooSMPMod implements ModInitializer {
 			.icon(() -> new ItemStack(PooSMPItems.BIOME_STICK))
 			.title(Component.literal("PooSMP: Biome Sticks"))
 			.displayItems((displayContext, entries) -> {
-                for (String vanilla_biome : BiomeStickItem.vanilla_biomes) {
-                    entries.accept(PooSMPItems.getBiomeStickStack(vanilla_biome));
-                }
+                HolderLookup.Provider provider = displayContext.holders();
+                PooUtil.forEachEntry(provider, Registries.BIOME, biomeHolder -> {
+                    ItemStack itemStack = new ItemStack(PooSMPItems.BIOME_STICK);
+                    itemStack.set(PooSMPItemComponents.SELECTED_BIOME, biomeHolder.getRegisteredName());
+                    entries.accept(itemStack);
+                });
 			}).build();
 
 		public static final CreativeModeTab MUSIC_DISCS = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(PooSMPItems.DISC_TRIFECTA_CAP))
 			.title(Component.literal("PooSMP: Music Discs"))
 			.displayItems((displayContext, entries) -> {
-				HolderGetter<Item> registryEntryLookup = displayContext.holders().createRegistryLookup().getOrThrow(Registries.ITEM);
-				for (Holder<Item> i : registryEntryLookup.getOrThrow(PooSMPTags.Items.POOSMP_DISCS).stream().toList()) {
-					entries.accept(i.value());
-				}
+				HolderLookup.Provider provider = displayContext.holders();
+                PooUtil.forEachEntryInTag(provider, Registries.ITEM, PooSMPTags.Items.POOSMP_DISCS, ItemStack::new);
 			}).build();
 
 		public static final CreativeModeTab MOB_STICKS = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(Items.ZOMBIE_HEAD))
 			.title(Component.literal("PooSMP: Mob Sticks"))
 			.displayItems((displayContext, entries) -> {
-				for (EntityType<?> entity : MobStickItem.Stack.mob_list) {
-					entries.accept(MobStickItem.Stack.getMobStick((EntityType<Mob>) entity));
-				}
+                HolderLookup.Provider provider = displayContext.holders();
+				MobStickItem.Stack.getStacks(provider, entries::accept);
 			}).build();
 
 		public static final CreativeModeTab MONEY = FabricItemGroup.builder()
@@ -219,9 +205,11 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPItemComponents.init();
 		PooSMPItemGroups.init();
 		ShopCategories.registerCategories();
+
 		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
 		});
+
 		PooSMPPoi.init();
 		PooSMPVillagers.init();
 		TradeConstructors.register_villager_trades();
@@ -261,6 +249,11 @@ public class PooSMPMod implements ModInitializer {
 				//}
 			});
 		});
+
+        BiomeModificationImpl.INSTANCE.addModifier(Id.of("test"), ModificationPhase.REPLACEMENTS, PooSMPPredicates::biomeNotFromPooSMP, (biomeSelectionContext, biomeModificationContext) -> {
+            biomeModificationContext.getAttributes().set(EnvironmentAttributes.BED_RULE, BedRule.EXPLODES);
+            biomeModificationContext.getAttributes().set(EnvironmentAttributes.CLOUD_HEIGHT, 380f);
+        });
 
 		if (PooSMPMod.SHOP_ENABLED) {
 			DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:set_item_prices"), ItemWorth::setPrices);
