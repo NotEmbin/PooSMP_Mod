@@ -63,11 +63,6 @@ public class ItemShopBlockEntity extends BlockEntity implements ExtendedScreenHa
     }
 
     @Override
-    protected void writeNbt(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.writeNbt(nbt, registryLookup);
-    }
-
-    @Override
     public Component getDisplayName() {
         return Component.literal("Item Shop");
     }

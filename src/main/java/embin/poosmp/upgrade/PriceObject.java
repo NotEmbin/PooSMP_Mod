@@ -58,7 +58,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
     }
 
     public static int getCurrentPrice(Upgrade upgrade, Player playerEntity) {
-        return getCurrentPrice(upgrade, playerEntity, ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, playerEntity.getWorld().getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE)));
+        return getCurrentPrice(upgrade, playerEntity, ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, playerEntity.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE)));
     }
 
     public record PriceIncreasePerLevel(int value, float multiplier) {

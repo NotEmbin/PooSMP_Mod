@@ -1,7 +1,6 @@
 package embin.poosmp.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -34,10 +33,5 @@ public class RiggedBlock extends Block {
         world.destroyBlock(hit.getBlockPos(), false, projectile.getOwner());
         Vec3 vec3d = hit.getBlockPos().getCenter();
         world.explode(projectile, world.damageSources().badRespawnPointExplosion(vec3d), null, vec3d, 4.0F, true, Level.ExplosionInteraction.BLOCK);
-    }
-
-    @Override
-    protected List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {
-        return List.of(this.asItem().getDefaultInstance());
     }
 }

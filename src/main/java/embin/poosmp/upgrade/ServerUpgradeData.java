@@ -26,7 +26,7 @@ public class ServerUpgradeData {
     }
 
     public int getPurchasedAmount(ServerPlayer player, Upgrade upgrade) {
-        Identifier id = upgrade.getId(player.getServerWorld().getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE));
+        Identifier id = upgrade.getId(player.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE));
         return getPurchasesMap(player).getOrDefault(id, 0);
     }
 
@@ -35,7 +35,7 @@ public class ServerUpgradeData {
     }
 
     public void setPurchasedAmount(ServerPlayer player, Upgrade upgrade, int amount) {
-        Identifier id = upgrade.getId(player.getServerWorld().getRegistryManager().get(PooSMPRegistries.Keys.UPGRADE));
+        Identifier id = upgrade.getId(player.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE));
         Map<Identifier, Integer> purchaseMap = getPurchasesMap(player);
         purchaseMap.put(id, amount);
         this.purchases.put(player.getUUID(), purchaseMap);

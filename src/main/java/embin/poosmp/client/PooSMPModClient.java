@@ -2,14 +2,13 @@ package embin.poosmp.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import embin.poosmp.block.PooSMPBlocks;
-import embin.poosmp.client.screen.shop.ShopScreenOld;
 import embin.poosmp.client.screen.shop.ShopScreenHandler;
 import embin.poosmp.client.screen.upgrade.UpgradesScreen;
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.util.Id;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -17,10 +16,12 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -35,19 +36,20 @@ import org.slf4j.LoggerFactory;
 
 public class PooSMPModClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("poosmp/client");
+    public static final KeyMapping.Category POOSMP_KEYS = KeyMapping.Category.register(Id.of("poosmp_keys"));
     public static final boolean SYNC_DATA = false;
 
 	public static KeyMapping openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_upgrades_screen",
 			InputConstants.Type.KEYSYM,
 			GLFW.GLFW_KEY_0,
-			"category.poosmp.keybinds"
+			POOSMP_KEYS
 	));
 	public static KeyMapping openDeathScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_death_screen",
 			InputConstants.Type.KEYSYM,
 			GLFW.GLFW_KEY_KP_DIVIDE,
-			"category.poosmp.keybinds"
+            POOSMP_KEYS
 	));
 
 	@Override
@@ -57,12 +59,14 @@ public class PooSMPModClient implements ClientModInitializer {
 				client.setScreen(new UpgradesScreen(client.screen));
 			}
 			while (openDeathScreen.consumeClick()) {
-				client.setScreen(new DeathScreen(Component.literal("nah jk (click title screen to respawn)"), false));
-				for (AttributeInstance attribute : client.player.getAttributes().getSyncableAttributes()) {
-					for (AttributeModifier modifier : attribute.getModifiers()) {
-						LOGGER.info("{} / {}", attribute.getAttribute().getRegisteredName(), modifier.id().toString());
-					}
-				}
+                if (client.player != null) {
+                    client.setScreen(new DeathScreen(Component.literal("nah jk (click title screen to respawn)"), false, client.player));
+                    for (AttributeInstance attribute : client.player.getAttributes().getSyncableAttributes()) {
+                        for (AttributeModifier modifier : attribute.getModifiers()) {
+                            LOGGER.info("{} / {}", attribute.getAttribute().getRegisteredName(), modifier.id().toString());
+                        }
+                    }
+                }
 			}
 		});
 
@@ -77,7 +81,8 @@ public class PooSMPModClient implements ClientModInitializer {
 		//	);
 		//});
 
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.getCutout(),
+
+		BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
 			Blocks.MOSS_CARPET,
 			Blocks.RED_CARPET,
 			Blocks.YELLOW_CARPET,
@@ -95,24 +100,18 @@ public class PooSMPModClient implements ClientModInitializer {
 			Blocks.PINK_CARPET,
 			Blocks.MAGENTA_CARPET,
 			Blocks.WHITE_CARPET,
-			PooSMPBlocks.PALE_OAK_SAPLING,
-			PooSMPBlocks.PALE_HANGING_MOSS,
-			PooSMPBlocks.RESIN_CLUMP,
-			PooSMPBlocks.PALE_MOSS_CARPET,
-			PooSMPBlocks.POTTED_PALE_OAK_SAPLING
+            PooSMPBlocks.FAKE_GRASS_BLOCK
 		);
-
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.getCutoutMipped(), PooSMPBlocks.FAKE_GRASS_BLOCK);
 
 		ColorProviderRegistry.BLOCK.register(
 			(state, world, pos, tintIndex) -> world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
 			PooSMPBlocks.FAKE_GRASS_BLOCK
 		);
 
-		ColorProviderRegistry.ITEM.register(
-			(stack, tintIndex) -> GrassColors.getColor(0.5, 1.0),
-			PooSMPBlocks.FAKE_GRASS_BLOCK
-		);
+		// ColorProviderRegistry.ITEM.register(
+		// 	(stack, tintIndex) -> GrassColors.getColor(0.5, 1.0),
+		// 	PooSMPBlocks.FAKE_GRASS_BLOCK
+		// );
 
 		PooSMPMessages.registerS2CPackets();
 	}

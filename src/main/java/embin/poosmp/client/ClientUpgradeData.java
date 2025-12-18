@@ -49,7 +49,7 @@ public class ClientUpgradeData {
         CompoundTag data = buf.readNbt();
         if (data != null) {
             for (String key : data.keySet()) {
-                this.purchases.put(Id.of(key), data.getInt(key));
+                this.purchases.put(Id.of(key), data.getIntOr(key, 0));
             }
         }
     }
