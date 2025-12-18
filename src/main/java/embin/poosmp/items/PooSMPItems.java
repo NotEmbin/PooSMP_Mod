@@ -95,10 +95,6 @@ public class PooSMPItems {
         EntityType.COW,
         MobStickItem.BuiltInNames.cow_names, false
     ));
-    public static final Item RESIN_BRICK = register("minecraft:resin_brick");
-    public static final Item STRANGE_DIAMOND_PICKAXE = register("strange_diamond_pickaxe", new StrangePickaxeItem(ToolMaterials.DIAMOND, copyAttributes(Items.DIAMOND_PICKAXE).component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
-    public static final Item STRANGE_NETHERITE_PICKAXE = register("strange_netherite_pickaxe", new StrangePickaxeItem(ToolMaterials.NETHERITE, copyAttributes(Items.NETHERITE_PICKAXE).fireResistant().component(PooSMPItemComponents.BLOCKS_MINED, 0).rarity(Rarity.EPIC)));
-    public static final Item STRANGE_UPGRADE_SMITHING_TEMPLATE = register("strange_upgrade_smithing_template");
     public static final Item DISC_STORY_OF_UNDERTALE = musicDisc("story_of_undertale", PooSMPJukeboxSongs.SOU, "Cubey");
     public static final Item RAW_RED_POO = register("raw_red_poo", Rarity.UNCOMMON);
     public static final Item RED_POO_INGOT = register("red_poo_ingot", Rarity.UNCOMMON);
