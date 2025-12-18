@@ -16,6 +16,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -30,18 +31,18 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public class MobStickItem extends CreativeSnitchItem {
-    public EntityType<Mob> mob;
+    public EntityType<?> mob;
     public String[] names;
 
     public MobStickItem(Properties settings, EntityType<?> mob, String[] name_list, boolean snitch) {
         super(settings, snitch);
-        this.mob = (EntityType<Mob>) mob;
+        this.mob = mob;
         this.names = name_list;
     }
 
     public MobStickItem(Properties settings, EntityType<?> mob, String[] name_list) {
         super(settings);
-        this.mob = (EntityType<Mob>) mob;
+        this.mob = mob;
         this.names = name_list;
     }
 
@@ -51,12 +52,12 @@ public class MobStickItem extends CreativeSnitchItem {
         double player_z = user.getZ();
         double player_y = user.getY();
         BlockPos pos = BlockPos.containing(player_x, player_y, player_z);
-        EntityType<Mob> selected_mob = this.mob;
+        EntityType<?> selected_mob = this.mob;
         List<String> name_list = List.of(this.names);
         ItemStack stack = user.getItemInHand(user.getUsedItemHand());
         try {
             if (stack.has(PooSMPItemComponents.MOB_OVERRIDE)) {
-                selected_mob = (EntityType<Mob>) stack.get(PooSMPItemComponents.MOB_OVERRIDE);
+                selected_mob = stack.get(PooSMPItemComponents.MOB_OVERRIDE);
             }
         } catch (ClassCastException exception) {
             if (world.isClientSide()) {
@@ -76,13 +77,13 @@ public class MobStickItem extends CreativeSnitchItem {
         }
 
         if (!world.isClientSide()) {
-            EntityType<Mob> default_mob = this.mob;
+            EntityType<?> default_mob = this.mob;
             ItemStack offhand_item = stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             if (offhand_item == null) {
                 offhand_item = new ItemStack(Items.TOTEM_OF_UNDYING);;
                 user.displayClientMessage(Component.literal("Invalid offhand override item! Using default instead...").withStyle(ChatFormatting.RED), true);
             }
-            Mob mob = selected_mob.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
+            Entity mob = selected_mob.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
             if (mob == null) {
                 user.displayClientMessage(Component.literal("Mob override failed because mob is null! Using default instead...").withStyle(ChatFormatting.RED), true);
                 mob = default_mob.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
@@ -104,7 +105,9 @@ public class MobStickItem extends CreativeSnitchItem {
                     mob.setCustomNameVisible(true);
                 }
             }
-            mob.setItemInHand(InteractionHand.OFF_HAND, offhand_item.copy());
+            if (mob instanceof Mob realMob) {
+                realMob.setItemInHand(InteractionHand.OFF_HAND, offhand_item.copy());
+            }
             Commands commandManager = world.getServer().getCommands();
             CommandSourceStack commandSource = world.getServer().createCommandSourceStack().withSuppressedOutput();
             commandManager.performPrefixedCommand(commandSource, "team add " + player_uuid + " \"" + user.getName().getString() + "\"");

@@ -55,7 +55,7 @@ public class PooSMPBlocks {
         Block block = Registry.register(BuiltInRegistries.BLOCK, resourceKey, blockFunction.apply(blockProperties.setId(resourceKey)));
         if (should_register_item) {
             ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
-            Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, settings.setId(itemKey)));
+            Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, settings.setId(itemKey).useBlockDescriptionPrefix().modelId(id)));
         }
         return block;
     }

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "poosmp:item/twenty_five_dollar_bill"
-  }
-}

@@ -35,7 +35,7 @@ import java.util.function.Function;
 public class PooSMPItems {
     public static <T extends Item> T register(String path, Function<Item.Properties, T> item, Item.Properties properties) {
         Identifier id = Id.of(path);
-        return Registry.register(BuiltInRegistries.ITEM, id, item.apply(properties.setId(ResourceKey.create(Registries.ITEM, id))));
+        return Registry.register(BuiltInRegistries.ITEM, id, item.apply(properties.setId(ResourceKey.create(Registries.ITEM, id)).modelId(id)));
     }
 
     public static final Item POOP_STICK = register("poop_stick", PoopStickItem::new, new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant().stacksTo(1));
