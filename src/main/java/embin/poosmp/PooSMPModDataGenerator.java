@@ -3,7 +3,6 @@ package embin.poosmp;
 import embin.poosmp.datagen.PooSMPLootTableProvider;
 import embin.poosmp.datagen.PooSMPModelProvider;
 import embin.poosmp.datagen.PooSMPRecipeProvider;
-import embin.poosmp.datagen.PooSMPRegistryDataGenerator;
 import embin.poosmp.world.PooSMPConfiguredFeatures;
 import embin.poosmp.world.PooSMPPlacedFeatures;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;

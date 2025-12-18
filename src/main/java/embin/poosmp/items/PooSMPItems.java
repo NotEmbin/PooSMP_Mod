@@ -6,18 +6,17 @@ import embin.poosmp.util.Id;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.item.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.Rarity;
@@ -25,6 +24,7 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SmithingTemplateItem;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluids;
 
@@ -50,7 +50,7 @@ public class PooSMPItems {
     public static final Item RING = register("ring");
     public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4, ""), false);
     public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
-    public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.createArmorTrimTemplate(Id.of("poosmp:fill")));
+    public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.createArmorTrimTemplate(new Item.Properties().rarity(Rarity.UNCOMMON)));
     public static final Item DISC_TRIFECTA_CAP = musicDisc("trifecta_cap", PooSMPJukeboxSongs.TRIFECTA_CAP, "Embin");
     public static final Item DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL = musicDisc("butterflies_and_hurricanes_instrumental", PooSMPJukeboxSongs.BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL, "Embin");
     public static final Item DISC_BUDDY_HOLLY = musicDisc("buddy_holly", PooSMPJukeboxSongs.BUDDY_HOLLY, "ianyourgod");
@@ -99,16 +99,16 @@ public class PooSMPItems {
     public static final Item RAW_RED_POO = register("raw_red_poo", Rarity.UNCOMMON);
     public static final Item RED_POO_INGOT = register("red_poo_ingot", Rarity.UNCOMMON);
     public static final Item RED_POO_UPGRADE_SMITHING_TEMPLATE = register("red_poo_upgrade_smithing_template", Rarity.RARE);
-    public static final Item BANANA = register("banana", new Item(new Item.Properties().food(PooSMPFoods.BANANA)));
-    public static final Item RED_POO_SWORD = register("red_poo_sword", new Item(new Item.Properties().sword(PooSMPMaterials.RED_POO, 3, -2.4f)));
-    public static final Item RED_POO_SHOVEL = register("red_poo_shovel", new ShovelItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(ShovelItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 1.5F, -3.0F))));
-    public static final Item RED_POO_PICKAXE = register("red_poo_pickaxe", new PickaxeItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(PickaxeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 1.0F, -2.8F))));
-    public static final Item RED_POO_AXE = register("red_poo_axe", new AxeItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(AxeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, 5.0F, -3.0F))));
-    public static final Item RED_POO_HOE = register("red_poo_hoe", new HoeItem(PooSMPMaterials.RED_POO, new Item.Properties().attributes(HoeItem.createAttributeModifiers(PooSMPMaterials.RED_POO, -3.0F, 0.0F))));
-    public static final Item RED_POO_HELMET = register("red_poo_helmet", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.HELMET, (new Item.Properties()).durability(ArmorItem.Type.HELMET.getMaxDamage(44))));
-    public static final Item RED_POO_CHESTPLATE = register("red_poo_chestplate", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getMaxDamage(44))));
-    public static final Item RED_POO_LEGGINGS = register("red_poo_leggings", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.LEGGINGS, (new Item.Properties()).durability(ArmorItem.Type.LEGGINGS.getMaxDamage(44))));
-    public static final Item RED_POO_BOOTS = register("red_poo_boots", new ArmorItem(PooSMPMaterials.A_RED_POO, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getMaxDamage(44))));
+    public static final Item BANANA = food("banana", PooSMPFoods.BANANA);
+    public static final Item RED_POO_SWORD = register("red_poo_sword", new Item.Properties().sword(PooSMPMaterials.RED_POO, 3, -2.4f));
+    public static final Item RED_POO_SHOVEL = register("red_poo_shovel", new ShovelItem(PooSMPMaterials.RED_POO, 1.5F, -3.0F, new Item.Properties()));
+    public static final Item RED_POO_PICKAXE = register("red_poo_pickaxe", new Item.Properties().pickaxe(PooSMPMaterials.RED_POO, 1.0F, -2.8F));
+    public static final Item RED_POO_AXE = register("red_poo_axe", new AxeItem(PooSMPMaterials.RED_POO, 5.0F, -3.0F, new Item.Properties()));
+    public static final Item RED_POO_HOE = register("red_poo_hoe", new HoeItem(PooSMPMaterials.RED_POO, -3.0F, 0.0F, new Item.Properties()));
+    public static final Item RED_POO_HELMET = register("red_poo_helmet", new Item.Properties().humanoidArmor(PooSMPMaterials.A_RED_POO, ArmorType.HELMET));
+    public static final Item RED_POO_CHESTPLATE = register("red_poo_chestplate", new Item.Properties().humanoidArmor(PooSMPMaterials.A_RED_POO, ArmorType.CHESTPLATE));
+    public static final Item RED_POO_LEGGINGS = register("red_poo_leggings", new Item.Properties().humanoidArmor(PooSMPMaterials.A_RED_POO, ArmorType.LEGGINGS));
+    public static final Item RED_POO_BOOTS = register("red_poo_boots", new Item.Properties().humanoidArmor(PooSMPMaterials.A_RED_POO, ArmorType.BOOTS));
     public static final Item GEAR = register("gear");
     public static final Item SCREW = register("screw");
     public static final Item GLASS_SHARD = register("glass_shard");
@@ -137,6 +137,10 @@ public class PooSMPItems {
         return register(name, new Item(new Item.Properties()));
     }
 
+    private static Item register(String name, Item.Properties properties) {
+        return register(name, new Item(properties));
+    }
+
     private static Item register(String name, int max_count) {
         return register(name, new Item(new Item.Properties().stacksTo(max_count)));
     }
@@ -159,7 +163,7 @@ public class PooSMPItems {
 
     public static ItemAttributeModifiers healthTotemAttributes(int hp, String id_suffix) {
         return ItemAttributeModifiers.builder().add(
-            EntityAttributes.GENERIC_MAX_HEALTH,
+            Attributes.MAX_HEALTH,
             new AttributeModifier(
                 Id.of("poosmp:health_totem_buff" + id_suffix), hp, AttributeModifier.Operation.ADD_VALUE
             ),
@@ -169,13 +173,13 @@ public class PooSMPItems {
 
     public static ItemAttributeModifiers reachTotemAttributes(float amount, String id_suffix) {
         return ItemAttributeModifiers.builder().add(
-            EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
+            Attributes.BLOCK_INTERACTION_RANGE,
             new AttributeModifier(
                 Id.of("poosmp:reach_totem_blocks" + id_suffix), amount, AttributeModifier.Operation.ADD_VALUE
             ),
             EquipmentSlotGroup.HAND
         ).add(
-            EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
+            Attributes.ENTITY_INTERACTION_RANGE,
             new AttributeModifier(
                 Id.of("poosmp:reach_totem_entities" + id_suffix), amount, AttributeModifier.Operation.ADD_VALUE
             ),
@@ -194,11 +198,11 @@ public class PooSMPItems {
 
     public static ItemAttributeModifiers magicDeviceAttributes(float amount) {
         return ItemAttributeModifiers.builder().add(
-                EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
-                new AttributeModifier(
-                        Id.of("poosmp:magic_device"), amount, AttributeModifier.Operation.ADD_VALUE
-                ),
-                EquipmentSlotGroup.HAND
+            Attributes.ENTITY_INTERACTION_RANGE,
+            new AttributeModifier(
+                    Id.of("poosmp:magic_device"), amount, AttributeModifier.Operation.ADD_VALUE
+            ),
+            EquipmentSlotGroup.HAND
         ).build();
     }
 }

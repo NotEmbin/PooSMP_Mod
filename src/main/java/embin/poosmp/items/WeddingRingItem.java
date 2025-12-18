@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -28,25 +29,25 @@ public class WeddingRingItem extends CreativeSnitchItem {
 
     public static ItemAttributeModifiers weddingRingAttributes() {
         return ItemAttributeModifiers.builder().add(
-            EntityAttributes.GENERIC_MAX_HEALTH,
+            Attributes.MAX_HEALTH,
             new AttributeModifier(
                 Id.of("poosmp:wedding_ring_hp_buff"), 10, AttributeModifier.Operation.ADD_VALUE
             ),
             EquipmentSlotGroup.OFFHAND
         ).add(
-            EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
+            Attributes.ENTITY_INTERACTION_RANGE,
             new AttributeModifier(
                 Id.of("poosmp:wedding_ring_entity_reach_buff"), 1.0F, AttributeModifier.Operation.ADD_VALUE
             ),
             EquipmentSlotGroup.OFFHAND
         ).add(
-            EntityAttributes.GENERIC_ATTACK_DAMAGE,
+            Attributes.ATTACK_DAMAGE,
             new AttributeModifier(
                 Id.of("poosmp:wedding_ring_attack_damage"), 8, AttributeModifier.Operation.ADD_VALUE
             ),
             EquipmentSlotGroup.HAND
         ).add(
-            EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
+            Attributes.ARMOR_TOUGHNESS,
             new AttributeModifier(
                 Id.of("poosmp:wedding_ring_armor_toughness"), 6, AttributeModifier.Operation.ADD_VALUE
             ),
@@ -56,7 +57,7 @@ public class WeddingRingItem extends CreativeSnitchItem {
 
     public static ItemAttributeModifiers weddingRingPublicAttributes() {
         return ItemAttributeModifiers.builder().add(
-            EntityAttributes.GENERIC_ATTACK_DAMAGE,
+            Attributes.ATTACK_DAMAGE,
             new AttributeModifier(
                 Id.of("poosmp:wedding_ring_attack_damage"), 2, AttributeModifier.Operation.ADD_VALUE
             ),
