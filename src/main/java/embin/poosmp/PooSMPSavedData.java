@@ -2,12 +2,10 @@ package embin.poosmp;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import embin.poosmp.upgrade.Upgrade;
 import net.minecraft.core.Registry;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
@@ -15,7 +13,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import org.jspecify.annotations.Nullable;
@@ -101,12 +98,17 @@ public class PooSMPSavedData extends SavedData {
         return this.balance.get(uuid);
     }
 
+    public double getTrimmedBalance(Player player) {
+        return PooSMPSavedData.trimBalance(this.getBalance(player));
+    }
+
     public boolean addBalance(Player player, double amount) {
-        double currentBalance = this.getBalance(player);
-        final double newAmount = Math.clamp(currentBalance + amount, 0.0D, Double.MAX_VALUE);
+        double currentBalance = this.getTrimmedBalance(player);
+        final double trimmedAmount = PooSMPSavedData.trimBalance(amount);
+        final double newAmount = Math.clamp(currentBalance + trimmedAmount, 0.0D, Double.MAX_VALUE);
         this.balance.put(player.getUUID(), newAmount);
         this.setDirty();
-        return newAmount == (currentBalance + amount);
+        return newAmount == (currentBalance + trimmedAmount);
     }
 
     public int upgradePurchaseAmount(Player player, Upgrade upgrade) {
@@ -127,7 +129,7 @@ public class PooSMPSavedData extends SavedData {
     public static PooSMPSavedData get(Player player) {
         MinecraftServer server = player.level().getServer();
         if (server != null) return PooSMPSavedData.get(server);
-        return null;
+        return null; // i don't think returning null makes sense
     }
 
     private static <T> Codec<Map<UUID, T>> uuidMapCodec(Codec<T> valueCodec) {
@@ -140,5 +142,9 @@ public class PooSMPSavedData extends SavedData {
 
     private static Registry<Upgrade> getUpgradeRegistry(Player player) {
         return player.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
+    }
+
+    private static double trimBalance(final double balance) {
+        return Math.floor(balance * 100D) / 100D;
     }
 }

@@ -2,7 +2,6 @@ package embin.poosmp.datagen;
 
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.PooSMPItems;
-import embin.poosmp.util.PooSMPTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
@@ -31,27 +30,6 @@ public class PooSMPRecipeProvider extends FabricRecipeProvider {
         offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.POOP_BRICK_SLAB, PooSMPBlocks.POOP_BRICKS, 2);
         offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.POOP_BRICK_WALL, PooSMPBlocks.POOP_BRICKS);
         offerRedNetherFenceRecipe(exporter, PooSMPBlocks.RED_NETHER_BRICK_FENCE, Blocks.RED_NETHER_BRICKS);
-
-        offerPlanksRecipe(exporter, PooSMPBlocks.PALE_OAK_PLANKS, PooSMPTags.Items.PALE_OAK_LOGS, 4);
-        offerBarkBlockRecipe(exporter, PooSMPBlocks.PALE_OAK_WOOD, PooSMPBlocks.PALE_OAK_LOG);
-        offerBarkBlockRecipe(exporter, PooSMPBlocks.STRIPPED_PALE_OAK_WOOD, PooSMPBlocks.STRIPPED_PALE_OAK_LOG);
-        offerDoorRecipe(exporter, PooSMPBlocks.PALE_OAK_DOOR, PooSMPBlocks.PALE_OAK_PLANKS);
-        offerTrapdoorRecipe(exporter, PooSMPBlocks.PALE_OAK_TRAPDOOR, PooSMPBlocks.PALE_OAK_PLANKS);
-        offerStairsRecipe(exporter, PooSMPBlocks.PALE_OAK_STAIRS, PooSMPBlocks.PALE_OAK_PLANKS);
-        offerSlabRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.PALE_OAK_SLAB, PooSMPBlocks.PALE_OAK_PLANKS);
-        offerFenceRecipe(exporter, PooSMPBlocks.PALE_OAK_FENCE, PooSMPBlocks.PALE_OAK_PLANKS);
-        offerFenceGateRecipe(exporter, PooSMPBlocks.PALE_OAK_FENCE_GATE, PooSMPBlocks.PALE_OAK_PLANKS);
-        offerPressurePlateRecipe(exporter, PooSMPBlocks.PALE_OAK_PRESSURE_PLATE, PooSMPBlocks.PALE_OAK_PLANKS);
-        offerButtonRecipe(exporter, PooSMPBlocks.PALE_OAK_BUTTON, PooSMPBlocks.PALE_OAK_PLANKS);
-
-        offerStairsRecipe(exporter, PooSMPBlocks.RESIN_BRICK_STAIRS, PooSMPBlocks.RESIN_BRICKS);
-        offerSlabRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.RESIN_BRICK_SLAB, PooSMPBlocks.RESIN_BRICKS);
-        offerWallRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.RESIN_BRICK_WALL, PooSMPBlocks.RESIN_BRICKS);
-        offerChiseledBlockRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.CHISELED_RESIN_BRICKS, PooSMPBlocks.RESIN_BRICK_SLAB);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.RESIN_BRICK_SLAB, PooSMPBlocks.RESIN_BRICKS, 2);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.RESIN_BRICK_STAIRS, PooSMPBlocks.RESIN_BRICKS);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.RESIN_BRICK_WALL, PooSMPBlocks.RESIN_BRICKS);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, PooSMPBlocks.CHISELED_RESIN_BRICKS, PooSMPBlocks.RESIN_BRICKS);
     }
 
     public static void offerStairsRecipe(RecipeExporter exporter, ItemLike output, ItemLike input) {

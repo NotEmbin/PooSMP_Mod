@@ -10,13 +10,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 
+@SuppressWarnings({"NullableProblems", "SameParameterValue"})
 public class PooSMPTags {
     public static class Blocks {
         private static TagKey<Block> createTag(String name) {
             return TagKey.create(Registries.BLOCK, Id.of(name));
         }
 
-        public static final TagKey<Block> PALE_OAK_LOGS = createTag("poosmp:pale_oak_logs");
         public static final TagKey<Block> INCORRECT_FOR_RED_POO_TOOLS = createTag("poosmp:incorrect_for_red_poo_tools");
     }
 
@@ -28,7 +28,7 @@ public class PooSMPTags {
         public static final TagKey<Item> TOTEMS = createTag("poosmp:totems");
         public static final TagKey<Item> POOSMP_DISCS = createTag("poosmp:poosmp_discs");
         public static final TagKey<Item> STEREO_DISCS = createTag("poosmp:stereo_discs");
-        public static final TagKey<Item> PALE_OAK_LOGS = createTag("poosmp:pale_oak_logs");
+        public static final TagKey<Item> RED_POO_REPAIR_ITEMS = createTag("poosmp:red_poo_repair_items");
     }
 
     public static class Enchantments {

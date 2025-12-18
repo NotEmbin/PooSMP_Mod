@@ -116,7 +116,6 @@ public class PooSMPMod implements ModInitializer {
 				entries.accept(PooSMPItems.BACON_BUCKET);
 				entries.accept(PooSMPItems.COW_STICK);
 				entries.accept(PooSMPBlocks.BANKERS_TABLE);
-				entries.accept(PooSMPItems.RESIN_BRICK);
 				//entries.add(PooSMPItems.STRANGE_DIAMOND_PICKAXE);
 				//entries.add(PooSMPItems.STRANGE_NETHERITE_PICKAXE);
 				//entries.add(PooSMPItems.STRANGE_UPGRADE_SMITHING_TEMPLATE);
