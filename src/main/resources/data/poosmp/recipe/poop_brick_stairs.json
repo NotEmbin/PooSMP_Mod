@@ -2,16 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "minecraft:resin_bricks"
-    }
+    "#": "poosmp:poop_bricks"
   },
   "pattern": [
-    "###",
+    "#  ",
+    "## ",
     "###"
   ],
   "result": {
-    "count": 6,
-    "id": "minecraft:resin_brick_wall"
+    "count": 4,
+    "id": "poosmp:poop_brick_stairs"
   }
 }
