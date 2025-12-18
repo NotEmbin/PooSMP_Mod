@@ -157,7 +157,8 @@ public class BiomeStickItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag type) {
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag type) {
         super.appendHoverText(stack, context, tooltipDisplay, consumer, type);
         try {
             if (stack.has(selected_biome_component) || stack.has(DataComponents.CUSTOM_NAME)) {
