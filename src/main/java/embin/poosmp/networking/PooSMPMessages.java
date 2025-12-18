@@ -106,8 +106,6 @@ public class PooSMPMessages {
                 } else {
                     PooSMPModClient.LOGGER.warn("Upgrade sync: server was null");
                 }
-            } else {
-                PooSMPModClient.LOGGER.info("Data sync is disabled");
             }
         });
     }
