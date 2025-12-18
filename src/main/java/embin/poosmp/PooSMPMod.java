@@ -200,8 +200,8 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPRegistries.acknowledge();
 		PooSMPSoundEvents.init(); // so that music discs actually work
 		//Upgrades.init();
+        PooSMPItems.init();
 		PooSMPBlocks.init();
-		PooSMPItems.init();
 		PooSMPItemComponents.init();
 		PooSMPItemGroups.init();
 		ShopCategories.registerCategories();

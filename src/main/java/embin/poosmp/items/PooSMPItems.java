@@ -6,6 +6,8 @@ import embin.poosmp.util.Id;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -28,29 +30,31 @@ import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluids;
 
+import java.util.function.Function;
+
 public class PooSMPItems {
-    public static <T extends Item> T register(String path, T item) {
-        return Registry.register(BuiltInRegistries.ITEM, Id.of(path), item);
+    public static <T extends Item> T register(String path, Function<Item.Properties, T> item, Item.Properties properties) {
+        Identifier id = Id.of(path);
+        return Registry.register(BuiltInRegistries.ITEM, id, item.apply(properties.setId(ResourceKey.create(Registries.ITEM, id))));
     }
 
-    public static final Item POOP_STICK = register("poop_stick", new PoopStickItem(new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant().stacksTo(1)));
-    public static final Item SERVER_SAYS_WHAT_STICK = register("server_says_what_stick", new ServerSaysWhatItem(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).fireResistant()));
-    public static final Item BIOME_STICK = register("biome_stick", new BiomeStickItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(PooSMPItemComponents.SELECTED_BIOME, "minecraft:plains")));
-    public static final Item BOOM_STICK = register("boom_stick", new BoomStickItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant()));
-    public static final Item ZOMBIE_STICK = register("zombie_stick", new MobStickItem(
-        new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant(),
-        EntityType.ZOMBIE,
+    public static final Item POOP_STICK = register("poop_stick", PoopStickItem::new, new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant().stacksTo(1));
+    public static final Item SERVER_SAYS_WHAT_STICK = register("server_says_what_stick", ServerSaysWhatItem::new, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).fireResistant());
+    public static final Item BIOME_STICK = register("biome_stick", BiomeStickItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(PooSMPItemComponents.SELECTED_BIOME, "minecraft:plains"));
+    public static final Item BOOM_STICK = register("boom_stick", BoomStickItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant());
+    public static final Item ZOMBIE_STICK = register("zombie_stick", properties -> new MobStickItem(
+        properties, EntityType.ZOMBIE,
         MobStickItem.BuiltInNames.zombie_names, false
-    ));
+    ), new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant());
     public static final Item DIAMOND_SHARD = register("diamond_shard");
-    public static final Item WEDDING_RING = register("wedding_ring", new WeddingRingItem(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).fireResistant()));
+    public static final Item WEDDING_RING = register("wedding_ring", WeddingRingItem::new, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).fireResistant());
     public static final Item RED_NETHER_BRICK = register("red_nether_brick");
     public static final Item POOP_BRICK = register("poop_brick");
-    public static final Item POOPLET = register("pooplet", new Item(new Item.Properties().food(PooSMPFoods.POOPLET)));
+    public static final Item POOPLET = food("pooplet", PooSMPFoods.POOPLET);
     public static final Item RING = register("ring");
     public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4, ""), false);
-    public static final Item WARP_STICK = register("warp_stick", new WarpStick(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
-    public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem.createArmorTrimTemplate(new Item.Properties().rarity(Rarity.UNCOMMON)));
+    public static final Item WARP_STICK = register("warp_stick", WarpStick::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+    public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem::createArmorTrimTemplate, new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final Item DISC_TRIFECTA_CAP = musicDisc("trifecta_cap", PooSMPJukeboxSongs.TRIFECTA_CAP, "Embin");
     public static final Item DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL = musicDisc("butterflies_and_hurricanes_instrumental", PooSMPJukeboxSongs.BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL, "Embin");
     public static final Item DISC_BUDDY_HOLLY = musicDisc("buddy_holly", PooSMPJukeboxSongs.BUDDY_HOLLY, "ianyourgod");
@@ -65,19 +69,15 @@ public class PooSMPItems {
     public static final Item DISC_ENDLESSLY_INSTRUMENTAL = musicDisc("endlessly_instrumental", PooSMPJukeboxSongs.ENDLESSLY_INSTRUMENTAL, "Embin");
     public static final Item DISC_ENDLESSLY = musicDisc("endlessly", PooSMPJukeboxSongs.ENDLESSLY, "Embin");
     public static final Item DISC_ENDLESSLY_STEREO = musicDisc("endlessly_stereo", PooSMPJukeboxSongs.ENDLESSLY_STEREO, "Embin");
-    public static final Item ZAP_STICK = register("lightning_stick", new ZapStick(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
-    public static final Item VILLAGER_STICK = register("villager_stick", new MobStickItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), EntityType.VILLAGER, MobStickItem.BuiltInNames.villager_names));
-    public static final Item CUBE_POTTERY_SHERD = register("cube_pottery_sherd", new Item(new Item.Properties()));
-    public static final Item POO_POTTERY_SHERD = register("poo_pottery_sherd", new Item(new Item.Properties()));
+    public static final Item ZAP_STICK = register("lightning_stick", ZapStick::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+    public static final Item VILLAGER_STICK = register("villager_stick", p -> new MobStickItem(p, EntityType.VILLAGER, MobStickItem.BuiltInNames.villager_names), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+    public static final Item CUBE_POTTERY_SHERD = register("cube_pottery_sherd");
+    public static final Item POO_POTTERY_SHERD = register("poo_pottery_sherd");
     public static final Item ONE_DOLLAR_BILL = moneyItem("one_dollar_bill", 1);
     public static final Item BACON_BUCKET = register(
         "bacon_bucket",
-        new MobBucketItem(
-            EntityType.PIG,
-            Fluids.LAVA,
-            SoundEvents.BUCKET_EMPTY_FISH,
-            new Item.Properties().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)
-        )
+        properties -> new MobBucketItem(EntityType.PIG, Fluids.LAVA, SoundEvents.BUCKET_EMPTY_FISH, properties),
+        new Item.Properties().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)
     );
     public static final Item TWO_DOLLAR_BILL = moneyItem("two_dollar_bill", 2);
     public static final Item FIVE_DOLLAR_BILL = moneyItem("five_dollar_bill", 5);
@@ -90,21 +90,17 @@ public class PooSMPItems {
     //public static final Item FIVE_CENT_COIN = coinItem("five_cent_coin", 5);
     //public static final Item TEN_CENT_COIN = coinItem("ten_cent_coin", 10);
     //public static final Item TWENTY_FIVE_CENT_COIN = coinItem("twenty_five_cent_coin", 25);
-    public static final Item COW_STICK = register("cow_stick", new MobStickItem(
-        new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant(),
-        EntityType.COW,
-        MobStickItem.BuiltInNames.cow_names, false
-    ));
+    public static final Item COW_STICK = register("cow_stick", properties -> new MobStickItem(properties, EntityType.COW, MobStickItem.BuiltInNames.cow_names, false));
     public static final Item DISC_STORY_OF_UNDERTALE = musicDisc("story_of_undertale", PooSMPJukeboxSongs.SOU, "Cubey");
     public static final Item RAW_RED_POO = register("raw_red_poo", Rarity.UNCOMMON);
     public static final Item RED_POO_INGOT = register("red_poo_ingot", Rarity.UNCOMMON);
     public static final Item RED_POO_UPGRADE_SMITHING_TEMPLATE = register("red_poo_upgrade_smithing_template", Rarity.RARE);
     public static final Item BANANA = food("banana", PooSMPFoods.BANANA);
     public static final Item RED_POO_SWORD = register("red_poo_sword", new Item.Properties().sword(PooSMPMaterials.RED_POO, 3, -2.4f));
-    public static final Item RED_POO_SHOVEL = register("red_poo_shovel", new ShovelItem(PooSMPMaterials.RED_POO, 1.5F, -3.0F, new Item.Properties()));
+    public static final Item RED_POO_SHOVEL = register("red_poo_shovel", properties -> new ShovelItem(PooSMPMaterials.RED_POO, 1.5F, -3.0F, properties));
     public static final Item RED_POO_PICKAXE = register("red_poo_pickaxe", new Item.Properties().pickaxe(PooSMPMaterials.RED_POO, 1.0F, -2.8F));
-    public static final Item RED_POO_AXE = register("red_poo_axe", new AxeItem(PooSMPMaterials.RED_POO, 5.0F, -3.0F, new Item.Properties()));
-    public static final Item RED_POO_HOE = register("red_poo_hoe", new HoeItem(PooSMPMaterials.RED_POO, -3.0F, 0.0F, new Item.Properties()));
+    public static final Item RED_POO_AXE = register("red_poo_axe", properties -> new AxeItem(PooSMPMaterials.RED_POO, 5.0F, -3.0F, properties));
+    public static final Item RED_POO_HOE = register("red_poo_hoe", properties -> new HoeItem(PooSMPMaterials.RED_POO, -3.0F, 0.0F, properties));
     public static final Item RED_POO_HELMET = register("red_poo_helmet", new Item.Properties().humanoidArmor(PooSMPMaterials.A_RED_POO, ArmorType.HELMET));
     public static final Item RED_POO_CHESTPLATE = register("red_poo_chestplate", new Item.Properties().humanoidArmor(PooSMPMaterials.A_RED_POO, ArmorType.CHESTPLATE));
     public static final Item RED_POO_LEGGINGS = register("red_poo_leggings", new Item.Properties().humanoidArmor(PooSMPMaterials.A_RED_POO, ArmorType.LEGGINGS));
@@ -112,7 +108,7 @@ public class PooSMPItems {
     public static final Item GEAR = register("gear");
     public static final Item SCREW = register("screw");
     public static final Item GLASS_SHARD = register("glass_shard");
-    public static final Item MAGIC_DEVICE = register("magic_device", new MagicDeviceItem(new Item.Properties().durability(1024).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)));
+    public static final Item MAGIC_DEVICE = register("magic_device", MagicDeviceItem::new, new Item.Properties().durability(1024).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final Item NULL_SHARD = register("null_shard", Rarity.EPIC);
 
     public static ItemStack getBiomeStickStack(String biome) {
@@ -122,42 +118,42 @@ public class PooSMPItems {
     }
 
     private static Item moneyItem(String name, double value) {
-        return register(name, new MoneyItem(new Item.Properties().component(PooSMPItemComponents.MONEY, value).stacksTo(99)));
-    }
-
-    private static Item coinItem(String name, double value) {
-        return register(name, new MoneyItem(new Item.Properties().component(PooSMPItemComponents.MONEY, value).stacksTo(99)));
+        return register(name, MoneyItem::new, new Item.Properties().component(PooSMPItemComponents.MONEY, value).stacksTo(99));
     }
 
     private static Item musicDisc(String name, ResourceKey<JukeboxSong> song, String requester) {
-        return register("music_disc/" + name, new RequestedDiscItem(requester, new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(song)));
-    }
-
-    private static Item register(String name) {
-        return register(name, new Item(new Item.Properties()));
+        return register("music_disc/" + name, properties -> new RequestedDiscItem(requester, properties), new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(song));
     }
 
     private static Item register(String name, Item.Properties properties) {
-        return register(name, new Item(properties));
+        return register(name, Item::new, properties);
+    }
+
+    private static Item register(String name, Function<Item.Properties, Item> itemFunction) {
+        return register(name, itemFunction, new Item.Properties());
+    }
+
+    private static Item register(String name) {
+        return register(name, new Item.Properties());
     }
 
     private static Item register(String name, int max_count) {
-        return register(name, new Item(new Item.Properties().stacksTo(max_count)));
+        return register(name, new Item.Properties().stacksTo(max_count));
     }
 
     private static Item register(String name, Rarity rarity) {
-        return register(name, new Item(new Item.Properties().rarity(rarity)));
+        return register(name, new Item.Properties().rarity(rarity));
     }
 
     private static Item food(String name, FoodProperties food) {
-        return register(name, new Item(new Item.Properties().food(food)));
+        return register(name, new Item.Properties().food(food));
     }
 
     private static Item totem(String name, ItemAttributeModifiers attributes, boolean enchanted) {
         if (enchanted) {
-            return register("enchanted_totem_of_" + name, new CreativeSnitchItem(new Item.Properties().attributes(attributes).rarity(Rarity.RARE).stacksTo(1).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)));
+            return register("enchanted_totem_of_" + name, CreativeSnitchItem::new, new Item.Properties().attributes(attributes).rarity(Rarity.RARE).stacksTo(1).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
         } else {
-            return register("totem_of_" + name, new CreativeSnitchItem(new Item.Properties().attributes(attributes).rarity(Rarity.UNCOMMON).stacksTo(1)));
+            return register("totem_of_" + name, CreativeSnitchItem::new, new Item.Properties().attributes(attributes).rarity(Rarity.UNCOMMON).stacksTo(1));
         }
     }
 
