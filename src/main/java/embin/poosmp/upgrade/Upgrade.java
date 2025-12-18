@@ -2,11 +2,9 @@ package embin.poosmp.upgrade;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import embin.poosmp.PooSMPMod;
 import embin.poosmp.PooSMPRegistries;
-import embin.poosmp.networking.payload.UpgradeSyncPayload;
-import embin.poosmp.util.IEntityDataSaver;
-import embin.poosmp.util.PooSMPTags;
+import embin.poosmp.PooSMPSavedData;
+import embin.poosmp.networking.payload.DataSyncPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -22,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import java.util.ArrayList;
@@ -56,16 +55,15 @@ public record Upgrade(
         return registry.getKey(this);
     }
 
-    public int amountPurchased(ServerPlayer player) {
-        return ServerUpgradeData.INSTANCE.getPurchasedAmount(player, this);
+    public int amountPurchased(Player player) {
+        PooSMPSavedData savedData = PooSMPSavedData.get(player);
+        return savedData != null ? savedData.upgradePurchaseAmount(player, this) : 0;
     }
 
     public static void syncData(ServerPlayer player) {
         CompoundTag data = new CompoundTag();
-        for (Identifier upgrade : ServerUpgradeData.INSTANCE.savedUpgrades(player)) {
-            data.putInt(upgrade.toString(), ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade));
-        }
-        ServerPlayNetworking.send(player, new UpgradeSyncPayload(data));
+        data.put("poosmp_data", PooSMPSavedData.get(player.level().getServer()).asNbt());
+        ServerPlayNetworking.send(player, new DataSyncPayload(data));
     }
 
     public List<ItemAttributeModifiers.Entry> getAttributesForAmount(int amount, Registry<Upgrade> upgradeRegistry) {
@@ -90,13 +88,13 @@ public record Upgrade(
         }
     }
 
-    public void onPurchase(ServerPlayer player) {
+    public void onPurchase(Player player) {
         if (this.attribute_modifiers.isPresent()) {
-            MinecraftServer server = player.getServer();
+            MinecraftServer server = player.level().getServer();
             Commands commandManager = server.getCommands();
             CommandSourceStack commandSource = server.createCommandSourceStack();
 
-            Registry<Upgrade> upgradeRegistry = server.registryAccess().get(PooSMPRegistries.Keys.UPGRADE);
+            Registry<Upgrade> upgradeRegistry = server.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
 
             for (ItemAttributeModifiers.Entry entry : this.getAttributesForAmount(this.amountPurchased(player), upgradeRegistry)) {
                 Holder<Attribute> attribute = entry.attribute();
@@ -107,7 +105,7 @@ public record Upgrade(
                 int index = Integer.parseInt(Arrays.stream(entry.modifier().id().toString().split("_")).toList().getLast());
 
                 if (index >= this.amountPurchased(player)) {
-                    commandManager.executeWithPrefix(commandSource, String.format("attribute %s %s modifier add %s %s add_value",
+                    commandManager.performPrefixedCommand(commandSource, String.format("attribute %s %s modifier add %s %s add_value",
                             playerUuid, attributeId, id, amount
                     ));
                 }
@@ -115,16 +113,16 @@ public record Upgrade(
         }
     }
 
-    public void onSell(ServerPlayer player) {
+    public void onSell(Player player) {
         this.statusEffect.ifPresent(instance -> player.removeEffect(instance.getEffect()));
 
         if (this.attribute_modifiers.isPresent()) {
-            MinecraftServer server = player.getServer();
+            MinecraftServer server = player.level().getServer();
             Commands commandManager = server.getCommands();
             CommandSourceStack commandSource = server.createCommandSourceStack();
 
             int purchasedAmount = this.amountPurchased(player);
-            Registry<Upgrade> upgradeRegistry = server.registryAccess().get(PooSMPRegistries.Keys.UPGRADE);
+            Registry<Upgrade> upgradeRegistry = server.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
 
             for (ItemAttributeModifiers.Entry entry : this.getAttributesForAmount(purchasedAmount, upgradeRegistry)) {
                 Holder<Attribute> attribute = entry.attribute();
@@ -136,7 +134,7 @@ public record Upgrade(
                 String playerUuid = player.getStringUUID();
 
                 if (index >= purchasedAmount) {
-                    commandManager.executeWithPrefix(commandSource, String.format(
+                    commandManager.performPrefixedCommand(commandSource, String.format(
                             "attribute %s %s modifier remove %s",
                             playerUuid, attributeId, id
                     ));

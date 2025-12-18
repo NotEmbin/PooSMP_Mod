@@ -17,37 +17,14 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class PooSMPMaterials {
-    public static final ToolMaterial RED_POO = new ToolMaterial() {
-        @Override
-        public int getDurability() {
-            return 4096;
-        }
-
-        @Override
-        public float getMiningSpeedMultiplier() {
-            return 10.0F;
-        }
-
-        @Override
-        public float getAttackDamage() {
-            return 5.0F;
-        }
-
-        @Override
-        public TagKey<Block> getInverseTag() {
-            return PooSMPTags.Blocks.INCORRECT_FOR_RED_POO_TOOLS;
-        }
-
-        @Override
-        public int getEnchantability() {
-            return 25;
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return Ingredient.of(PooSMPItems.RED_POO_INGOT);
-        }
-    };
+    public static final ToolMaterial RED_POO = new ToolMaterial(
+            PooSMPTags.Blocks.INCORRECT_FOR_RED_POO_TOOLS,
+            4096, // durability
+            10.0F, // speed (yarn: miningSpeedMultiplier)
+            5.0f, // attack damage
+            25, // enchantability
+            PooSMPTags.Items.POOSMP_DISCS // repair items
+    );
 
     public static Holder<ArmorMaterial> register(String name, Supplier<ArmorMaterial> material) {
         return Registry.registerForHolder(Registries.ARMOR_MATERIAL, Id.of(name), material.get());

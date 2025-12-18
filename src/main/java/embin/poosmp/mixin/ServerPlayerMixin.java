@@ -1,39 +1,28 @@
 package embin.poosmp.mixin;
 
-import embin.poosmp.PooSMPMod;
 import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.upgrade.Upgrade;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin {
-    @Shadow public abstract void playSoundToPlayer(SoundEvent sound, SoundSource category, float volume, float pitch);
-
-    @Shadow public abstract ServerLevel getServerWorld();
-
-    @Shadow public abstract void doTick();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickMixin(CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer)(Object)this;
         Upgrade.syncData(player);
         for (Identifier id : ServerUpgradeData.INSTANCE.savedUpgrades(player)) {
-            Upgrade upgrade = this.getServerWorld().registryAccess().get(PooSMPRegistries.Keys.UPGRADE).get(id);
+            Upgrade upgrade = player.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE).getValue(id);
             if (upgrade != null) {
                 upgrade.onTick(player);
                 if (upgrade.statusEffect().isPresent() && !ServerUpgradeData.INSTANCE.activeEffects.containsKey(player.getUUID())) {

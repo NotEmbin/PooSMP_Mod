@@ -1,16 +1,24 @@
-package embin.poosmp.upgrade;
+package embin.poosmp;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.upgrade.Upgrade;
 import net.minecraft.core.Registry;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -77,6 +85,7 @@ public class PooSMPSavedData extends SavedData {
         final int amountPurchased = this.getPurchasedUpgradesIdMap(player).getOrDefault(upgradeId, 0);
         if (amountPurchased > 0) {
             this.getPurchasedUpgradesIdMap(player).put(upgradeId, amountPurchased + 1);
+            upgrade.onSell(player);
             this.setDirty();
         } else {
             this.logger.warn("{} attempted to sell {} whilst not having it!", player.getPlainTextName(), upgradeId);
@@ -98,6 +107,27 @@ public class PooSMPSavedData extends SavedData {
         this.balance.put(player.getUUID(), newAmount);
         this.setDirty();
         return newAmount == (currentBalance + amount);
+    }
+
+    public int upgradePurchaseAmount(Player player, Upgrade upgrade) {
+        return this.getPurchasedUpgradesIdMap(player).getOrDefault(upgrade.getId(getUpgradeRegistry(player)), 0);
+    }
+
+    public Tag asNbt() {
+        return PooSMPSavedData.CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow();
+    }
+
+    public static PooSMPSavedData get(MinecraftServer server) {
+        ServerLevel serverLevel = server.getLevel(ServerLevel.OVERWORLD);
+        if (serverLevel == null) return new PooSMPSavedData();
+        return serverLevel.getDataStorage().computeIfAbsent(PooSMPSavedData.TYPE);
+    }
+
+    @Nullable
+    public static PooSMPSavedData get(Player player) {
+        MinecraftServer server = player.level().getServer();
+        if (server != null) return PooSMPSavedData.get(server);
+        return null;
     }
 
     private static <T> Codec<Map<UUID, T>> uuidMapCodec(Codec<T> valueCodec) {

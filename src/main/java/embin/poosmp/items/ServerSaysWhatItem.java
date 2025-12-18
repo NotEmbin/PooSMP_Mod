@@ -5,8 +5,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +18,7 @@ public class ServerSaysWhatItem extends Item {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
         String message = "What?";
         ItemStack stack = user.getItemInHand(hand);
         Component customItemName = stack.get(DataComponents.CUSTOM_NAME);
@@ -28,12 +28,12 @@ public class ServerSaysWhatItem extends Item {
         if (message.contains("testicle") || message.contains("rubbing") || message.contains("Rubbing")) {
             message = "cubey smells";
         }
-        if (!world.isClientSide) {
-            MinecraftServer server = user.getServer();
+        if (!world.isClientSide()) {
+            MinecraftServer server = user.level().getServer();
             Commands commandManager = server.getCommands();
             CommandSourceStack commandSource = server.createCommandSourceStack();
-            commandManager.executeWithPrefix(commandSource, "say " + message);
+            commandManager.performPrefixedCommand(commandSource, "say " + message);
         }
-        return TypedActionResult.success(user.getItemInHand(hand));
+        return InteractionResult.SUCCESS;
     }
 }

@@ -4,15 +4,20 @@ import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.util.Id;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
 public class WeddingRingItem extends CreativeSnitchItem {
@@ -60,9 +65,9 @@ public class WeddingRingItem extends CreativeSnitchItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-        if (!world.isClientSide) {
+    public void inventoryTick(ItemStack stack, ServerLevel world, Entity entity, EquipmentSlot equipmentSlot) {
+        super.inventoryTick(stack, world, entity, equipmentSlot);
+        if (!world.isClientSide()) {
             if (entity.isAlwaysTicking()) {
                 if (Arrays.asList(married_users).contains(entity.getName().getString())
                     || entity.getName().getString().startsWith("Player")
@@ -82,14 +87,14 @@ public class WeddingRingItem extends CreativeSnitchItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
-        super.appendHoverText(stack, context, tooltip, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag type) {
+        super.appendHoverText(stack, context, tooltipDisplay, consumer, type);
         if (stack.has(PooSMPItemComponents.MARRIED)) {
             if (stack.getOrDefault(PooSMPItemComponents.MARRIED, false)) {
-                tooltip.add(Component.translatable("tooltip.poosmp.married.true").withStyle(ChatFormatting.GOLD));
+                consumer.accept(Component.translatable("tooltip.poosmp.married.true").withStyle(ChatFormatting.GOLD));
             } else {
-                tooltip.add(Component.translatable("tooltip.poosmp.married.false").withStyle(ChatFormatting.RED));
-                tooltip.add(Component.translatable("tooltip.poosmp.married.false.line_2").withStyle(ChatFormatting.RED));
+                consumer.accept(Component.translatable("tooltip.poosmp.married.false").withStyle(ChatFormatting.RED));
+                consumer.accept(Component.translatable("tooltip.poosmp.married.false.line_2").withStyle(ChatFormatting.RED));
             }
         }
     }

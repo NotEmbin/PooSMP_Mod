@@ -1,10 +1,13 @@
 package embin.poosmp.networking;
 
+import embin.poosmp.PooSMPMod;
 import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.PooSMPSavedData;
 import embin.poosmp.client.ClientUpgradeData;
+import embin.poosmp.client.PooSMPModClient;
 import embin.poosmp.networking.payload.BuyUpgradePayload;
 import embin.poosmp.networking.payload.SellUpgradePayload;
-import embin.poosmp.networking.payload.UpgradeSyncPayload;
+import embin.poosmp.networking.payload.DataSyncPayload;
 import embin.poosmp.upgrade.PriceObject;
 import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.upgrade.Upgrade;
@@ -32,7 +35,7 @@ public class PooSMPMessages {
     public static void register() {
         PayloadTypeRegistry.playC2S().register(BuyUpgradePayload.ID, BuyUpgradePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SellUpgradePayload.ID, SellUpgradePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(UpgradeSyncPayload.ID, UpgradeSyncPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(DataSyncPayload.ID, DataSyncPayload.CODEC);
     }
 
 
@@ -40,6 +43,7 @@ public class PooSMPMessages {
         ServerPlayNetworking.registerGlobalReceiver(BuyUpgradePayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
             ServerLevel level = player.level();
+            PooSMPSavedData savedData = PooSMPSavedData.get(context.server());
 
             if (!level.isClientSide()) {
                 MinecraftServer server = level.getServer();
@@ -49,7 +53,8 @@ public class PooSMPMessages {
                         Holder<Upgrade> upgrade = upgradeRegistry.get(payload.upgrade()).get();
                         int currentPurchasedAmount = ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade.value());
                         player.setExperienceLevels(player.experienceLevel - PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount));
-                        ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount + 1);
+                        // ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount + 1);
+                        savedData.buyUpgrade(player, upgrade.value());
                         upgrade.value().onPurchase(player);
                         level.playSound(null, player.blockPosition(), SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS);
                         Upgrade.syncData(player);
@@ -63,6 +68,7 @@ public class PooSMPMessages {
         ServerPlayNetworking.registerGlobalReceiver(SellUpgradePayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
             ServerLevel level = player.level();
+            PooSMPSavedData savedData = PooSMPSavedData.get(context.server());
 
             if (!level.isClientSide()) {
                 MinecraftServer server = level.getServer();
@@ -70,10 +76,10 @@ public class PooSMPMessages {
                     Registry<Upgrade> upgradeRegistry = server.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
                     if (upgradeRegistry.get(payload.upgrade()).isPresent()) {
                         Holder<Upgrade> upgrade = upgradeRegistry.get(payload.upgrade()).get();
-                        upgrade.value().onSell(player);
                         int currentPurchasedAmount = ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade.value());
                         player.setExperienceLevels(player.experienceLevel + PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount - 1));
-                        ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount - 1);
+                        // ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount - 1);
+                        savedData.sellUpgrade(player, upgrade.value());
                         Upgrade.syncData(player);
                     } else {
                         server.sendSystemMessage(Component.literal("Invalid upgrade").withStyle(ChatFormatting.RED));
@@ -84,15 +90,25 @@ public class PooSMPMessages {
     }
 
     public static void registerS2CPackets() {
-        ClientPlayNetworking.registerGlobalReceiver(UpgradeSyncPayload.ID, (payload, context) -> {
-            Minecraft client = context.client();
-            client.execute(() -> {
-                for (String upgradeId : payload.nbt().keySet()) {
-                    Identifier id = Identifier.parse(upgradeId);
-                    ClientUpgradeData.INSTANCE.setPurchasedAmount(id, payload.nbt().getIntOr(upgradeId, 0));
-                    ClientUpgradeData.INSTANCE.setBalance(payload.nbt().getDoubleOr("poosmp:balance", 0));
+        ClientPlayNetworking.registerGlobalReceiver(DataSyncPayload.ID, (payload, context) -> {
+            if (PooSMPModClient.SYNC_DATA) {
+                Minecraft client = context.client();
+                MinecraftServer server = context.player().level().getServer();
+                if (server != null) {
+                    PooSMPSavedData savedData = PooSMPSavedData.get(server);
+                    client.execute(() -> {
+                        for (String upgradeString : payload.nbt().keySet()) {
+                            Identifier upgradeId = Identifier.parse(upgradeString);
+                            ClientUpgradeData.INSTANCE.setPurchasedAmount(upgradeId, payload.nbt().getIntOr(upgradeString, 0));
+                            ClientUpgradeData.INSTANCE.setBalance(payload.nbt().getDoubleOr("poosmp:balance", 0));
+                        }
+                    });
+                } else {
+                    PooSMPModClient.LOGGER.warn("Upgrade sync: server was null");
                 }
-            });
+            } else {
+                PooSMPModClient.LOGGER.info("Data sync is disabled");
+            }
         });
     }
 }

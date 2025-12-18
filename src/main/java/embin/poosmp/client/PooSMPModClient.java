@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 public class PooSMPModClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("poosmp/client");
+    public static final boolean SYNC_DATA = false;
+
 	public static KeyMapping openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_upgrades_screen",
 			InputConstants.Type.KEYSYM,
@@ -110,36 +112,6 @@ public class PooSMPModClient implements ClientModInitializer {
 		ColorProviderRegistry.ITEM.register(
 			(stack, tintIndex) -> GrassColors.getColor(0.5, 1.0),
 			PooSMPBlocks.FAKE_GRASS_BLOCK
-		);
-
-		ItemTooltipCallback.EVENT.register(
-				Id.of("poosmp:adjust_tooltip"),
-				(itemStack, tooltipContext, tooltipType, list) -> {
-					if (tooltipType.isAdvanced()) {
-						Component disabledText = Component.translatable("item.disabled").withStyle(ChatFormatting.RED);
-						boolean wasDisabled = false; // cant actually check if item is disabled in this callback
-						if (list.getLast().equals(disabledText)) {
-							list.removeLast();
-							wasDisabled = true;
-						}
-						if (!itemStack.getComponents().isEmpty()) {
-							list.removeLast();
-						}
-						list.removeLast();
-						if (itemStack.has(PooSMPItemComponents.ITEM_VALUE)) {
-							itemStack.get(PooSMPItemComponents.ITEM_VALUE).appendTooltip(tooltipContext, list::add, tooltipType);
-						}
-						Identifier displayedId = itemStack.getOrDefault(PooSMPItemComponents.DISPLAYED_ID, BuiltInRegistries.ITEM.getKey(itemStack.getItem()));
-						boolean hasComponent = itemStack.has(PooSMPItemComponents.DISPLAYED_ID);
-						list.add(Component.literal(displayedId.toString()).withStyle(hasComponent ? ChatFormatting.DARK_GRAY : ChatFormatting.RED));
-						if (!itemStack.getComponents().isEmpty()) {
-							list.add(Component.translatable("item.components", itemStack.getComponents().size()).withStyle(ChatFormatting.DARK_GRAY));
-						}
-						if (wasDisabled) {
-							list.add(disabledText);
-						}
-					}
-				}
 		);
 
 		PooSMPMessages.registerS2CPackets();
