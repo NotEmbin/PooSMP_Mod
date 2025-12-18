@@ -25,7 +25,7 @@
     "minecraft:gameplay/eyeblossom_open": true,
     "minecraft:gameplay/piglins_zombify": false,
     "minecraft:visual/water_fog_color": "#adadad",
-    "minecraft:visual/cloud_color": "#8d2525"
+    "minecraft:visual/cloud_color": "#aa8d2525"
   },
   "spawners": {},
   "spawn_costs": {},
