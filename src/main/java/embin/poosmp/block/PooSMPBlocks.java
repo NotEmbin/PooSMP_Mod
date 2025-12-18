@@ -30,9 +30,9 @@ public class PooSMPBlocks {
     public static final Block POOP_BLOCK = register("poop_block", Block::new, copyBlock(Blocks.MUD).mapColor(DyeColor.BROWN));
     public static final Block MISSINGNO_BLOCK = register("missingno", BlockBehaviour.Properties.of().requiresCorrectToolForDrops().mapColor(DyeColor.MAGENTA).strength(1.5F), new Item.Properties().rarity(Rarity.EPIC));
     public static final Block POOP_BRICKS = register("poop_bricks", Block::new, copyBlock(Blocks.MUD_BRICKS).mapColor(MapColor.COLOR_ORANGE));
-    public static final Block POOP_BRICK_STAIRS = register("poop_brick_stairs", stairBlock(POOP_BRICKS));
-    public static final Block POOP_BRICK_SLAB = register("poop_brick_slab", slabBlock(POOP_BRICKS));
-    public static final Block POOP_BRICK_WALL = register("poop_brick_wall", wallBlock(POOP_BRICKS));
+    public static final Block POOP_BRICK_STAIRS = register("poop_brick_stairs", stairBlock(POOP_BRICKS), copyBlock(POOP_BRICKS));
+    public static final Block POOP_BRICK_SLAB = register("poop_brick_slab", SlabBlock::new, copyBlock(POOP_BRICKS));
+    public static final Block POOP_BRICK_WALL = register("poop_brick_wall", wallBlock(), copyBlock(POOP_BRICKS));
     public static final Block RED_NETHER_BRICK_FENCE = register("red_nether_brick_fence", FenceBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0F, 6.0F).sound(SoundType.NETHER_BRICKS));
     public static final Block SUS = register("im_gonna_kill_myself", properties -> new AnnoyanceBlock(Annoyances.SUS, properties), BlockBehaviour.Properties.of().mapColor(DyeColor.RED).strength(1.0F));
     public static final Block DDEDEDODEDIAMANTE_BLOCK = register("ddededodediamante_block", ddededodediamanteBlock::new, BlockBehaviour.Properties.of().mapColor(DyeColor.MAGENTA).strength(1.0F));
@@ -43,9 +43,9 @@ public class PooSMPBlocks {
     // i can't bother with this right now
     public static final Block RED_POO_BLOCK = register("red_poo_block", BlockBehaviour.Properties.of().requiresCorrectToolForDrops().mapColor(DyeColor.RED).strength(2.5F).sound(SoundType.BONE_BLOCK), new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final Block DRAGON_ANNOYANCE = register("ear_destroyer_9000", properties -> new AnnoyanceBlock(Annoyances.DRAGON, properties), BlockBehaviour.Properties.of().mapColor(DyeColor.WHITE).strength(1.0F));
-    public static final Block FAKE_DIRT = register("fake_dirt", fakeBlock(Blocks.DIRT));
-    public static final Block FAKE_GRASS_BLOCK = register("fake_grass_block", fakeBlock(Blocks.GRASS_BLOCK));
-    public static final Block FAKE_STONE = register("fake_stone", fakeBlock(Blocks.STONE));
+    public static final Block FAKE_DIRT = register("fake_dirt", fakeBlock(Blocks.DIRT), copyBlock(Blocks.DIRT));
+    public static final Block FAKE_GRASS_BLOCK = register("fake_grass_block", fakeBlock(Blocks.GRASS_BLOCK), copyBlock(Blocks.GRASS_BLOCK));
+    public static final Block FAKE_STONE = register("fake_stone", fakeBlock(Blocks.STONE), copyBlock(Blocks.STONE));
     public static final Block RIGGED_STONE = register("rigged_stone", RiggedBlock::new, copyBlock(Blocks.STONE));
 
 
@@ -89,19 +89,15 @@ public class PooSMPBlocks {
     }
 
     public static Function<BlockBehaviour.Properties, Block> stairBlock(Block block) {
-        return settings -> new StairBlock(block.defaultBlockState(), copyBlock(block));
+        return settings -> new StairBlock(block.defaultBlockState(), settings);
     }
 
-    public static Function<BlockBehaviour.Properties, Block> slabBlock(Block block) {
-        return settings -> new SlabBlock(copyBlock(block));
-    }
-
-    public static Function<BlockBehaviour.Properties, Block> wallBlock(Block block) {
-        return settings -> new WallBlock(copyBlock(block).forceSolidOn());
+    public static Function<BlockBehaviour.Properties, Block> wallBlock() {
+        return settings -> new WallBlock(settings.forceSolidOn());
     }
 
     public static Function<BlockBehaviour.Properties, Block> fakeBlock(Block block) {
-        return settings -> new FakeBlock(block, copyBlock(block).instabreak());
+        return settings -> new FakeBlock(block, settings.instabreak());
     }
 
     public static void init() {
