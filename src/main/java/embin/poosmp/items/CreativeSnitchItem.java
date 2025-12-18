@@ -5,14 +5,18 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import java.util.Arrays;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
 
 public class CreativeSnitchItem extends Item {
-    public static final String[] known_operators = {"_thecubic_", "ddededodediamant", "Embin", "whentheapple"};
+    public static final List<String> KNOWN_OPERATORS = List.of("_thecubic_", "ddededodediamant", "Embin", "whentheapple");
+
     public CreativeSnitchItem(Properties settings, boolean snitch) {
         super(settings.component(PooSMPItemComponents.FROM_CREATIVE, snitch));
     }
@@ -22,22 +26,25 @@ public class CreativeSnitchItem extends Item {
 
 
     @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-        if (!world.isClientSide && entity.isAlwaysTicking()) {
-            if (stack.has(PooSMPItemComponents.FROM_CREATIVE)) {
-                if (stack.getOrDefault(PooSMPItemComponents.FROM_CREATIVE, false)) {
-                    MinecraftServer server = world.getServer();
+    public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
+        super.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
+        CreativeSnitchItem.invTick(itemStack, serverLevel, entity, equipmentSlot);
+    }
+
+    public static void invTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
+        if (!serverLevel.isClientSide() && entity.isAlwaysTicking()) {
+            if (itemStack.has(PooSMPItemComponents.FROM_CREATIVE)) {
+                if (itemStack.getOrDefault(PooSMPItemComponents.FROM_CREATIVE, false)) {
+                    MinecraftServer server = serverLevel.getServer();
                     CommandSourceStack source = server.createCommandSourceStack().withSuppressedOutput();
                     Commands commandManager = server.getCommands();
-                    Component item_name = Component.translatable(stack.getTranslationKey());
                     String player_name = entity.getName().getString();
-                    Component message = Component.literal(player_name).append(" took a ").append(item_name).append(" from Creative Mode or /give");
-                    if (Arrays.asList(known_operators).contains(player_name) || player_name.startsWith("Player")) {
-                        commandManager.executeWithPrefix(source, "tellraw @a \"" + message.getString() + "\"");
+                    Component message = Component.literal(player_name).append(" took a ").append(itemStack.getItemName()).append(" from Creative Mode or /give");
+                    if (CreativeSnitchItem.KNOWN_OPERATORS.contains(player_name) || player_name.startsWith("Player")) {
+                        commandManager.performPrefixedCommand(source, "tellraw @a \"" + message.getString() + "\"");
                     }
                 }
-                stack.set(PooSMPItemComponents.FROM_CREATIVE, null);
+                itemStack.set(PooSMPItemComponents.FROM_CREATIVE, null);
             }
         }
     }

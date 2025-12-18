@@ -1,12 +1,10 @@
 package embin.poosmp.items;
 
-import embin.poosmp.PooSMPMod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSources;
@@ -33,9 +31,9 @@ public class MagicDeviceItem extends Item {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
         ItemStack itemStack = user.getItemInHand(hand);
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             HitResult hitResult = user.pick(20.0D, 0.0F, false);
             DamageSources damageSources = new DamageSources(world.registryAccess());
             ExplosionDamageCalculator eb = new ExplosionDamageCalculator();
@@ -46,12 +44,12 @@ public class MagicDeviceItem extends Item {
                 String victim_name = itemStack.get(DataComponents.CUSTOM_NAME).getString();
                 Player victim = getPlayerByName(victim_name, world);
                 if (victim != null) {
-                    world.explode(null, damageSources.explosion(null, null), eb, victim.getPos(), EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
+                    world.explode(null, damageSources.explosion(null, null), eb, victim.getEyePosition(), EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
                 } else {
                     user.displayClientMessage(Component.literal("No player with such name exists!").withStyle(ChatFormatting.YELLOW), true);
                 }
             } else if (entityHitResult != null && entityHitResult.getEntity() != null) {
-                Vec3 pos = entityHitResult.getEntity().getPos();
+                Vec3 pos = entityHitResult.getEntity().getEyePosition();
                 world.explode(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
             } else if (hitResult.getType() == HitResult.Type.BLOCK) {
                 explodeBlock(hitResult, world);
@@ -59,21 +57,21 @@ public class MagicDeviceItem extends Item {
                 Vec3 pos = hitResult.getLocation();
                 world.explode(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
             }
-            itemStack.hurtAndBreak(1, user, LivingEntity.getSlotForHand(hand));
+            itemStack.hurtAndBreak(1, user, hand);
         }
         user.awardStat(Stats.ITEM_USED.get(this));
-        return TypedActionResult.success(itemStack);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand) {
-        Level world = user.getWorld();
+        Level world = user.level();
         if (!world.isClientSide()) {
-            Vec3 pos = entity.getPos();
+            Vec3 pos = entity.getEyePosition();
             DamageSources damageSources = new DamageSources(world.registryAccess());
             ExplosionDamageCalculator eb = new ExplosionDamageCalculator();
             world.explode(null, damageSources.explosion(null, null), eb, pos, EXPLOSION_POWER, false, Level.ExplosionInteraction.TRIGGER);
-            stack.hurtAndBreak(1, user, LivingEntity.getSlotForHand(hand));
+            stack.hurtAndBreak(1, user, hand);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
