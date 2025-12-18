@@ -2,16 +2,13 @@ package embin.poosmp.economy.shop;
 
 import embin.poosmp.PooSMPRegistries;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.registry.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -53,8 +50,7 @@ public class ShopCategory {
     }
 
     public List<Holder<Item>> getItems(HolderLookup.Provider wrapperLookup) {
-        HolderGetter. Provider registryLookup = wrapperLookup.createRegistryLookup();
-        Stream<Holder<Item>> itemStream = registryLookup.lookupOrThrow(Registries.ITEM).getOrThrow(getShopProductsTag()).stream();
+        Stream<Holder<Item>> itemStream = wrapperLookup.lookupOrThrow(Registries.ITEM).getOrThrow(getShopProductsTag()).stream();
         return itemStream.toList();
     }
 }

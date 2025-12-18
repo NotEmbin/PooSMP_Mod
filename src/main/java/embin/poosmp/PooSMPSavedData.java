@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import embin.poosmp.upgrade.Upgrade;
+import embin.poosmp.util.PooUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.NbtOps;
@@ -145,6 +146,6 @@ public class PooSMPSavedData extends SavedData {
     }
 
     private static double trimBalance(final double balance) {
-        return Math.floor(balance * 100D) / 100D;
+        return PooUtil.roundTwo(balance);
     }
 }

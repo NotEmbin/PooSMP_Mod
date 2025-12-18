@@ -4,24 +4,34 @@
   "has_precipitation": true,
   "creature_spawn_probability": 0.2,
   "effects": {
-    "sky_color": 15760127,
-    "fog_color": 16761597,
     "water_color": 14237668,
     "water_fog_color": 3343666,
     "foliage_color": 16098068,
-    "grass_color_modifier": "none",
-    "particle": {
-      "options": {
-        "type": "minecraft:cherry_leaves"
-      },
-      "probability": 0.01
+    "grass_color_modifier": "none"
+  },
+  "attributes": {
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:cherry_leaves"
+        },
+        "probability": 0.01
+      }
+    ],
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "explodes": true
     },
-    "music": {
-      "max_delay": 60,
-      "min_delay": 20,
-      "replace_current_music": false,
-      "sound": "minecraft:music.creative"
-    }
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 60,
+        "min_delay": 20,
+        "sound": "minecraft:music.credits"
+      }
+    },
+    "minecraft:visual/sky_color": "#f07aff",
+    "minecraft:visual/fog_color": "#ffc2fd"
   },
   "spawners": {
     "misc": [

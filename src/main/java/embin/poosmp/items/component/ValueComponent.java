@@ -8,6 +8,7 @@ import embin.poosmp.util.PooUtil;
 import java.util.function.Consumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
@@ -21,14 +22,14 @@ public record ValueComponent(double buyValue, double sellValue, Holder<ShopCateg
             PooSMPRegistries.SHOP_CATEGORY.holderByNameCodec().fieldOf("shop_category").forGetter(ValueComponent::category)
     ).apply(builder, ValueComponent::new));
 
-    @Override
-    public void appendTooltip(Item.TooltipContext context, Consumer<Component> tooltip, TooltipFlag type) {
-        if (type.isAdvanced()) {
-            tooltip.accept(Component.translatable("tooltip.poosmp.item_value.sell_price", PooUtil.roundTwo(this.sellValue)).withStyle(ChatFormatting.GRAY));
-        }
-    }
-
     public boolean canBeSold() {
         return this.sellValue >= 0;
+    }
+
+    @Override
+    public void addToTooltip(Item.TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag, DataComponentGetter dataComponentGetter) {
+        if (tooltipFlag.isAdvanced()) {
+            consumer.accept(Component.translatable("tooltip.poosmp.item_value.sell_price", PooUtil.roundTwo(this.sellValue)).withStyle(ChatFormatting.GRAY));
+        }
     }
 }
