@@ -1,6 +1,5 @@
 package embin.poosmp.client;
 
-import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.Id;
 import net.fabricmc.api.EnvType;
@@ -13,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Environment(EnvType.CLIENT)
+@Deprecated
 public class ClientUpgradeData {
     public static final ClientUpgradeData INSTANCE = new ClientUpgradeData();
     public Map<Identifier, Integer> purchases;

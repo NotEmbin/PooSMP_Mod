@@ -2,30 +2,19 @@ package embin.poosmp.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import embin.poosmp.block.PooSMPBlocks;
-import embin.poosmp.client.screen.shop.ShopScreenHandler;
 import embin.poosmp.client.screen.upgrade.UpgradesScreen;
-import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.util.Id;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.GrassColor;
@@ -37,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class PooSMPModClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("poosmp/client");
     public static final KeyMapping.Category POOSMP_KEYS = KeyMapping.Category.register(Id.of("poosmp_keys"));
-    public static final boolean SYNC_DATA = false;
+    public static final boolean SYNC_DATA = true;
 
 	public static KeyMapping openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_upgrades_screen",

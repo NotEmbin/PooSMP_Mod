@@ -2,16 +2,22 @@ package embin.poosmp;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import embin.poosmp.networking.payload.DataSyncPayload;
 import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.PooUtil;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.Registry;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Util;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -23,31 +29,27 @@ import java.util.*;
 
 @SuppressWarnings({"NullableProblems", "DataFlowIssue"})
 public class PooSMPSavedData extends SavedData {
+    public static final String NBT_KEY = "poosmp_data";
     public static final Codec<PooSMPSavedData> CODEC = RecordCodecBuilder.create(u -> u.group(
         uuidMapCodec(Codec.DOUBLE).fieldOf("player_balance").forGetter(z -> z.balance),
-        uuidMapIdCodec(Codec.INT).fieldOf("purchased_upgrades").forGetter(z -> z.purchasedUpgrades),
-        uuidMapIdCodec(MobEffectInstance.CODEC).fieldOf("active_effects").forGetter(z -> z.activeEffects)
+        uuidMapIdCodec(Codec.INT).fieldOf("purchased_upgrades").forGetter(z -> z.purchasedUpgrades)
     ).apply(u, PooSMPSavedData::new));
     public static final SavedDataType<PooSMPSavedData> TYPE = new SavedDataType<>("poosmp", PooSMPSavedData::new, PooSMPSavedData.CODEC, null);
-    private final Map<UUID, Map<Identifier, Integer>> purchasedUpgrades;
-    private final Map<UUID, Map<Identifier, MobEffectInstance>> activeEffects;
-    private final Map<UUID, Double> balance;
+    public Map<UUID, Map<Identifier, Integer>> purchasedUpgrades;
+    public Map<UUID, Double> balance;
     private final Logger logger = LogUtils.getLogger();
 
     public PooSMPSavedData(
             Map<UUID, Double> balance,
-            Map<UUID, Map<Identifier, Integer>> purchases,
-            Map<UUID, Map<Identifier, MobEffectInstance>> activeEffects
+            Map<UUID, Map<Identifier, Integer>> purchases
     ) {
-        this.balance = balance;
-        this.purchasedUpgrades = purchases;
-        this.activeEffects = activeEffects;
+        this.balance = new HashMap<>(balance);
+        this.purchasedUpgrades = fixMaps(purchases);
     }
 
     public PooSMPSavedData() {
         this.balance = HashMap.newHashMap(16);
         this.purchasedUpgrades = HashMap.newHashMap(16);
-        this.activeEffects = HashMap.newHashMap(16);
     }
 
     public Map<Identifier, Integer> getPurchasedUpgradesIdMap(Player player) {
@@ -74,6 +76,7 @@ public class PooSMPSavedData extends SavedData {
     public void buyUpgrade(Player player, Upgrade upgrade) {
         Identifier upgradeId = upgrade.getId(getUpgradeRegistry(player));
         final int amountPurchased = this.getPurchasedUpgradesIdMap(player).getOrDefault(upgradeId, 0);
+        upgrade.onPurchase(player);
         this.getPurchasedUpgradesIdMap(player).put(upgradeId, amountPurchased + 1);
         this.setDirty();
     }
@@ -82,8 +85,8 @@ public class PooSMPSavedData extends SavedData {
         Identifier upgradeId = upgrade.getId(getUpgradeRegistry(player));
         final int amountPurchased = this.getPurchasedUpgradesIdMap(player).getOrDefault(upgradeId, 0);
         if (amountPurchased > 0) {
-            this.getPurchasedUpgradesIdMap(player).put(upgradeId, amountPurchased + 1);
             upgrade.onSell(player);
+            this.getPurchasedUpgradesIdMap(player).put(upgradeId, amountPurchased - 1);
             this.setDirty();
         } else {
             this.logger.warn("{} attempted to sell {} whilst not having it!", player.getPlainTextName(), upgradeId);
@@ -126,11 +129,24 @@ public class PooSMPSavedData extends SavedData {
         return serverLevel.getDataStorage().computeIfAbsent(PooSMPSavedData.TYPE);
     }
 
-    @Nullable
     public static PooSMPSavedData get(Player player) {
         MinecraftServer server = player.level().getServer();
         if (server != null) return PooSMPSavedData.get(server);
-        return null; // i don't think returning null makes sense
+        return new PooSMPSavedData(); // i don't think returning null makes sense
+    }
+
+    public static void syncToClient(ServerPlayer player) {
+        CompoundTag data = new CompoundTag();
+        PooSMPSavedData savedData = PooSMPSavedData.get(player.level().getServer());
+        PooSMPSavedData sendData = Util.make(new PooSMPSavedData(), poodata -> {
+            poodata.balance = Util.make(HashMap.newHashMap(1), map -> map.put(player.getUUID(), savedData.getBalance(player)));
+            poodata.purchasedUpgrades = Util.make(HashMap.newHashMap(1), map -> {
+                Map<Identifier, Integer> mapSync = savedData.getPurchasedUpgradesIdMap(player);
+                map.put(player.getUUID(), mapSync);
+            });
+        });
+        data.put(PooSMPSavedData.NBT_KEY, sendData.asNbt());
+        ServerPlayNetworking.send(player, new DataSyncPayload(data));
     }
 
     private static <T> Codec<Map<UUID, T>> uuidMapCodec(Codec<T> valueCodec) {
@@ -147,5 +163,32 @@ public class PooSMPSavedData extends SavedData {
 
     private static double trimBalance(final double balance) {
         return PooUtil.roundTwo(balance);
+    }
+
+    private static <T, K, V> Map<T, Map<K, V>> fixMaps(Map<T, Map<K, V>> map) {
+        if (!map.isEmpty()) {
+            Map<T, Map<K, V>> fixedMap = HashMap.newHashMap(map.size());
+            for (T t : map.keySet()) {
+                fixedMap.put(t, new HashMap<>(map.get(t)));
+            }
+            return fixedMap;
+        } else return HashMap.newHashMap(16);
+    }
+
+    private boolean syncFrom(Tag nbtTag) {
+        DataResult<PooSMPSavedData> decoded = PooSMPSavedData.CODEC.parse(NbtOps.INSTANCE, nbtTag);
+        decoded.ifSuccess(savedData -> {
+            this.balance = new HashMap<>(savedData.balance);
+            this.purchasedUpgrades = fixMaps(savedData.purchasedUpgrades);
+        });
+        return decoded.isSuccess();
+    }
+
+    public static final class Client {
+        public static final PooSMPSavedData INSTANCE = new PooSMPSavedData();
+
+        public static boolean sync(Tag nbtTag) {
+            return Client.INSTANCE.syncFrom(nbtTag);
+        }
     }
 }

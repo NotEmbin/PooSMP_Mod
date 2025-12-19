@@ -1,9 +1,7 @@
 package embin.poosmp.networking;
 
-import embin.poosmp.PooSMPMod;
 import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.PooSMPSavedData;
-import embin.poosmp.client.ClientUpgradeData;
 import embin.poosmp.client.PooSMPModClient;
 import embin.poosmp.networking.payload.BuyUpgradePayload;
 import embin.poosmp.networking.payload.SellUpgradePayload;
@@ -16,7 +14,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
@@ -57,7 +54,7 @@ public class PooSMPMessages {
                         savedData.buyUpgrade(player, upgrade.value());
                         upgrade.value().onPurchase(player);
                         level.playSound(null, player.blockPosition(), SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS);
-                        Upgrade.syncData(player);
+                        PooSMPSavedData.syncToClient(player);
                     } else {
                         server.sendSystemMessage(Component.literal("Invalid upgrade").withStyle(ChatFormatting.RED));
                     }
@@ -76,11 +73,10 @@ public class PooSMPMessages {
                     Registry<Upgrade> upgradeRegistry = server.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
                     if (upgradeRegistry.get(payload.upgrade()).isPresent()) {
                         Holder<Upgrade> upgrade = upgradeRegistry.get(payload.upgrade()).get();
-                        int currentPurchasedAmount = ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade.value());
+                        int currentPurchasedAmount = savedData.upgradePurchaseAmount(player, upgrade.value());
                         player.setExperienceLevels(player.experienceLevel + PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount - 1));
-                        // ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount - 1);
                         savedData.sellUpgrade(player, upgrade.value());
-                        Upgrade.syncData(player);
+                        PooSMPSavedData.syncToClient(player);
                     } else {
                         server.sendSystemMessage(Component.literal("Invalid upgrade").withStyle(ChatFormatting.RED));
                     }
@@ -92,20 +88,7 @@ public class PooSMPMessages {
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(DataSyncPayload.ID, (payload, context) -> {
             if (PooSMPModClient.SYNC_DATA) {
-                Minecraft client = context.client();
-                MinecraftServer server = context.player().level().getServer();
-                if (server != null) {
-                    PooSMPSavedData savedData = PooSMPSavedData.get(server);
-                    client.execute(() -> {
-                        for (String upgradeString : payload.nbt().keySet()) {
-                            Identifier upgradeId = Identifier.parse(upgradeString);
-                            ClientUpgradeData.INSTANCE.setPurchasedAmount(upgradeId, payload.nbt().getIntOr(upgradeString, 0));
-                            ClientUpgradeData.INSTANCE.setBalance(payload.nbt().getDoubleOr("poosmp:balance", 0));
-                        }
-                    });
-                } else {
-                    PooSMPModClient.LOGGER.warn("Upgrade sync: server was null");
-                }
+                PooSMPSavedData.Client.sync(payload.nbt().get("poosmp_data"));
             }
         });
     }

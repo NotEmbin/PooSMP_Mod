@@ -2,7 +2,6 @@ package embin.poosmp.upgrade;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.PooSMPSavedData;
 import embin.poosmp.networking.payload.DataSyncPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -18,15 +17,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.Util;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 public record Upgrade(
         Item icon, PriceObject price, boolean can_be_sold, Optional<Integer> max_purchases,
@@ -60,13 +58,7 @@ public record Upgrade(
         return savedData != null ? savedData.upgradePurchaseAmount(player, this) : 0;
     }
 
-    public static void syncData(ServerPlayer player) {
-        CompoundTag data = new CompoundTag();
-        data.put("poosmp_data", PooSMPSavedData.get(player.level().getServer()).asNbt());
-        ServerPlayNetworking.send(player, new DataSyncPayload(data));
-    }
-
-    public List<ItemAttributeModifiers.Entry> getAttributesForAmount(int amount, Registry<Upgrade> upgradeRegistry) {
+    public List<ItemAttributeModifiers.Entry> getAttributesForAmount(int amount) {
         if (amount < 0) return List.of();
         if (this.attribute_modifiers.isPresent()) {
             List<ItemAttributeModifiers.Entry> attributes = new ArrayList<>(amount * this.attribute_modifiers.get().size());
@@ -81,7 +73,7 @@ public record Upgrade(
     }
 
     public void onTick(ServerPlayer player) {
-        if (this.statusEffect.isPresent() && ServerUpgradeData.INSTANCE.getPurchasedAmount(player, this) > 0) {
+        if (this.statusEffect.isPresent() && PooSMPSavedData.get(player).upgradePurchaseAmount(player, this) > 0) {
             if (!player.getActiveEffects().contains(this.statusEffect.get())) {
                 player.addEffect(this.statusEffect.get());
             }
@@ -94,9 +86,7 @@ public record Upgrade(
             Commands commandManager = server.getCommands();
             CommandSourceStack commandSource = server.createCommandSourceStack();
 
-            Registry<Upgrade> upgradeRegistry = server.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
-
-            for (ItemAttributeModifiers.Entry entry : this.getAttributesForAmount(this.amountPurchased(player), upgradeRegistry)) {
+            for (ItemAttributeModifiers.Entry entry : this.getAttributesForAmount(this.amountPurchased(player))) {
                 Holder<Attribute> attribute = entry.attribute();
                 String attributeId = attribute.getRegisteredName();
                 String id = entry.modifier().id().toString();
@@ -122,21 +112,19 @@ public record Upgrade(
             CommandSourceStack commandSource = server.createCommandSourceStack();
 
             int purchasedAmount = this.amountPurchased(player);
-            Registry<Upgrade> upgradeRegistry = server.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
 
-            for (ItemAttributeModifiers.Entry entry : this.getAttributesForAmount(purchasedAmount, upgradeRegistry)) {
+            for (ItemAttributeModifiers.Entry entry : this.getAttributesForAmount(purchasedAmount)) {
                 Holder<Attribute> attribute = entry.attribute();
                 String attributeId = attribute.getRegisteredName();
                 String id = entry.modifier().id().toString();
                 int index = Integer.parseInt(Arrays.stream(entry.modifier().id().toString().split("_")).toList().getLast());
                 //PooSMPMod.LOGGER.info(Arrays.toString(entry.modifier().id().toString().split("_")));
                 //PooSMPMod.LOGGER.info("Index: {}, Amount Purchased: {}, Entry: {}", index, this.amountPurchased(), id);
-                String playerUuid = player.getStringUUID();
 
                 if (index >= purchasedAmount) {
                     commandManager.performPrefixedCommand(commandSource, String.format(
                             "attribute %s %s modifier remove %s",
-                            playerUuid, attributeId, id
+                            player.getStringUUID(), attributeId, id
                     ));
                 }
             }

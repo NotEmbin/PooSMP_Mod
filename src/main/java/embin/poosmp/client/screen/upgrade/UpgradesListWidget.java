@@ -1,6 +1,7 @@
 package embin.poosmp.client.screen.upgrade;
 
 import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.PooSMPSavedData;
 import embin.poosmp.client.ClientUpgradeData;
 import embin.poosmp.networking.payload.BuyUpgradePayload;
 import embin.poosmp.networking.payload.SellUpgradePayload;
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -63,7 +65,7 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
 
     public static HolderSet<Upgrade> getTooltipOrder(@Nullable RegistryAccess registries, ResourceKey<Registry<Upgrade>> key, TagKey<Upgrade> tag) {
         if (registries != null) {
-            Optional<HolderSet.Named<Upgrade>> optional = registries.getOrThrow(key).value().get(tag);
+            Optional<HolderSet.Named<Upgrade>> optional = registries.lookupOrThrow(key).get(tag);
             if (optional.isPresent()) {
                 return optional.get();
             }
@@ -89,6 +91,12 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
         this.children().forEach(UpgradeEntry::update);
     }
 
+    @Override
+    public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+        super.renderWidget(guiGraphics, i, j, f);
+        this.renderDecorations(guiGraphics, i, j);
+    }
+
     public class UpgradeEntry extends ContainerObjectSelectionList.Entry<UpgradesListWidget.UpgradeEntry> {
         protected static final Identifier SLOT_TEXTURE = Id.ofVanilla("container/slot");
         private final Upgrade upgrade;
@@ -103,16 +111,12 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
             this.player = player;
             this.buyButton = Button.builder(Component.literal("+"), button -> {
                 ClientPlayNetworking.send(new BuyUpgradePayload(upgradeRegistry.getId(this.upgrade)));
-                int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(this.upgrade, upgradeRegistry);
-                ClientUpgradeData.INSTANCE.setPurchasedAmount(this.upgrade, amountPurchased + 1, upgradeRegistry);
                 this.ticksSincePurchase = 0;
                 button.active = false;
                 UpgradesListWidget.this.update();
             }).bounds(50, 50, 20, 20).build();
             this.sellButton = Button.builder(Component.literal("-"), button -> {
                 ClientPlayNetworking.send(new SellUpgradePayload(upgradeRegistry.getId(this.upgrade)));
-                int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(this.upgrade, upgradeRegistry);
-                ClientUpgradeData.INSTANCE.setPurchasedAmount(this.upgrade, amountPurchased - 1, upgradeRegistry);
                 player.makeSound(SoundEvents.AMETHYST_BLOCK_BREAK);
                 UpgradesListWidget.this.update();
             }).bounds(30, 50, 20, 20).build();
@@ -130,7 +134,7 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
             guiGraphics.renderFakeItem(this.upgrade.icon().getDefaultInstance(), x + 2, y + 2);
             this.buyButton.setPosition(x + 175, y);
             this.sellButton.setPosition(x + 80, y);
-            int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(this.upgrade, upgradeRegistry);
+            final int amountPurchased = PooSMPSavedData.Client.INSTANCE.upgradePurchaseAmount(this.player, this.upgrade);
             String upgradePrice = StatFormatter.DEFAULT.format(PriceObject.getCurrentPrice(this.upgrade, this.player, amountPurchased));
             int offset = UpgradesListWidget.this.minecraft.font.width(upgradePrice) / 2;
             if (amountPurchased > 0) {
@@ -139,7 +143,7 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
             } else {
                 this.sellButton.setTooltip(null);
             }
-            if (!canBeBought(this.upgrade, upgradeRegistry, this.player)) {
+            if (!canBeBought(this.upgrade, this.player)) {
                 this.buyButton.setTooltip(Tooltip.create(Component.literal("Out of stock or insufficient xp level!")));
             } else if (this.upgrade.max_purchases().isPresent()){
                 String tooltip = String.format("%s/%s", amountPurchased, this.upgrade.max_purchases().get());
@@ -163,22 +167,22 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
             return this.upgrade;
         }
 
-        protected static boolean canBeSold(Upgrade upgrade, Registry<Upgrade> upgradeRegistry) {
-            if (ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, upgradeRegistry) <= 0) return false;
+        protected static boolean canBeSold(Upgrade upgrade, Player player) {
+            if (PooSMPSavedData.Client.INSTANCE.upgradePurchaseAmount(player, upgrade) <= 0) return false;
             return upgrade.can_be_sold();
         }
 
         // client side check :trollface:
-        protected static boolean canBeBought(Upgrade upgrade, Registry<Upgrade> upgradeRegistry, Player player) {
-            int amountPurchased = ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, upgradeRegistry);
+        protected static boolean canBeBought(Upgrade upgrade, Player player) {
+            int amountPurchased = PooSMPSavedData.Client.INSTANCE.upgradePurchaseAmount(player, upgrade);
             int upgradePrice = PriceObject.getCurrentPrice(upgrade, player, amountPurchased);
             if (player.experienceLevel < upgradePrice) return false;
-            return ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, upgradeRegistry) < upgrade.maxPurchases();
+            return PooSMPSavedData.Client.INSTANCE.upgradePurchaseAmount(player, upgrade) < upgrade.maxPurchases();
         }
 
         protected void update() {
-            this.sellButton.active = canBeSold(this.upgrade, upgradeRegistry) && this.ticksSincePurchase >= 120;
-            this.buyButton.active = canBeBought(this.upgrade, upgradeRegistry, this.player) && this.ticksSincePurchase >= 120;
+            this.sellButton.active = canBeSold(this.upgrade, this.player) && this.ticksSincePurchase >= 120;
+            this.buyButton.active = canBeBought(this.upgrade,this.player) && this.ticksSincePurchase >= 120;
             this.ticksSincePurchase++;
             //this.text.setCentered(true);
             //this.text.setTextColor(Colors.BLACK);

@@ -1,7 +1,7 @@
 package embin.poosmp.mixin;
 
 import embin.poosmp.PooSMPRegistries;
-import embin.poosmp.upgrade.ServerUpgradeData;
+import embin.poosmp.PooSMPSavedData;
 import embin.poosmp.upgrade.Upgrade;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,18 +20,11 @@ public abstract class ServerPlayerMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickMixin(CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer)(Object)this;
-        Upgrade.syncData(player);
-        for (Identifier id : ServerUpgradeData.INSTANCE.savedUpgrades(player)) {
+        PooSMPSavedData.syncToClient(player);
+        for (Identifier id : PooSMPSavedData.get(player).getPurchasedUpgradesIdMap(player).keySet()) {
             Upgrade upgrade = player.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE).getValue(id);
             if (upgrade != null) {
                 upgrade.onTick(player);
-                if (upgrade.statusEffect().isPresent() && !ServerUpgradeData.INSTANCE.activeEffects.containsKey(player.getUUID())) {
-                    if (ServerUpgradeData.INSTANCE.activeEffects.containsKey(player.getUUID())) {
-                        if (!ServerUpgradeData.INSTANCE.activeEffects.get(player.getUUID()).containsKey(id)) {
-                            ServerUpgradeData.INSTANCE.addStatusEffect(player, id, upgrade.statusEffect().get());
-                        }
-                    }
-                }
             }
         }
     }
