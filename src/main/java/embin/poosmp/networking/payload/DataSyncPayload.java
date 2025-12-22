@@ -1,5 +1,6 @@
 package embin.poosmp.networking.payload;
 
+import embin.poosmp.networking.PooSMPMessages;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -8,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 @SuppressWarnings("NullableProblems")
 public record DataSyncPayload(CompoundTag nbt) implements CustomPacketPayload {
     public static final StreamCodec<FriendlyByteBuf, DataSyncPayload> CODEC = CustomPacketPayload.codec(DataSyncPayload::write, DataSyncPayload::new);
-    public static final Type<DataSyncPayload> ID = new Type<>(embin.poosmp.util.Id.of("poosmp:upgrade_sync"));
+    public static final Type<DataSyncPayload> ID = new Type<>(PooSMPMessages.DATA_SYNC);
 
     public DataSyncPayload(FriendlyByteBuf buf) {
         this(buf.readNbt());

@@ -7,7 +7,6 @@ import embin.poosmp.networking.payload.BuyUpgradePayload;
 import embin.poosmp.networking.payload.SellUpgradePayload;
 import embin.poosmp.networking.payload.DataSyncPayload;
 import embin.poosmp.upgrade.PriceObject;
-import embin.poosmp.upgrade.ServerUpgradeData;
 import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.Id;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -27,7 +26,7 @@ import net.minecraft.sounds.SoundSource;
 public class PooSMPMessages {
     public static final Identifier BUY_UPGRADE = Id.of("buy_upgrade");
     public static final Identifier SELL_UPGRADE = Id.of("sell_upgrade");
-    public static final Identifier UPGRADE_SYNC = Id.of("upgrade_sync");
+    public static final Identifier DATA_SYNC = Id.of("data_sync");
 
     public static void register() {
         PayloadTypeRegistry.playC2S().register(BuyUpgradePayload.ID, BuyUpgradePayload.CODEC);
@@ -47,8 +46,8 @@ public class PooSMPMessages {
                 server.execute(() -> {
                     Registry<Upgrade> upgradeRegistry = server.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE);
                     if (upgradeRegistry.get(payload.upgrade()).isPresent()) {
-                        Holder<Upgrade> upgrade = upgradeRegistry.get(payload.upgrade()).get();
-                        int currentPurchasedAmount = ServerUpgradeData.INSTANCE.getPurchasedAmount(player, upgrade.value());
+                        Holder<Upgrade> upgrade = upgradeRegistry.get(payload.upgrade()).orElseThrow();
+                        int currentPurchasedAmount = savedData.upgradePurchaseAmount(player, upgrade.value());
                         player.setExperienceLevels(player.experienceLevel - PriceObject.getCurrentPrice(upgrade.value(), player, currentPurchasedAmount));
                         // ServerUpgradeData.INSTANCE.setPurchasedAmount(player, upgrade.value(), currentPurchasedAmount + 1);
                         savedData.buyUpgrade(player, upgrade.value());
@@ -56,7 +55,7 @@ public class PooSMPMessages {
                         level.playSound(null, player.blockPosition(), SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS);
                         PooSMPSavedData.syncToClient(player);
                     } else {
-                        server.sendSystemMessage(Component.literal("Invalid upgrade").withStyle(ChatFormatting.RED));
+                        server.sendSystemMessage(Component.literal(player.getPlainTextName() + " requested invalid upgrade").withStyle(ChatFormatting.RED));
                     }
                 });
             }
@@ -78,7 +77,7 @@ public class PooSMPMessages {
                         savedData.sellUpgrade(player, upgrade.value());
                         PooSMPSavedData.syncToClient(player);
                     } else {
-                        server.sendSystemMessage(Component.literal("Invalid upgrade").withStyle(ChatFormatting.RED));
+                        server.sendSystemMessage(Component.literal(player.getPlainTextName() + " requested invalid upgrade").withStyle(ChatFormatting.RED));
                     }
                 });
             }
