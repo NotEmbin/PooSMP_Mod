@@ -1,4 +1,4 @@
-package embin.poosmp;
+package embin.poosmp.world;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
@@ -18,11 +18,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Util;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
-import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;

@@ -2,6 +2,7 @@ package embin.poosmp.items;
 
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
+import embin.poosmp.upgrade.PooSMPKeys;
 import embin.poosmp.util.Id;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.function.Function;
@@ -53,7 +55,7 @@ public class PooSMPItems {
     public static final Item POOPLET = food("pooplet", PooSMPFoods.POOPLET);
     public static final Item RING = register("ring");
     public static final Item TOTEM_OF_HEALTH = totem("health", healthTotemAttributes(4, ""), false);
-    public static final Item WARP_STICK = register("warp_stick", WarpStick::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+    public static final Item WARP_STICK = warpStick("warp_stick", PooSMPKeys.HYRULE);
     public static final Item FILL_ARMOR_TRIM_TEMPLATE = register("fill_armor_trim_smithing_template", SmithingTemplateItem::createArmorTrimTemplate, new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final Item DISC_TRIFECTA_CAP = musicDisc("trifecta_cap", PooSMPJukeboxSongs.TRIFECTA_CAP, "Embin");
     public static final Item DISC_BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL = musicDisc("butterflies_and_hurricanes_instrumental", PooSMPJukeboxSongs.BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL, "Embin");
@@ -110,6 +112,7 @@ public class PooSMPItems {
     public static final Item GLASS_SHARD = register("glass_shard");
     public static final Item MAGIC_DEVICE = register("magic_device", MagicDeviceItem::new, new Item.Properties().durability(1024).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final Item NULL_SHARD = register("null_shard", Rarity.EPIC);
+    public static final Item NULL_STICK = warpStick("null_stick", PooSMPKeys.MISSINGNO);
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);
@@ -155,6 +158,10 @@ public class PooSMPItems {
         } else {
             return register("totem_of_" + name, CreativeSnitchItem::new, new Item.Properties().attributes(attributes).rarity(Rarity.UNCOMMON).stacksTo(1));
         }
+    }
+
+    private static Item warpStick(String name, ResourceKey<Level> targetDimension) {
+        return register(name, WarpStick::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(PooSMPItemComponents.WARP_DIMENSION, targetDimension));
     }
 
     public static ItemAttributeModifiers healthTotemAttributes(int hp, String id_suffix) {

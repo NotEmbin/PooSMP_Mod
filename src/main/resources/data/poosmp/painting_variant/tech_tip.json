@@ -1,5 +1,13 @@
 {
   "asset_id": "poosmp:tech_tip",
   "width": 4,
-  "height": 4
+  "height": 4,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.poosmp.tech_tip.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.poosmp.tech_tip.author"
+  }
 }

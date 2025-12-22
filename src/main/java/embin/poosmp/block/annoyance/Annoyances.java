@@ -1,6 +1,6 @@
 package embin.poosmp.block.annoyance;
 
-import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.PooSMPSoundEvents;
 import embin.poosmp.util.Id;
 import net.minecraft.core.Registry;

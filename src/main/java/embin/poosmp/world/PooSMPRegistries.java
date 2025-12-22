@@ -1,5 +1,6 @@
-package embin.poosmp;
+package embin.poosmp.world;
 
+import embin.poosmp.PooSMPMod;
 import embin.poosmp.block.annoyance.Annoyance;
 import embin.poosmp.economy.shop.ShopCategory;
 import embin.poosmp.upgrade.Upgrade;

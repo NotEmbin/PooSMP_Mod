@@ -2,10 +2,8 @@ package embin.poosmp.upgrade;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import embin.poosmp.PooSMPRegistries;
-import embin.poosmp.client.ClientUpgradeData;
-import embin.poosmp.upgrade.ServerUpgradeData;
-import embin.poosmp.util.IEntityDataSaver;
+import embin.poosmp.world.PooSMPSavedData;
+
 import java.util.Optional;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.player.Player;
@@ -50,7 +48,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
         }
 
         return (basePrice + priceIncrease);
-         */
+        */
         if (amountPurchased > 0) {
             return upgrade.price().base_price() + (upgrade.price().price_increase_base() * (amountPurchased));
         }
@@ -58,7 +56,7 @@ public record PriceObject(int base_price, int price_increase_base, Optional<Pric
     }
 
     public static int getCurrentPrice(Upgrade upgrade, Player playerEntity) {
-        return getCurrentPrice(upgrade, playerEntity, ClientUpgradeData.INSTANCE.getPurchasedAmount(upgrade, playerEntity.registryAccess().lookupOrThrow(PooSMPRegistries.Keys.UPGRADE)));
+        return getCurrentPrice(upgrade, playerEntity, PooSMPSavedData.Client.INSTANCE.upgradePurchaseAmount(playerEntity, upgrade));
     }
 
     public record PriceIncreasePerLevel(int value, float multiplier) {

@@ -1,13 +1,12 @@
 package embin.poosmp.economy.shop;
 
 import com.mojang.logging.LogUtils;
-import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.util.Id;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 

@@ -1,7 +1,7 @@
 package embin.poosmp.networking;
 
-import embin.poosmp.PooSMPRegistries;
-import embin.poosmp.PooSMPSavedData;
+import embin.poosmp.world.PooSMPRegistries;
+import embin.poosmp.world.PooSMPSavedData;
 import embin.poosmp.client.PooSMPModClient;
 import embin.poosmp.networking.payload.BuyUpgradePayload;
 import embin.poosmp.networking.payload.SellUpgradePayload;

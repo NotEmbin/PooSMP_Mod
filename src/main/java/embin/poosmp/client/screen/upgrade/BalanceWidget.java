@@ -1,6 +1,7 @@
 package embin.poosmp.client.screen.upgrade;
 
-import embin.poosmp.client.ClientUpgradeData;
+import embin.poosmp.world.PooSMPSavedData;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 import net.minecraft.client.Minecraft;
@@ -17,8 +18,12 @@ public class BalanceWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
-        String balance = "$" + NumberFormat.getNumberInstance(Locale.US).format(ClientUpgradeData.INSTANCE.getBalance());
-        context.drawString(Minecraft.getInstance().font, balance, this.getX(), this.getY(), CommonColors.WHITE);
+        Minecraft minecraft = Minecraft.getInstance();
+        PooSMPSavedData savedData = PooSMPSavedData.Client.INSTANCE;
+        if (minecraft.player != null) {
+            String balance = "$" + NumberFormat.getNumberInstance(Locale.US).format(savedData.getBalance(minecraft.player));
+            context.drawString(minecraft.font, balance, this.getX(), this.getY(), CommonColors.WHITE);
+        }
     }
 
     @Override

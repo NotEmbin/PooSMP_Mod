@@ -1,6 +1,6 @@
 package embin.poosmp.upgrade;
 
-import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.util.PooUtil;
 import java.util.*;
 import net.minecraft.resources.Identifier;

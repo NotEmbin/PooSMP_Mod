@@ -24,7 +24,7 @@
 			"embin.poosmp.client.PooSMPModClient"
 		],
 		"fabric-datagen": [
-			"embin.poosmp.PooSMPModDataGenerator"
+          "embin.poosmp.datagen.PooSMPModDataGenerator"
 		],
 		"preLaunch": [
 			"embin.poosmp.PooSMPPreLaunch"

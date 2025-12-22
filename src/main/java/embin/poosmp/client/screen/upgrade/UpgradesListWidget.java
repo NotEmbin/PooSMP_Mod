@@ -1,8 +1,7 @@
 package embin.poosmp.client.screen.upgrade;
 
-import embin.poosmp.PooSMPRegistries;
-import embin.poosmp.PooSMPSavedData;
-import embin.poosmp.client.ClientUpgradeData;
+import embin.poosmp.world.PooSMPRegistries;
+import embin.poosmp.world.PooSMPSavedData;
 import embin.poosmp.networking.payload.BuyUpgradePayload;
 import embin.poosmp.networking.payload.SellUpgradePayload;
 import embin.poosmp.upgrade.PriceObject;
@@ -18,7 +17,6 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;

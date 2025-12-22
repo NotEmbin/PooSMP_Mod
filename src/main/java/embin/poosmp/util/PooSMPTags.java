@@ -1,6 +1,6 @@
 package embin.poosmp.util;
 
-import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.economy.shop.ShopCategory;
 import embin.poosmp.upgrade.Upgrade;
 import net.minecraft.core.registries.Registries;

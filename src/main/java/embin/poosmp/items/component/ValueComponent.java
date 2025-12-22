@@ -2,7 +2,7 @@ package embin.poosmp.items.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.economy.shop.ShopCategory;
 import embin.poosmp.util.PooUtil;
 import java.util.function.Consumer;

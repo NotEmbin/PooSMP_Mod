@@ -7,9 +7,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
 import java.util.List;
 
 public class PooSMPItemComponents {
@@ -93,5 +96,11 @@ public class PooSMPItemComponents {
             BuiltInRegistries.DATA_COMPONENT_TYPE,
             Id.of("item_value"),
             DataComponentType.<ValueComponent>builder().persistent(ValueComponent.CODEC).build()
+    );
+
+    public static final DataComponentType<ResourceKey<Level>> WARP_DIMENSION = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Id.of("warp_dimension"),
+            DataComponentType.<ResourceKey<Level>>builder().persistent(Level.RESOURCE_KEY_CODEC).build()
     );
 }

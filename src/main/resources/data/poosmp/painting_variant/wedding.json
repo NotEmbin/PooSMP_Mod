@@ -1,5 +1,13 @@
 {
   "asset_id": "poosmp:wedding",
   "width": 4,
-  "height": 2
+  "height": 2,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.poosmp.wedding.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.poosmp.wedding.author"
+  }
 }

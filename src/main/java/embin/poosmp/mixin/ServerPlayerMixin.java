@@ -1,7 +1,7 @@
 package embin.poosmp.mixin;
 
-import embin.poosmp.PooSMPRegistries;
-import embin.poosmp.PooSMPSavedData;
+import embin.poosmp.world.PooSMPRegistries;
+import embin.poosmp.world.PooSMPSavedData;
 import embin.poosmp.upgrade.Upgrade;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

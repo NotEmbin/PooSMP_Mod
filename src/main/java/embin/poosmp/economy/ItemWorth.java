@@ -1,6 +1,6 @@
 package embin.poosmp.economy;
 
-import embin.poosmp.PooSMPRegistries;
+import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.economy.shop.ShopCategories;
 import embin.poosmp.economy.shop.ShopCategory;
 import embin.poosmp.items.PooSMPItems;

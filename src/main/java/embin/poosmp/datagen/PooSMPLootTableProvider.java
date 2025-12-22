@@ -17,5 +17,9 @@ public class PooSMPLootTableProvider extends FabricBlockLootTableProvider {
         dropSelf(PooSMPBlocks.POOP_BRICK_WALL);
         add(PooSMPBlocks.POOP_BRICK_SLAB, createSlabItemTable(PooSMPBlocks.POOP_BRICK_SLAB));
         dropSelf(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
+        dropSelf(PooSMPBlocks.FAKE_GRASS_BLOCK);
+        dropSelf(PooSMPBlocks.FAKE_DIRT);
+        dropSelf(PooSMPBlocks.FAKE_STONE);
+        dropSelf(PooSMPBlocks.RIGGED_STONE);
     }
 }
