@@ -7,12 +7,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -179,18 +179,18 @@ public class MobStickItem extends CreativeSnitchItem {
     }
 
     public static final class BuiltInNames {
-        public static final String[] zombie_names = {
+        public static final String[] ZOMBIE = {
             "Goon",
             "Henchman"
         };
 
-        public static final String[] villager_names = {
+        public static final String[] VILLAGER = {
             "Villager"
         };
 
-        public static final String[] no_names = {};
+        public static final String[] NONE = {};
 
-        public static final String[] cow_names = {
+        public static final String[] COW = {
             "Cow",
             "Ol' Betsey"
         };
@@ -212,6 +212,7 @@ public class MobStickItem extends CreativeSnitchItem {
         }
     }
 
+    @Deprecated
     public static MobEffectInstance copy(MobEffectInstance instance) {
         return new MobEffectInstance(instance);
     }

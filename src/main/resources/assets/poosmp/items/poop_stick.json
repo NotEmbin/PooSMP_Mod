@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "poosmp:item/poop_stick"
+    "model": "minecraft:item/stick"
   }
 }

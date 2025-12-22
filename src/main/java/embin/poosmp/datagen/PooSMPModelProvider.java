@@ -22,7 +22,8 @@ public class PooSMPModelProvider extends FabricModelProvider {
                 PooSMPItems.NULL_STICK,
                 PooSMPBlocks.SUS.asItem(),
                 PooSMPBlocks.POOP_BRICK_WALL.asItem(),
-                PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem()
+                PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem(),
+                PooSMPItems.POOP_STICK
         );
     }
 

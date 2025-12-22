@@ -25,6 +25,7 @@ import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SmithingTemplateItem;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -46,7 +47,7 @@ public class PooSMPItems {
     public static final Item BOOM_STICK = register("boom_stick", BoomStickItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant());
     public static final Item ZOMBIE_STICK = register("zombie_stick", properties -> new MobStickItem(
         properties, EntityType.ZOMBIE,
-        MobStickItem.BuiltInNames.zombie_names, false
+        MobStickItem.BuiltInNames.ZOMBIE, false
     ), new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant());
     public static final Item DIAMOND_SHARD = register("diamond_shard");
     public static final Item WEDDING_RING = register("wedding_ring", WeddingRingItem::new, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).fireResistant());
@@ -72,7 +73,7 @@ public class PooSMPItems {
     public static final Item DISC_ENDLESSLY = musicDisc("endlessly", PooSMPJukeboxSongs.ENDLESSLY, "Embin");
     public static final Item DISC_ENDLESSLY_STEREO = musicDisc("endlessly_stereo", PooSMPJukeboxSongs.ENDLESSLY_STEREO, "Embin");
     public static final Item ZAP_STICK = register("lightning_stick", ZapStick::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
-    public static final Item VILLAGER_STICK = register("villager_stick", p -> new MobStickItem(p, EntityType.VILLAGER, MobStickItem.BuiltInNames.villager_names), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+    public static final Item VILLAGER_STICK = register("villager_stick", p -> new MobStickItem(p, EntityType.VILLAGER, MobStickItem.BuiltInNames.VILLAGER), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
     public static final Item CUBE_POTTERY_SHERD = register("cube_pottery_sherd");
     public static final Item POO_POTTERY_SHERD = register("poo_pottery_sherd");
     public static final Item ONE_DOLLAR_BILL = moneyItem("one_dollar_bill", 1);
@@ -92,7 +93,7 @@ public class PooSMPItems {
     //public static final Item FIVE_CENT_COIN = coinItem("five_cent_coin", 5);
     //public static final Item TEN_CENT_COIN = coinItem("ten_cent_coin", 10);
     //public static final Item TWENTY_FIVE_CENT_COIN = coinItem("twenty_five_cent_coin", 25);
-    public static final Item COW_STICK = register("cow_stick", properties -> new MobStickItem(properties, EntityType.COW, MobStickItem.BuiltInNames.cow_names, false));
+    public static final Item COW_STICK = register("cow_stick", properties -> new MobStickItem(properties, EntityType.COW, MobStickItem.BuiltInNames.COW, false));
     public static final Item DISC_STORY_OF_UNDERTALE = musicDisc("story_of_undertale", PooSMPJukeboxSongs.SOU, "Cubey");
     public static final Item RAW_RED_POO = register("raw_red_poo", Rarity.UNCOMMON);
     public static final Item RED_POO_INGOT = register("red_poo_ingot", Rarity.UNCOMMON);
@@ -110,7 +111,7 @@ public class PooSMPItems {
     public static final Item GEAR = register("gear");
     public static final Item SCREW = register("screw");
     public static final Item GLASS_SHARD = register("glass_shard");
-    public static final Item MAGIC_DEVICE = register("magic_device", MagicDeviceItem::new, new Item.Properties().durability(1024).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final Item MAGIC_DEVICE = register("magic_device", MagicDeviceItem::new, new Item.Properties().durability(256).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final Item NULL_SHARD = register("null_shard", Rarity.EPIC);
     public static final Item NULL_STICK = warpStick("null_stick", PooSMPKeys.MISSINGNO);
 
@@ -149,7 +150,7 @@ public class PooSMPItems {
     }
 
     private static Item food(String name, FoodProperties food) {
-        return register(name, new Item.Properties().food(food));
+        return register(name, new Item.Properties().food(food, Consumables.DRIED_KELP));
     }
 
     private static Item totem(String name, ItemAttributeModifiers attributes, boolean enchanted) {
