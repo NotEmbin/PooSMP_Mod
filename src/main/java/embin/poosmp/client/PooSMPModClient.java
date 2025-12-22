@@ -111,7 +111,7 @@ public class PooSMPModClient implements ClientModInitializer {
             if (minecraft.player != null) {
                 if (savedData.getBalance(minecraft.player) > 0 || PooSMPModClient.ALWAYS_SHOW_BALANCE) {
                     String balance = "$" + NumberFormat.getNumberInstance(Locale.US).format(savedData.getBalance(minecraft.player));
-                    guiGraphics.drawString(minecraft.font, balance, 200, 200, CommonColors.WHITE);
+                    guiGraphics.drawString(minecraft.font, balance, 10, guiGraphics.guiHeight() - 10, CommonColors.WHITE);
                 }
             }
         });

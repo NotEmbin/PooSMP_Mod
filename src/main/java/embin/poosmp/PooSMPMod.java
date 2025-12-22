@@ -46,7 +46,7 @@ public class PooSMPMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final PooSMPLogFilter filter = new PooSMPLogFilter();
 	public static final boolean componentless_installed = FabricLoader.getInstance().isModLoaded("componentless");
-	public static final boolean SHOP_ENABLED = false; // not ready yet
+	public static final boolean SHOP_ENABLED = true; // not ready yet
 
 	public static final class PooSMPItemGroups {
 		public static void init() {

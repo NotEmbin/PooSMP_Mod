@@ -14,12 +14,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipProvider;
 
-public record ValueComponent(double buyValue, double sellValue, Holder<ShopCategory> category) implements TooltipProvider {
-    public static final double MAX_PRICE = 500_000_000D;
+public record ValueComponent(double buyValue, double sellValue, ShopCategory category) implements TooltipProvider {
+    public static final double MAX_PRICE = 200_000_000D;
     public static final Codec<ValueComponent> CODEC = RecordCodecBuilder.create(builder -> builder.group(
             Codec.doubleRange(0, MAX_PRICE).fieldOf("buy_price").forGetter(ValueComponent::buyValue),
             Codec.doubleRange(-1, MAX_PRICE).fieldOf("sell_price").forGetter(ValueComponent::sellValue),
-            PooSMPRegistries.SHOP_CATEGORY.holderByNameCodec().fieldOf("shop_category").forGetter(ValueComponent::category)
+            PooSMPRegistries.SHOP_CATEGORY.byNameCodec().fieldOf("shop_category").forGetter(ValueComponent::category)
     ).apply(builder, ValueComponent::new));
 
     public boolean canBeSold() {

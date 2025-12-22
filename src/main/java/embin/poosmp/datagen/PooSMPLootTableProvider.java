@@ -21,5 +21,6 @@ public class PooSMPLootTableProvider extends FabricBlockLootTableProvider {
         dropSelf(PooSMPBlocks.FAKE_DIRT);
         dropSelf(PooSMPBlocks.FAKE_STONE);
         dropSelf(PooSMPBlocks.RIGGED_STONE);
+        dropSelf(PooSMPBlocks.RED_POO_BLOCK);
     }
 }

@@ -3,6 +3,7 @@
   "package": "embin.poosmp.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BlockItemMixin",
     "ItemEntityMixin",
     "ServerPlayerMixin",
     "TradeMixin"

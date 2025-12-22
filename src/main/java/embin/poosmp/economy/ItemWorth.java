@@ -1,21 +1,18 @@
 package embin.poosmp.economy;
 
-import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.economy.shop.ShopCategories;
 import embin.poosmp.economy.shop.ShopCategory;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.items.component.ValueComponent;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
-import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 public final class ItemWorth {
 
     public static void setPrice(DefaultItemComponentEvents.ModifyContext modifyContext, ShopCategory category, Item item, double price, double sellPrice) {
-        Holder<ShopCategory> categoryEntry = PooSMPRegistries.SHOP_CATEGORY.wrapAsHolder(category);
-        modifyContext.modify(item, builder -> builder.set(PooSMPItemComponents.ITEM_VALUE, new ValueComponent(price, sellPrice, categoryEntry)));
+        modifyContext.modify(item, builder -> builder.set(PooSMPItemComponents.ITEM_VALUE, new ValueComponent(price, sellPrice, category)));
     }
 
     public static void setPrice(DefaultItemComponentEvents.ModifyContext modifyContext, ShopCategory category, Item item, double price) {
