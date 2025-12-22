@@ -1,15 +1,19 @@
 package embin.poosmp.util;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gamerules.GameRule;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -48,5 +52,11 @@ public class PooUtil {
 
     public static <T> void forEachEntryInTag(HolderLookup.Provider provider, ResourceKey<Registry<T>> registryKey, TagKey<T> tagKey, Consumer<Holder<T>> consumer) {
         provider.lookupOrThrow(registryKey).get(tagKey).ifPresent(holders -> holders.forEach(consumer));
+    }
+
+    public static <T> T getGameRuleValue(Level level, GameRule<T> gameRule) {
+        if (level instanceof ServerLevel serverLevel) {
+            return serverLevel.getGameRules().get(gameRule);
+        } else return gameRule.defaultValue();
     }
 }

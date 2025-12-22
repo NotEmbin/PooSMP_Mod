@@ -28,10 +28,10 @@ public class CreativeSnitchItem extends Item {
     @Override
     public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
         super.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
-        CreativeSnitchItem.invTick(itemStack, serverLevel, entity, equipmentSlot);
+        CreativeSnitchItem.invTick(itemStack, serverLevel, entity);
     }
 
-    public static void invTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
+    public static void invTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity) {
         if (!serverLevel.isClientSide() && entity.isAlwaysTicking()) {
             if (itemStack.has(PooSMPItemComponents.FROM_CREATIVE)) {
                 if (itemStack.getOrDefault(PooSMPItemComponents.FROM_CREATIVE, false)) {

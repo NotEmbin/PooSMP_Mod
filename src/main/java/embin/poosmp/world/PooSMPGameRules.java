@@ -9,10 +9,14 @@ import net.minecraft.world.level.gamerules.GameRule;
 public final class PooSMPGameRules {
     private PooSMPGameRules() {}
 
-    public static final GameRule<Boolean> SHOW_BALANCE = ofBool("show_balance", false);
+    public static final GameRule<Double> STARTING_BALANCE = ofDouble("starting_balance", 32D);
 
     private static GameRule<Boolean> ofBool(String id, boolean defaultValue) {
         return GameRuleBuilder.forBoolean(defaultValue).codec(Codec.BOOL).buildAndRegister(Id.of(id));
+    }
+
+    private static GameRule<Double> ofDouble(String id, double defaultValue) {
+        return GameRuleBuilder.forDouble(defaultValue).codec(Codec.doubleRange(0, 32767)).buildAndRegister(Id.of(id));
     }
 
     public static void acknowledge() {}

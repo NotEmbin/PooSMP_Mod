@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FakeBlock extends Block {
+public class FakeBlock extends Block implements ImpersonatingBlock {
     private final Block fakeOf;
 
     public FakeBlock(Block block, Properties settings) {
@@ -23,5 +23,10 @@ public class FakeBlock extends Block {
     @Override
     public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
         this.fakeOf.animateTick(blockState, level, blockPos, randomSource);
+    }
+
+    @Override
+    public Block getBlockImpersonatingAs() {
+        return this.fakeOf;
     }
 }

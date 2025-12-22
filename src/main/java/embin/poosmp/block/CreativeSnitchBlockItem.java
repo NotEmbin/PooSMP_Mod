@@ -18,6 +18,6 @@ public class CreativeSnitchBlockItem extends BlockItem {
     @Override
     public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
         super.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
-        CreativeSnitchItem.invTick(itemStack, serverLevel, entity, equipmentSlot);
+        CreativeSnitchItem.invTick(itemStack, serverLevel, entity);
     }
 }

@@ -38,15 +38,14 @@ public class PooSMPBlocks {
     public static final Block DDEDEDODEDIAMANTE_BLOCK = register("ddededodediamante_block", ddededodediamanteBlock::new, BlockBehaviour.Properties.of().mapColor(DyeColor.MAGENTA).strength(1.0F));
     public static final Block PENIS_BLOCK = register("minecraft:penis", GrassBlock::new, copyBlock(Blocks.GRASS_BLOCK));
     public static final Block BANKERS_TABLE = register("bankers_table", copyBlock(Blocks.FLETCHING_TABLE).mapColor(DyeColor.BROWN));
-
-    // public static final Block ITEM_SHOP = register("item_shop", new ItemShopBlock(copyBlock(Blocks.IRON_BLOCK)));
     // i can't bother with this right now
+    // public static final Block ITEM_SHOP = register("item_shop", new ItemShopBlock(copyBlock(Blocks.IRON_BLOCK)));
     public static final Block RED_POO_BLOCK = register("red_poo_block", BlockBehaviour.Properties.of().requiresCorrectToolForDrops().mapColor(DyeColor.RED).strength(2.5F).sound(SoundType.BONE_BLOCK), new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final Block DRAGON_ANNOYANCE = register("ear_destroyer_9000", properties -> new AnnoyanceBlock(Annoyances.DRAGON, properties), BlockBehaviour.Properties.of().mapColor(DyeColor.WHITE).strength(1.0F));
     public static final Block FAKE_DIRT = register("fake_dirt", fakeBlock(Blocks.DIRT), copyBlock(Blocks.DIRT));
     public static final Block FAKE_GRASS_BLOCK = register("fake_grass_block", fakeBlock(Blocks.GRASS_BLOCK), copyBlock(Blocks.GRASS_BLOCK));
     public static final Block FAKE_STONE = register("fake_stone", fakeBlock(Blocks.STONE), copyBlock(Blocks.STONE));
-    public static final Block RIGGED_STONE = register("rigged_stone", RiggedBlock::new, copyBlock(Blocks.STONE));
+    public static final Block RIGGED_STONE = register("rigged_stone", riggedBlock(Blocks.STONE), copyBlock(Blocks.STONE));
 
 
     public static Block register(Function<BlockBehaviour.Properties, Block> blockFunction, String name, Item.Properties settings, BlockBehaviour.Properties blockProperties, boolean should_register_item) {
@@ -55,7 +54,11 @@ public class PooSMPBlocks {
         Block block = Registry.register(BuiltInRegistries.BLOCK, resourceKey, blockFunction.apply(blockProperties.setId(resourceKey)));
         if (should_register_item) {
             ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
-            Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, settings.setId(itemKey).useBlockDescriptionPrefix().modelId(id)));
+            Identifier modelId = id;
+            if (block instanceof ImpersonatingBlock impersonatingBlock) {
+                modelId = impersonatingBlock.getBlockIdImpersonatingAs();
+            }
+            Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, settings.setId(itemKey).useBlockDescriptionPrefix().modelId(modelId)));
         }
         return block;
     }
@@ -98,6 +101,10 @@ public class PooSMPBlocks {
 
     public static Function<BlockBehaviour.Properties, Block> fakeBlock(Block block) {
         return settings -> new FakeBlock(block, settings.instabreak());
+    }
+
+    public static Function<BlockBehaviour.Properties, Block> riggedBlock(Block block) {
+        return settings -> new RiggedBlock(block, settings.instabreak());
     }
 
     public static void init() {

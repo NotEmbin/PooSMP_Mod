@@ -5,16 +5,20 @@ import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.client.screen.upgrade.UpgradesScreen;
 import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.util.Id;
+import embin.poosmp.world.PooSMPSavedData;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.CommonColors;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.GrassColor;
@@ -23,10 +27,14 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class PooSMPModClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("poosmp/client");
     public static final KeyMapping.Category POOSMP_KEYS = KeyMapping.Category.register(Id.of("poosmp_keys"));
     public static final boolean SYNC_DATA = true;
+    public static final boolean ALWAYS_SHOW_BALANCE = true;
 
 	public static KeyMapping openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_upgrades_screen",
@@ -96,6 +104,17 @@ public class PooSMPModClient implements ClientModInitializer {
 			(state, world, pos, tintIndex) -> world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
 			PooSMPBlocks.FAKE_GRASS_BLOCK
 		);
+
+        HudElementRegistry.addLast(Id.of("balance"), (guiGraphics, deltaTracker) -> {
+            Minecraft minecraft = Minecraft.getInstance();
+            PooSMPSavedData savedData = PooSMPSavedData.Client.INSTANCE;
+            if (minecraft.player != null) {
+                if (savedData.getBalance(minecraft.player) > 0 || PooSMPModClient.ALWAYS_SHOW_BALANCE) {
+                    String balance = "$" + NumberFormat.getNumberInstance(Locale.US).format(savedData.getBalance(minecraft.player));
+                    guiGraphics.drawString(minecraft.font, balance, 200, 200, CommonColors.WHITE);
+                }
+            }
+        });
 
 		// ColorProviderRegistry.ITEM.register(
 		// 	(stack, tintIndex) -> GrassColors.getColor(0.5, 1.0),

@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import org.slf4j.Logger;
@@ -94,7 +95,7 @@ public class PooSMPSavedData extends SavedData {
     public double getBalance(Player player) {
         UUID uuid = player.getUUID();
         if (!this.balance.containsKey(uuid)) {
-            this.balance.put(uuid, 0D);
+            this.balance.put(uuid, PooUtil.getGameRuleValue(player.level(), PooSMPGameRules.STARTING_BALANCE));
             this.setDirty();
         }
         return this.balance.get(uuid);
@@ -184,6 +185,7 @@ public class PooSMPSavedData extends SavedData {
 
     public static final class Client {
         public static final PooSMPSavedData INSTANCE = new PooSMPSavedData();
+        public static boolean showBalance = false;
 
         public static boolean sync(Tag nbtTag) {
             return Client.INSTANCE.syncFrom(nbtTag);
