@@ -22,12 +22,12 @@ public final class ItemWorth {
         setPrice(modifyContext, category, item, price, price / 2);
     }
 
-    public static void setPrices(DefaultItemComponentEvents.ModifyContext modifyContext) {
-        setPrice(modifyContext, ShopCategories.MATERIALS, Items.IRON_INGOT, 4.50);
-        setPrice(modifyContext, ShopCategories.MATERIALS, Items.IRON_NUGGET, 0.5, 0.2);
-        setPrice(modifyContext, ShopCategories.MATERIALS, Items.GOLD_INGOT, 8.50);
-        setPrice(modifyContext, ShopCategories.MATERIALS, Items.GOLD_NUGGET, 0.9, 0.4);
-        setPrice(modifyContext, ShopCategories.MATERIALS, Items.DIAMOND, 18);
-        setPrice(modifyContext, ShopCategories.MATERIALS, PooSMPItems.DIAMOND_SHARD, 1.5, 1);
+    public static void setPrices(DefaultItemComponentEvents.ModifyContext context) {
+        setPrice(context, ShopCategories.MATERIALS, Items.IRON_INGOT, 4.50);
+        setPrice(context, ShopCategories.MATERIALS, Items.IRON_NUGGET, 0.5, 0.2);
+        setPrice(context, ShopCategories.MATERIALS, Items.GOLD_INGOT, 8.50);
+        setPrice(context, ShopCategories.MATERIALS, Items.GOLD_NUGGET, 0.9, 0.4);
+        setPrice(context, ShopCategories.MATERIALS, Items.DIAMOND, 18);
+        setPrice(context, ShopCategories.MATERIALS, PooSMPItems.DIAMOND_SHARD, 1.5, 1);
     }
 }

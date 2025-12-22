@@ -11,6 +11,7 @@ import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.*;
 import embin.poosmp.villager.PooSMPPoi;
 import embin.poosmp.villager.PooSMPVillagers;
+import embin.poosmp.world.PooSMPGameRules;
 import embin.poosmp.world.PooSMPRegistries;
 import net.fabricmc.api.ModInitializer;
 
@@ -34,6 +35,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.timeline.Timelines;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,6 +198,7 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPItemComponents.init();
 		PooSMPItemGroups.init();
 		ShopCategories.registerCategories();
+        PooSMPGameRules.acknowledge();
 
 		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
@@ -240,11 +243,6 @@ public class PooSMPMod implements ModInitializer {
 				//}
 			});
 		});
-
-        BiomeModificationImpl.INSTANCE.addModifier(Id.of("test"), ModificationPhase.REPLACEMENTS, PooSMPPredicates::biomeNotFromPooSMP, (biomeSelectionContext, biomeModificationContext) -> {
-            biomeModificationContext.getAttributes().set(EnvironmentAttributes.BED_RULE, BedRule.EXPLODES);
-            biomeModificationContext.getAttributes().set(EnvironmentAttributes.CLOUD_HEIGHT, 380f);
-        });
 
 		if (PooSMPMod.SHOP_ENABLED) {
 			DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:set_item_prices"), ItemWorth::setPrices);
