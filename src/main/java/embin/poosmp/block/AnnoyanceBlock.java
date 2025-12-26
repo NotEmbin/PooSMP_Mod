@@ -1,6 +1,7 @@
 package embin.poosmp.block;
 
 import embin.poosmp.block.annoyance.Annoyance;
+import embin.poosmp.world.PooSMPGameRules;
 import embin.poosmp.world.PooSMPRegistries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -39,17 +40,24 @@ public class AnnoyanceBlock extends Block implements BlockWithTooltip {
     @Override
     protected void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!world.isClientSide()) {
-            BlockPos blockPos = hit.getBlockPos();
-            float v = this.annoyance.getVolume() * 1.5F;
-            float p = this.annoyance.getPitch() * 1.5F;
-            world.playSound(null, blockPos, this.annoyance.getSound(), SoundSource.BLOCKS, v, p);
+            ServerLevel serverLevel = (ServerLevel) world;
+            if (serverLevel.getGameRules().get(PooSMPGameRules.ANNOYANCES_MAKE_SOUND)) {
+                BlockPos blockPos = hit.getBlockPos();
+                float v = this.annoyance.getVolume() * 1.5F;
+                float p = this.annoyance.getPitch() * 1.5F;
+                world.playSound(null, blockPos, this.annoyance.getSound(), SoundSource.BLOCKS, v, p);
+            }
         }
     }
 
     @Override
     protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        if (random.nextIntBetweenInclusive(1, 100) <= this.annoyance.getChance()) {
-            world.playSound(null, pos, this.annoyance.getSound(), SoundSource.BLOCKS, this.annoyance.getVolume(), this.annoyance.getPitch());
+        if (world instanceof ServerLevel serverLevel) {
+            if (serverLevel.getGameRules().get(PooSMPGameRules.ANNOYANCES_MAKE_SOUND)) {
+                if (random.nextIntBetweenInclusive(1, 100) <= this.annoyance.getChance()) {
+                    world.playSound(null, pos, this.annoyance.getSound(), SoundSource.BLOCKS, this.annoyance.getVolume(), this.annoyance.getPitch());
+                }
+            }
         }
     }
 

@@ -9,7 +9,8 @@ import net.minecraft.world.level.gamerules.GameRule;
 public final class PooSMPGameRules {
     private PooSMPGameRules() {}
 
-    public static final GameRule<Double> STARTING_BALANCE = ofDouble("starting_balance", 32D);
+    public static final GameRule<Double> STARTING_BALANCE = ofDouble("starting_balance", 0D);
+    public static final GameRule<Boolean> ANNOYANCES_MAKE_SOUND = ofBool("annoyances_make_sound", true);
 
     private static GameRule<Boolean> ofBool(String id, boolean defaultValue) {
         return GameRuleBuilder.forBoolean(defaultValue).codec(Codec.BOOL).buildAndRegister(Id.of(id));
