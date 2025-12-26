@@ -101,6 +101,7 @@ public class TradeConstructors {
                 }
             }));
             factories.add((serverLevel, entity, randomSource) -> new ToMoney(PooSMPItems.RAW_RED_POO, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 50).getOffer(serverLevel, entity, randomSource));
+            factories.add((serverLevel, entity, randomSource) -> new ToMoney(PooSMPBlocks.DDEDEDODEDIAMANTE_BLOCK.asItem(), 16, PooSMPItems.ONE_DOLLAR_BILL, 10).getOffer(serverLevel, entity, randomSource));
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3, factories -> {
             factories.add(((level, entity, random) -> new FromMoney(Items.PUMPKIN, 32, PooSMPItems.ONE_DOLLAR_BILL).getOffer(level, entity, random)));

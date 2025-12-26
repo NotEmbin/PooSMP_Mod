@@ -50,7 +50,6 @@ import java.util.Locale;
 public class PooSMPMod implements ModInitializer {
 	public static final String MOD_ID = "poosmp";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final PooSMPLogFilter filter = new PooSMPLogFilter();
 	public static final boolean componentless_installed = FabricLoader.getInstance().isModLoaded("componentless");
 	public static final boolean SHOP_ENABLED = true; // not ready yet
 
@@ -238,7 +237,7 @@ public class PooSMPMod implements ModInitializer {
                         savedData.addBalance(player, profit);
                         var sellText = Component.literal(player.getPlainTextName() + " sold " + itemStack + " for $" + profit);
                         itemStack.setCount(0);
-                        context.getSource().sendSystemMessage(sellText);
+                        context.getSource().sendSuccess(() -> sellText, true);
                         return Command.SINGLE_SUCCESS;
                     } else {
                         context.getSource().sendFailure(cantSellText);

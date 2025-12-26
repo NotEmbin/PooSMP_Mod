@@ -11,6 +11,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.InteractionHand;
@@ -26,6 +28,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.Team;
+
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -47,22 +53,22 @@ public class MobStickItem extends CreativeSnitchItem {
     }
 
     @Override
-    public InteractionResult use(Level world, Player user, InteractionHand hand) {
-        double player_x = user.getX();
-        double player_z = user.getZ();
-        double player_y = user.getY();
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
+        double player_x = player.getX();
+        double player_z = player.getZ();
+        double player_y = player.getY();
         BlockPos pos = BlockPos.containing(player_x, player_y, player_z);
-        EntityType<?> selected_mob = this.mob;
+        EntityType<?> selectedEntityType = this.mob;
         List<String> name_list = List.of(this.names);
-        ItemStack stack = user.getItemInHand(user.getUsedItemHand());
+        ItemStack stack = player.getItemInHand(player.getUsedItemHand());
         try {
             if (stack.has(PooSMPItemComponents.MOB_OVERRIDE)) {
-                selected_mob = stack.get(PooSMPItemComponents.MOB_OVERRIDE);
+                selectedEntityType = stack.get(PooSMPItemComponents.MOB_OVERRIDE);
             }
         } catch (ClassCastException exception) {
             if (world.isClientSide()) {
-                user.displayClientMessage(Component.literal("Mob override failed!").withStyle(ChatFormatting.RED), true);
-                user.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.literal("Mob override failed!").withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED), true);
             }
         }
         try {
@@ -71,52 +77,57 @@ public class MobStickItem extends CreativeSnitchItem {
             }
         } catch (Exception exception) {
             if (world.isClientSide()) {
-                user.displayClientMessage(Component.literal("Mob name list override failed!").withStyle(ChatFormatting.RED), true);
-                user.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.literal("Mob name list override failed!").withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED), true);
             }
         }
 
         if (!world.isClientSide()) {
-            EntityType<?> default_mob = this.mob;
+            MinecraftServer server = world.getServer();
+            Scoreboard scoreboard = server.getScoreboard();
+            EntityType<?> entityType = this.mob;
             ItemStack offhand_item = stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             if (offhand_item == null) {
                 offhand_item = new ItemStack(Items.TOTEM_OF_UNDYING);;
-                user.displayClientMessage(Component.literal("Invalid offhand override item! Using default instead...").withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.literal("Invalid offhand override item! Using default instead...").withStyle(ChatFormatting.RED), true);
             }
-            Entity mob = selected_mob.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
-            if (mob == null) {
-                user.displayClientMessage(Component.literal("Mob override failed because mob is null! Using default instead...").withStyle(ChatFormatting.RED), true);
-                mob = default_mob.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
+            Entity entity = selectedEntityType.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
+            if (entity == null) {
+                player.displayClientMessage(Component.literal("Mob override failed because entity is null! Using default instead...").withStyle(ChatFormatting.RED), true);
+                entity = entityType.spawn(world.getServer().getLevel(world.dimension()), pos, EntitySpawnReason.COMMAND);
             }
-            String zombie_uuid = mob.getStringUUID();
-            String player_uuid = user.getStringUUID();
+            String player_uuid = player.getStringUUID();
             Random random = new Random();
             if (name_list != null) {
                 if (!name_list.isEmpty()) {
                     try {
-                        mob.setCustomName(Component.literal(user.getName().getString()).append("'s ").append(name_list.get(random.nextInt(0, name_list.size()))));
+                        entity.setCustomName(player.getDisplayName().copy().append("'s ").append(name_list.get(random.nextInt(0, name_list.size()))));
                     } catch (IllegalArgumentException exception) {
-                        user.displayClientMessage(Component.literal("Mob could not be given a custom name!").withStyle(ChatFormatting.RED), true);
-                        user.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED), true);
-                        mob.setCustomName(Component.literal(user.getName().getString()).append("'s Mob"));
+                        player.displayClientMessage(Component.literal("Mob could not be given a custom name!").withStyle(ChatFormatting.RED), true);
+                        player.displayClientMessage(Component.literal(exception.toString()).withStyle(ChatFormatting.RED), true);
+                        entity.setCustomName(player.getDisplayName().copy().append("'s Mob"));
                     } catch (NullPointerException exception) {
-                        mob.setCustomName(Component.literal(user.getName().getString()).append("'s Mob"));
+                        entity.setCustomName(player.getDisplayName().copy().append("'s Mob"));
                     }
-                    mob.setCustomNameVisible(true);
+                    entity.setCustomNameVisible(true);
                 }
             }
-            if (mob instanceof Mob realMob) {
-                realMob.setItemInHand(InteractionHand.OFF_HAND, offhand_item.copy());
+            if (entity instanceof Mob mob) {
+                mob.setItemInHand(InteractionHand.OFF_HAND, offhand_item.copy());
             }
-            Commands commandManager = world.getServer().getCommands();
-            CommandSourceStack commandSource = world.getServer().createCommandSourceStack().withSuppressedOutput();
-            commandManager.performPrefixedCommand(commandSource, "team add " + player_uuid + " \"" + user.getName().getString() + "\"");
-            commandManager.performPrefixedCommand(commandSource, "team join " + player_uuid + " " + player_uuid);
-            commandManager.performPrefixedCommand(commandSource, "team join " + player_uuid + " " + zombie_uuid);
+            PlayerTeam team = scoreboard.getPlayerTeam(player_uuid);
+            if (team != null) {
+                scoreboard.addPlayerToTeam(entity.getScoreboardName(), team);
+            } else {
+                PlayerTeam newTeam = scoreboard.addPlayerTeam(player_uuid);
+                newTeam.setDisplayName(player.getDisplayName());
+                scoreboard.addPlayerToTeam(player.getScoreboardName(), newTeam);
+                scoreboard.addPlayerToTeam(entity.getScoreboardName(), newTeam);
+            }
         }
 
-        user.awardStat(Stats.ITEM_USED.get(this));
-        user.getCooldowns().addCooldown(stack, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 20));
+        player.awardStat(Stats.ITEM_USED.get(this));
+        player.getCooldowns().addCooldown(stack, stack.getOrDefault(PooSMPItemComponents.STICK_COOLDOWN_OVERRIDE, 20));
         return InteractionResult.SUCCESS;
     }
 
