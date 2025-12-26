@@ -1,6 +1,7 @@
 package embin.poosmp;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.context.CommandContext;
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.economy.ItemWorth;
 import embin.poosmp.economy.shop.ShopCategories;
@@ -28,6 +29,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -38,6 +40,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.*;
@@ -279,6 +284,13 @@ public class PooSMPMod implements ModInitializer {
             dispatcher.register(Commands.literal("getmoney25").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.TWENTY_FIVE_DOLLAR_BILL)));
             dispatcher.register(Commands.literal("getmoney50").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.FIFTY_DOLLAR_BILL)));
             dispatcher.register(Commands.literal("getmoney100").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.HUNDRED_DOLLAR_BILL)));
+            dispatcher.register(Commands.literal("deathcount").executes(context -> {
+                ServerPlayer player = context.getSource().getPlayer();
+                return tellDeathCount(context, player);
+            }).then(Commands.argument("target", EntityArgument.player()).executes(context -> {
+                ServerPlayer player = EntityArgument.getPlayer(context, "target");
+                return tellDeathCount(context, player);
+            })));
 		});
 
 		DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:displayed_id"), modifyContext -> {
@@ -319,5 +331,12 @@ public class PooSMPMod implements ModInitializer {
             level.addFreshEntity(new ItemEntity(level, player.getX(), player.getY(), player.getZ(), moneyStack.copy()));
             return Command.SINGLE_SUCCESS;
         } else return -50;
+    }
+
+    public static int tellDeathCount(CommandContext<CommandSourceStack> context, ServerPlayer player) {
+        if (player == null) return 0;
+        int deaths = player.getStats().getValue(Stats.CUSTOM.get(Stats.DEATHS));
+        context.getSource().sendSuccess(() -> Component.literal(player.getPlainTextName() + " has died " + deaths + " time(s)."), false);
+        return Command.SINGLE_SUCCESS;
     }
 }
