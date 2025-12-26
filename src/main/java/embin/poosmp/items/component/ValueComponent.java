@@ -28,7 +28,7 @@ public record ValueComponent(double buyValue, double sellValue, ShopCategory cat
 
     @Override
     public void addToTooltip(Item.TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag, DataComponentGetter dataComponentGetter) {
-        if (tooltipFlag.isAdvanced()) {
+        if (tooltipFlag.isAdvanced() && dataComponentGetter.get(PooSMPItemComponents.MONEY) == null) {
             consumer.accept(Component.translatable("tooltip.poosmp.item_value.sell_price", PooUtil.roundTwo(this.sellValue)).withStyle(ChatFormatting.GRAY));
         }
     }

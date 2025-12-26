@@ -31,28 +31,34 @@ public class PooSMPSavedData extends SavedData {
     public static final String NBT_KEY = "poosmp_data";
     public static final Codec<PooSMPSavedData> CODEC = RecordCodecBuilder.create(u -> u.group(
         uuidMapCodec(Codec.DOUBLE).fieldOf("player_balance").forGetter(z -> z.balance),
-        uuidMapIdCodec(Codec.INT).fieldOf("purchased_upgrades").forGetter(z -> z.purchasedUpgrades)
+        uuidMapIdCodec(Codec.INT).fieldOf("purchased_upgrades").forGetter(z -> z.purchasedUpgrades),
+        uuidMapCodec(Codec.STRING).fieldOf("player_names").forGetter(z -> z.playerNames)
     ).apply(u, PooSMPSavedData::new));
     public static final SavedDataType<PooSMPSavedData> TYPE = new SavedDataType<>("poosmp", PooSMPSavedData::new, PooSMPSavedData.CODEC, null);
     public Map<UUID, Map<Identifier, Integer>> purchasedUpgrades;
     public Map<UUID, Double> balance;
+    public Map<UUID, String> playerNames;
     private final Logger logger = LogUtils.getLogger();
 
     public PooSMPSavedData(
             Map<UUID, Double> balance,
-            Map<UUID, Map<Identifier, Integer>> purchases
+            Map<UUID, Map<Identifier, Integer>> purchases,
+            Map<UUID, String> playerNames
     ) {
         this.balance = new HashMap<>(balance);
         this.purchasedUpgrades = fixMaps(purchases);
+        this.playerNames = new HashMap<>(playerNames);
     }
 
     public PooSMPSavedData() {
         this.balance = HashMap.newHashMap(16);
         this.purchasedUpgrades = HashMap.newHashMap(16);
+        this.playerNames = HashMap.newHashMap(16);
     }
 
     public Map<Identifier, Integer> getPurchasedUpgradesIdMap(Player player) {
         UUID playerUuid = player.getUUID();
+        this.addPlayerName(player);
         if (!this.purchasedUpgrades.containsKey(playerUuid)) {
             this.purchasedUpgrades.put(playerUuid, HashMap.newHashMap(16));
             this.setDirty();
@@ -61,6 +67,7 @@ public class PooSMPSavedData extends SavedData {
     }
 
     public List<Upgrade> upgradesPlayerHas(Player player) {
+        this.addPlayerName(player);
         return this.getPurchasedUpgradesIdMap(player).keySet().stream()
                 .map(getUpgradeRegistry(player)::getOptional)
                 .filter(Optional::isPresent)
@@ -69,6 +76,7 @@ public class PooSMPSavedData extends SavedData {
     }
 
     public boolean hasUpgrade(Player player, Upgrade upgrade) {
+        this.addPlayerName(player);
         return this.upgradesPlayerHas(player).contains(upgrade);
     }
 
@@ -77,6 +85,7 @@ public class PooSMPSavedData extends SavedData {
         final int amountPurchased = this.getPurchasedUpgradesIdMap(player).getOrDefault(upgradeId, 0);
         upgrade.onPurchase(player);
         this.getPurchasedUpgradesIdMap(player).put(upgradeId, amountPurchased + 1);
+        this.addPlayerName(player);
         this.setDirty();
     }
 
@@ -86,6 +95,7 @@ public class PooSMPSavedData extends SavedData {
         if (amountPurchased > 0) {
             upgrade.onSell(player);
             this.getPurchasedUpgradesIdMap(player).put(upgradeId, amountPurchased - 1);
+            this.addPlayerName(player);
             this.setDirty();
         } else {
             this.logger.warn("{} attempted to sell {} whilst not having it!", player.getPlainTextName(), upgradeId);
@@ -96,6 +106,7 @@ public class PooSMPSavedData extends SavedData {
         UUID uuid = player.getUUID();
         if (!this.balance.containsKey(uuid)) {
             this.balance.put(uuid, PooUtil.getGameRuleValue(player.level(), PooSMPGameRules.STARTING_BALANCE));
+            this.addPlayerName(player);
             this.setDirty();
         }
         return this.balance.get(uuid);
@@ -110,6 +121,7 @@ public class PooSMPSavedData extends SavedData {
         final double trimmedAmount = PooSMPSavedData.trimBalance(amount);
         final double newAmount = Math.clamp(currentBalance + trimmedAmount, 0.0D, Double.MAX_VALUE);
         this.balance.put(player.getUUID(), newAmount);
+        this.addPlayerName(player);
         this.setDirty();
         return newAmount == (currentBalance + trimmedAmount);
     }
@@ -120,6 +132,25 @@ public class PooSMPSavedData extends SavedData {
 
     public Tag asNbt() {
         return PooSMPSavedData.CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow();
+    }
+
+    private boolean syncFrom(Tag nbtTag) {
+        DataResult<PooSMPSavedData> decoded = PooSMPSavedData.CODEC.parse(NbtOps.INSTANCE, nbtTag);
+        decoded.ifSuccess(savedData -> {
+            this.balance = new HashMap<>(savedData.balance);
+            this.purchasedUpgrades = fixMaps(savedData.purchasedUpgrades);
+        });
+        return decoded.isSuccess();
+    }
+
+    public void addPlayerName(Player player) {
+        if (!this.playerNames.containsKey(player.getUUID())) {
+            this.playerNames.put(player.getUUID(), player.getPlainTextName());
+        }
+    }
+
+    public Optional<String> getPlayerName(UUID uuid) {
+        return Optional.ofNullable(this.playerNames.get(uuid));
     }
 
     public static PooSMPSavedData get(MinecraftServer server) {
@@ -172,15 +203,6 @@ public class PooSMPSavedData extends SavedData {
             }
             return fixedMap;
         } else return HashMap.newHashMap(16);
-    }
-
-    private boolean syncFrom(Tag nbtTag) {
-        DataResult<PooSMPSavedData> decoded = PooSMPSavedData.CODEC.parse(NbtOps.INSTANCE, nbtTag);
-        decoded.ifSuccess(savedData -> {
-            this.balance = new HashMap<>(savedData.balance);
-            this.purchasedUpgrades = fixMaps(savedData.purchasedUpgrades);
-        });
-        return decoded.isSuccess();
     }
 
     public static final class Client {

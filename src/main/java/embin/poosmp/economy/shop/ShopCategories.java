@@ -16,7 +16,7 @@ public class ShopCategories {
     public static final ShopCategory MATERIALS = register("materials", Items.IRON_INGOT);
     public static final ShopCategory NATURE = register("nature", Items.GRASS_BLOCK);
     public static final ShopCategory BUILDING_BLOCKS = register("building_blocks", Items.BRICKS);
-    public static final ShopCategory BANKERS_TABLE = register("bankers_table", PooSMPItems.HUNDRED_DOLLAR_BILL);
+    public static final ShopCategory BANKERS_TABLE = register("bankers_table", Items.CRAFTING_TABLE);
 
     public static ShopCategory register(String id, Item icon) {
         Identifier id2 = Id.of(id);

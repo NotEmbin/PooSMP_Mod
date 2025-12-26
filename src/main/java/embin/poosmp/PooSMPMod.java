@@ -1,11 +1,14 @@
 package embin.poosmp;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.economy.ItemWorth;
 import embin.poosmp.economy.shop.ShopCategories;
 import embin.poosmp.items.MobStickItem;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.items.component.PooSMPItemComponents;
+import embin.poosmp.items.component.ValueComponent;
 import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.*;
@@ -13,8 +16,10 @@ import embin.poosmp.villager.PooSMPPoi;
 import embin.poosmp.villager.PooSMPVillagers;
 import embin.poosmp.world.PooSMPGameRules;
 import embin.poosmp.world.PooSMPRegistries;
+import embin.poosmp.world.PooSMPSavedData;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
@@ -22,6 +27,9 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.impl.item.ComponentTooltipAppenderRegistryImpl;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -29,6 +37,11 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Util;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +49,8 @@ import net.minecraft.world.item.Items;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.function.Predicate;
 
 public class PooSMPMod implements ModInitializer {
@@ -135,6 +150,7 @@ public class PooSMPMod implements ModInitializer {
 				entries.accept(PooSMPBlocks.FAKE_GRASS_BLOCK);
 				entries.accept(PooSMPBlocks.FAKE_STONE);
 				entries.accept(PooSMPBlocks.RIGGED_STONE);
+                entries.accept(PooSMPItems.NULL_STICK);
 			})).build();
 
 		public static final CreativeModeTab BIOME_STICKS = FabricItemGroup.builder()
@@ -213,26 +229,61 @@ public class PooSMPMod implements ModInitializer {
         ComponentTooltipAppenderRegistryImpl.addBefore(DataComponents.ENCHANTMENTS, PooSMPItemComponents.ITEM_VALUE);
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, registrationEnvironment) -> {
-			//dispatcher.register(
-			//		CommandManager.literal("getbal").executes(context -> {
-			//			ServerCommandSource source = context.getSource();
-			//			PlayerInventory inv = source.getPlayer().getInventory();
-			//			source.getClient().setScreen(new ShopScreen(new ShopScreenHandler(0, inv), inv));
-			//			return 1;
-			//		})
-			//);
-			//dispatcher.register(
-			//		ClientCommandManager.literal("setbal").requires(source -> source.hasPermissionLevel(2)).executes(context -> {
-			//			FabricClientCommandSource source = context.getSource();
-			//			PlayerInventory inv = source.getPlayer().getInventory();
-			//			source.getClient().setScreen(new ShopScreen(new ShopScreenHandler(0, inv), inv));
-			//			return 1;
-			//		})
-			//);
+			dispatcher.register(Commands.literal("sellhand").executes(context -> {
+                ServerPlayer player = context.getSource().getPlayer();
+                if (player == null) return 0;
+                ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
+                MinecraftServer server = context.getSource().getServer();
+                PooSMPSavedData savedData = PooSMPSavedData.get(server);
+                Component cantSellText = Component.literal("Can't sell this item").withStyle(ChatFormatting.RED);
+                if (itemStack.has(PooSMPItemComponents.ITEM_VALUE)) {
+                    ValueComponent value = itemStack.get(PooSMPItemComponents.ITEM_VALUE);
+                    if (value == null) return -2;
+                    if (value.canBeSold()) {
+                        var profit = value.sellValue() * itemStack.getCount();
+                        savedData.addBalance(player, profit);
+                        var sellText = Component.literal(player.getPlainTextName() + " sold " + itemStack + " for $" + profit);
+                        itemStack.setCount(0);
+                        context.getSource().sendSystemMessage(sellText);
+                        return Command.SINGLE_SUCCESS;
+                    } else {
+                        context.getSource().sendFailure(cantSellText);
+                        return -3;
+                    }
+                } else {
+                    context.getSource().sendFailure(cantSellText);
+                    return -1;
+                }
+            }));
+            dispatcher.register(Commands.literal("getbal").executes(context -> {
+                MinecraftServer server = context.getSource().getServer();
+                PooSMPSavedData savedData = PooSMPSavedData.get(server);
+                if (savedData.balance.isEmpty()) {
+                    context.getSource().sendFailure(Component.literal("Everybody is broke"));
+                    return 0;
+                }
+                final int[] index = {1};
+                savedData.balance.forEach((uuid, balance) -> {
+                    ServerPlayer player = server.getPlayerList().getPlayer(uuid);
+                    String formattedBalance = NumberFormat.getCurrencyInstance(Locale.US).format(balance);
+
+                    String playerName;
+                    if (player != null) {
+                        playerName = player.getPlainTextName();
+                    } else if (savedData.getPlayerName(uuid).isPresent()) {
+                        playerName = savedData.getPlayerName(uuid).orElseThrow();
+                    } else playerName = uuid.toString(); // fallback to player's uuid
+
+                    String message = index[0] + ": " + playerName + " > " + formattedBalance;
+                    context.getSource().sendSuccess(() -> Component.literal(message).withStyle(ChatFormatting.GOLD), false);
+                    index[0]++;
+                });
+                return Command.SINGLE_SUCCESS;
+            }));
 		});
 
 		DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:displayed_id"), modifyContext -> {
-			modifyContext.modify(Predicate.not(i -> false), (builder, item) -> {
+			modifyContext.modify(item -> true, (builder, item) -> {
 				Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
 				builder.set(PooSMPItemComponents.DISPLAYED_ID, itemId);
 				//if (itemId.getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {

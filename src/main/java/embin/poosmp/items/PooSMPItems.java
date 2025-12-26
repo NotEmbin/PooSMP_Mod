@@ -1,7 +1,9 @@
 package embin.poosmp.items;
 
+import embin.poosmp.economy.shop.ShopCategories;
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.PooSMPMod;
+import embin.poosmp.items.component.ValueComponent;
 import embin.poosmp.upgrade.PooSMPKeys;
 import embin.poosmp.util.Id;
 import net.minecraft.core.Registry;
@@ -111,7 +113,7 @@ public class PooSMPItems {
     public static final Item GEAR = register("gear");
     public static final Item SCREW = register("screw");
     public static final Item GLASS_SHARD = register("glass_shard");
-    public static final Item MAGIC_DEVICE = register("magic_device", MagicDeviceItem::new, new Item.Properties().durability(256).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final Item MAGIC_DEVICE = register("magic_device", MagicDeviceItem::new, new Item.Properties().durability(180).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final Item NULL_SHARD = register("null_shard", Rarity.EPIC);
     public static final Item NULL_STICK = warpStick("null_stick", PooSMPKeys.MISSINGNO);
 
@@ -122,7 +124,7 @@ public class PooSMPItems {
     }
 
     private static Item moneyItem(String name, double value) {
-        return register(name, MoneyItem::new, new Item.Properties().component(PooSMPItemComponents.MONEY, value).stacksTo(99));
+        return register(name, MoneyItem::new, new Item.Properties().component(PooSMPItemComponents.MONEY, value).component(PooSMPItemComponents.ITEM_VALUE, new ValueComponent(value, value, ShopCategories.MISC)).stacksTo(99));
     }
 
     private static Item musicDisc(String name, ResourceKey<JukeboxSong> song, String requester) {
