@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 60,
   "experience": 20,
-  "ingredient": {
-    "item": "poosmp:poop_block"
-  },
+  "ingredient": "poosmp:poop_block",
   "result": {
     "id": "poosmp:im_gonna_kill_myself"
   }

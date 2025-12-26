@@ -1,67 +1,69 @@
 package embin.poosmp.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import embin.poosmp.block.PooSMPBlocks;
-import embin.poosmp.client.screen.shop.ShopScreenOld;
-import embin.poosmp.client.screen.shop.ShopScreenHandler;
 import embin.poosmp.client.screen.upgrade.UpgradesScreen;
-import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.networking.PooSMPMessages;
 import embin.poosmp.util.Id;
+import embin.poosmp.world.PooSMPSavedData;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.color.world.BiomeColors;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.GrassColors;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.DeathScreen;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.CommonColors;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.level.block.Blocks;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class PooSMPModClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("poosmp/client");
-	public static KeyBinding openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+    public static final KeyMapping.Category POOSMP_KEYS = KeyMapping.Category.register(Id.of("poosmp_keys"));
+    public static final boolean SYNC_DATA = true;
+    public static final boolean ALWAYS_SHOW_BALANCE = true;
+
+	public static KeyMapping openUpgradesScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_upgrades_screen",
-			InputUtil.Type.KEYSYM,
+			InputConstants.Type.KEYSYM,
 			GLFW.GLFW_KEY_0,
-			"category.poosmp.keybinds"
+			POOSMP_KEYS
 	));
-	public static KeyBinding openDeathScreen = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+	public static KeyMapping openDeathScreen = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.poosmp.open_death_screen",
-			InputUtil.Type.KEYSYM,
+			InputConstants.Type.KEYSYM,
 			GLFW.GLFW_KEY_KP_DIVIDE,
-			"category.poosmp.keybinds"
+            POOSMP_KEYS
 	));
 
 	@Override
 	public void onInitializeClient() {
 		ClientTickEvents.END_CLIENT_TICK.register(Id.of("open_upgrades_screen"), client -> {
-			while (openUpgradesScreen.wasPressed()) {
-				client.setScreen(new UpgradesScreen(client.currentScreen));
+			while (openUpgradesScreen.consumeClick()) {
+				client.setScreen(new UpgradesScreen(client.screen));
 			}
-			while (openDeathScreen.wasPressed()) {
-				client.setScreen(new DeathScreen(Text.literal("nah jk (click title screen to respawn)"), false));
-				for (EntityAttributeInstance attribute : client.player.getAttributes().getAttributesToSend()) {
-					for (EntityAttributeModifier modifier : attribute.getModifiers()) {
-						LOGGER.info("{} / {}", attribute.getAttribute().getIdAsString(), modifier.id().toString());
-					}
-				}
+			while (openDeathScreen.consumeClick()) {
+                if (client.player != null) {
+                    client.setScreen(new DeathScreen(Component.literal("nah jk (click title screen to respawn)"), false, client.player));
+                    for (AttributeInstance attribute : client.player.getAttributes().getSyncableAttributes()) {
+                        for (AttributeModifier modifier : attribute.getModifiers()) {
+                            LOGGER.info("{} / {}", attribute.getAttribute().getRegisteredName(), modifier.id().toString());
+                        }
+                    }
+                }
 			}
 		});
 
@@ -76,7 +78,8 @@ public class PooSMPModClient implements ClientModInitializer {
 		//	);
 		//});
 
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
+
+		BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
 			Blocks.MOSS_CARPET,
 			Blocks.RED_CARPET,
 			Blocks.YELLOW_CARPET,
@@ -94,54 +97,29 @@ public class PooSMPModClient implements ClientModInitializer {
 			Blocks.PINK_CARPET,
 			Blocks.MAGENTA_CARPET,
 			Blocks.WHITE_CARPET,
-			PooSMPBlocks.PALE_OAK_SAPLING,
-			PooSMPBlocks.PALE_HANGING_MOSS,
-			PooSMPBlocks.RESIN_CLUMP,
-			PooSMPBlocks.PALE_MOSS_CARPET,
-			PooSMPBlocks.POTTED_PALE_OAK_SAPLING
+            PooSMPBlocks.FAKE_GRASS_BLOCK
 		);
-
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(), PooSMPBlocks.FAKE_GRASS_BLOCK);
 
 		ColorProviderRegistry.BLOCK.register(
-			(state, world, pos, tintIndex) -> world != null && pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.getDefaultColor(),
+			(state, world, pos, tintIndex) -> world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
 			PooSMPBlocks.FAKE_GRASS_BLOCK
 		);
 
-		ColorProviderRegistry.ITEM.register(
-			(stack, tintIndex) -> GrassColors.getColor(0.5, 1.0),
-			PooSMPBlocks.FAKE_GRASS_BLOCK
-		);
+        HudElementRegistry.addLast(Id.of("balance"), (guiGraphics, deltaTracker) -> {
+            Minecraft minecraft = Minecraft.getInstance();
+            PooSMPSavedData savedData = PooSMPSavedData.Client.INSTANCE;
+            if (minecraft.player != null) {
+                if (savedData.getBalance(minecraft.player) > 0 || PooSMPModClient.ALWAYS_SHOW_BALANCE) {
+                    String balance = NumberFormat.getCurrencyInstance(Locale.US).format(savedData.getBalance(minecraft.player));
+                    guiGraphics.drawString(minecraft.font, balance, 4, guiGraphics.guiHeight() - 10, CommonColors.WHITE);
+                }
+            }
+        });
 
-		ItemTooltipCallback.EVENT.register(
-				Id.of("poosmp:adjust_tooltip"),
-				(itemStack, tooltipContext, tooltipType, list) -> {
-					if (tooltipType.isAdvanced()) {
-						Text disabledText = Text.translatable("item.disabled").formatted(Formatting.RED);
-						boolean wasDisabled = false; // cant actually check if item is disabled in this callback
-						if (list.getLast().equals(disabledText)) {
-							list.removeLast();
-							wasDisabled = true;
-						}
-						if (!itemStack.getComponents().isEmpty()) {
-							list.removeLast();
-						}
-						list.removeLast();
-						if (itemStack.contains(PooSMPItemComponents.ITEM_VALUE)) {
-							itemStack.get(PooSMPItemComponents.ITEM_VALUE).appendTooltip(tooltipContext, list::add, tooltipType);
-						}
-						Identifier displayedId = itemStack.getOrDefault(PooSMPItemComponents.DISPLAYED_ID, Registries.ITEM.getId(itemStack.getItem()));
-						boolean hasComponent = itemStack.contains(PooSMPItemComponents.DISPLAYED_ID);
-						list.add(Text.literal(displayedId.toString()).formatted(hasComponent ? Formatting.DARK_GRAY : Formatting.RED));
-						if (!itemStack.getComponents().isEmpty()) {
-							list.add(Text.translatable("item.components", itemStack.getComponents().size()).formatted(Formatting.DARK_GRAY));
-						}
-						if (wasDisabled) {
-							list.add(disabledText);
-						}
-					}
-				}
-		);
+		// ColorProviderRegistry.ITEM.register(
+		// 	(stack, tintIndex) -> GrassColors.getColor(0.5, 1.0),
+		// 	PooSMPBlocks.FAKE_GRASS_BLOCK
+		// );
 
 		PooSMPMessages.registerS2CPackets();
 	}

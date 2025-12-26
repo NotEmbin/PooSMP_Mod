@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "poosmp:red_poo"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "poosmp:red_poo"
+      }
+    ]
+  }
+}

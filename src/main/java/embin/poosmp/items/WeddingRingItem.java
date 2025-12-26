@@ -2,96 +2,100 @@ package embin.poosmp.items;
 
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.util.Id;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.Level;
 
 public class WeddingRingItem extends CreativeSnitchItem {
     public static String[] married_users = {"Embin", "ddededodediamant", "_thecubic_", "schleop"};
-    public WeddingRingItem(Settings settings) {
+    public WeddingRingItem(Properties settings) {
         super(settings);
     }
 
-    public static AttributeModifiersComponent weddingRingAttributes() {
-        return AttributeModifiersComponent.builder().add(
-            EntityAttributes.GENERIC_MAX_HEALTH,
-            new EntityAttributeModifier(
-                Id.of("poosmp:wedding_ring_hp_buff"), 10, EntityAttributeModifier.Operation.ADD_VALUE
+    public static ItemAttributeModifiers weddingRingAttributes() {
+        return ItemAttributeModifiers.builder().add(
+            Attributes.MAX_HEALTH,
+            new AttributeModifier(
+                Id.of("poosmp:wedding_ring_hp_buff"), 10, AttributeModifier.Operation.ADD_VALUE
             ),
-            AttributeModifierSlot.OFFHAND
+            EquipmentSlotGroup.OFFHAND
         ).add(
-            EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
-            new EntityAttributeModifier(
-                Id.of("poosmp:wedding_ring_entity_reach_buff"), 1.0F, EntityAttributeModifier.Operation.ADD_VALUE
+            Attributes.ENTITY_INTERACTION_RANGE,
+            new AttributeModifier(
+                Id.of("poosmp:wedding_ring_entity_reach_buff"), 1.0F, AttributeModifier.Operation.ADD_VALUE
             ),
-            AttributeModifierSlot.OFFHAND
+            EquipmentSlotGroup.OFFHAND
         ).add(
-            EntityAttributes.GENERIC_ATTACK_DAMAGE,
-            new EntityAttributeModifier(
-                Id.of("poosmp:wedding_ring_attack_damage"), 8, EntityAttributeModifier.Operation.ADD_VALUE
+            Attributes.ATTACK_DAMAGE,
+            new AttributeModifier(
+                Id.of("poosmp:wedding_ring_attack_damage"), 8, AttributeModifier.Operation.ADD_VALUE
             ),
-            AttributeModifierSlot.HAND
+            EquipmentSlotGroup.HAND
         ).add(
-            EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
-            new EntityAttributeModifier(
-                Id.of("poosmp:wedding_ring_armor_toughness"), 6, EntityAttributeModifier.Operation.ADD_VALUE
+            Attributes.ARMOR_TOUGHNESS,
+            new AttributeModifier(
+                Id.of("poosmp:wedding_ring_armor_toughness"), 6, AttributeModifier.Operation.ADD_VALUE
             ),
-            AttributeModifierSlot.OFFHAND
+            EquipmentSlotGroup.OFFHAND
         ).build();
     }
 
-    public static AttributeModifiersComponent weddingRingPublicAttributes() {
-        return AttributeModifiersComponent.builder().add(
-            EntityAttributes.GENERIC_ATTACK_DAMAGE,
-            new EntityAttributeModifier(
-                Id.of("poosmp:wedding_ring_attack_damage"), 2, EntityAttributeModifier.Operation.ADD_VALUE
+    public static ItemAttributeModifiers weddingRingPublicAttributes() {
+        return ItemAttributeModifiers.builder().add(
+            Attributes.ATTACK_DAMAGE,
+            new AttributeModifier(
+                Id.of("poosmp:wedding_ring_attack_damage"), 2, AttributeModifier.Operation.ADD_VALUE
             ),
-            AttributeModifierSlot.HAND
+            EquipmentSlotGroup.HAND
         ).build();
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-        if (!world.isClient) {
-            if (entity.isPlayer()) {
+    public void inventoryTick(ItemStack stack, ServerLevel world, Entity entity, EquipmentSlot equipmentSlot) {
+        super.inventoryTick(stack, world, entity, equipmentSlot);
+        if (!world.isClientSide()) {
+            if (entity.isAlwaysTicking()) {
                 if (Arrays.asList(married_users).contains(entity.getName().getString())
                     || entity.getName().getString().startsWith("Player")
-                    || stack.contains(PooSMPItemComponents.FORCE_MARRIED)
+                    || stack.has(PooSMPItemComponents.FORCE_MARRIED)
                 ) {
-                    stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, weddingRingAttributes());
+                    stack.set(DataComponents.ATTRIBUTE_MODIFIERS, weddingRingAttributes());
                     stack.set(PooSMPItemComponents.MARRIED, true);
                 } else {
-                    stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, weddingRingPublicAttributes());
+                    stack.set(DataComponents.ATTRIBUTE_MODIFIERS, weddingRingPublicAttributes());
                     stack.set(PooSMPItemComponents.MARRIED, false);
                 }
             } else {
-                stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, weddingRingAttributes());
+                stack.set(DataComponents.ATTRIBUTE_MODIFIERS, weddingRingAttributes());
                 stack.set(PooSMPItemComponents.MARRIED, true);
             }
         }
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        if (stack.contains(PooSMPItemComponents.MARRIED)) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag type) {
+        super.appendHoverText(stack, context, tooltipDisplay, consumer, type);
+        if (stack.has(PooSMPItemComponents.MARRIED)) {
             if (stack.getOrDefault(PooSMPItemComponents.MARRIED, false)) {
-                tooltip.add(Text.translatable("tooltip.poosmp.married.true").formatted(Formatting.GOLD));
+                consumer.accept(Component.translatable("tooltip.poosmp.married.true").withStyle(ChatFormatting.GOLD));
             } else {
-                tooltip.add(Text.translatable("tooltip.poosmp.married.false").formatted(Formatting.RED));
-                tooltip.add(Text.translatable("tooltip.poosmp.married.false.line_2").formatted(Formatting.RED));
+                consumer.accept(Component.translatable("tooltip.poosmp.married.false").withStyle(ChatFormatting.RED));
+                consumer.accept(Component.translatable("tooltip.poosmp.married.false.line_2").withStyle(ChatFormatting.RED));
             }
         }
     }

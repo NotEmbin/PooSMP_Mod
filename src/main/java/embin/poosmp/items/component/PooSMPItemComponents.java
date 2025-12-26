@@ -3,13 +3,15 @@ package embin.poosmp.items.component;
 import com.mojang.serialization.Codec;
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.util.Id;
-import net.minecraft.component.ComponentType;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Unit;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -18,81 +20,87 @@ public class PooSMPItemComponents {
         PooSMPMod.LOGGER.info("Making PooSMP item components!!!");
     }
 
-    public static final ComponentType<String> SELECTED_BIOME = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<String> SELECTED_BIOME = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("selected_biome"),
-        ComponentType.<String>builder().codec(Codec.STRING).build()
+        DataComponentType.<String>builder().persistent(Codec.STRING).build()
     );
 
-    public static final ComponentType<Boolean> MARRIED = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Boolean> MARRIED = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("married"),
-        ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
+        DataComponentType.<Boolean>builder().persistent(Codec.BOOL).build()
     );
 
-    public static final ComponentType<Boolean> FROM_CREATIVE = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Boolean> FROM_CREATIVE = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("from_creative"),
-        ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
+        DataComponentType.<Boolean>builder().persistent(Codec.BOOL).build()
     );
 
-    public static final ComponentType<Unit> FORCE_MARRIED = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Unit> FORCE_MARRIED = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("force_married"),
-        ComponentType.<Unit>builder().codec(Unit.CODEC).build()
+        DataComponentType.<Unit>builder().persistent(Unit.CODEC).build()
     );
 
-    public static final ComponentType<EntityType<?>> MOB_OVERRIDE = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<EntityType<?>> MOB_OVERRIDE = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("mob_override"),
-        ComponentType.<EntityType<?>>builder().codec(Registries.ENTITY_TYPE.getCodec()).build()
+        DataComponentType.<EntityType<?>>builder().persistent(BuiltInRegistries.ENTITY_TYPE.byNameCodec()).build()
     );
 
-    public static final ComponentType<List<String>> MOB_NAMES = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<List<String>> MOB_NAMES = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("mob_stick_names_override"),
-        ComponentType.<List<String>>builder().codec(Codec.STRING.listOf()).build()
+        DataComponentType.<List<String>>builder().persistent(Codec.STRING.listOf()).build()
     );
 
-    public static final ComponentType<ItemStack> MOB_OFFHAND = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<ItemStack> MOB_OFFHAND = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("mob_offhand_item_override"),
-        ComponentType.<ItemStack>builder().codec(ItemStack.OPTIONAL_CODEC).build()
+        DataComponentType.<ItemStack>builder().persistent(ItemStack.OPTIONAL_CODEC).build()
     );
 
-    public static final ComponentType<Double> MONEY = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Double> MONEY = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("money"),
-        ComponentType.<Double>builder().codec(Codec.DOUBLE).build()
+        DataComponentType.<Double>builder().persistent(Codec.DOUBLE).build()
     );
 
-    public static final ComponentType<Integer> STICK_COOLDOWN_OVERRIDE = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Integer> STICK_COOLDOWN_OVERRIDE = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("stick_cooldown_override"),
-        ComponentType.<Integer>builder().codec(Codec.INT).build()
+        DataComponentType.<Integer>builder().persistent(Codec.INT).build()
     );
 
-    public static final ComponentType<Integer> BIOME_STICK_RADIUS_OVERRIDE = Registry.register(
-        Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Integer> BIOME_STICK_RADIUS_OVERRIDE = Registry.register(
+        BuiltInRegistries.DATA_COMPONENT_TYPE,
         Id.of("biome_stick_radius_override"),
-        ComponentType.<Integer>builder().codec(Codec.INT).build()
+        DataComponentType.<Integer>builder().persistent(Codec.INT).build()
     );
 
-    public static final ComponentType<Integer> BLOCKS_MINED = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Integer> BLOCKS_MINED = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
             Id.of("strange/blocks_mined"),
-            ComponentType.<Integer>builder().codec(Codec.INT).build()
+            DataComponentType.<Integer>builder().persistent(Codec.INT).build()
     );
 
-    public static final ComponentType<Identifier> DISPLAYED_ID = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<Identifier> DISPLAYED_ID = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
             Id.of("displayed_id"),
-            ComponentType.<Identifier>builder().codec(Identifier.CODEC).build()
+            DataComponentType.<Identifier>builder().persistent(Identifier.CODEC).build()
     );
 
-    public static final ComponentType<ValueComponent> ITEM_VALUE = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
+    public static final DataComponentType<ValueComponent> ITEM_VALUE = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
             Id.of("item_value"),
-            ComponentType.<ValueComponent>builder().codec(ValueComponent.CODEC).build()
+            DataComponentType.<ValueComponent>builder().persistent(ValueComponent.CODEC).build()
+    );
+
+    public static final DataComponentType<ResourceKey<Level>> WARP_DIMENSION = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Id.of("warp_dimension"),
+            DataComponentType.<ResourceKey<Level>>builder().persistent(Level.RESOURCE_KEY_CODEC).build()
     );
 }

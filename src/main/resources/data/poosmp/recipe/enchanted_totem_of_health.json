@@ -7,12 +7,8 @@
     "###"
   ],
   "key": {
-    "3": {
-      "item": "poosmp:totem_of_health"
-    },
-    "#": {
-      "item": "minecraft:diamond"
-    }
+    "3": "poosmp:totem_of_health",
+    "#": "minecraft:diamond"
   },
   "result": {
     "id": "poosmp:enchanted_totem_of_health",

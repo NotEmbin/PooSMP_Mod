@@ -7,7 +7,7 @@
   "max_purchases": 10,
   "attribute_modifiers": [
     {
-      "type": "minecraft:player.entity_interaction_range",
+      "type": "minecraft:entity_interaction_range",
       "id": "poosmp:upgrade/entity_reach_increase",
       "amount": 1,
       "operation": "add_value"

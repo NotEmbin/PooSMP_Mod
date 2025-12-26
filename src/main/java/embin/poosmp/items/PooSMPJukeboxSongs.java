@@ -1,24 +1,24 @@
 package embin.poosmp.items;
 
 import embin.poosmp.util.Id;
-import net.minecraft.block.jukebox.JukeboxSong;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.JukeboxSong;
 
 public interface PooSMPJukeboxSongs {
-    private static RegistryKey<JukeboxSong> of (String namespace) {
-        return RegistryKey.of(RegistryKeys.JUKEBOX_SONG, Id.of(namespace));
+    private static ResourceKey<JukeboxSong> of (String namespace) {
+        return ResourceKey.create(Registries.JUKEBOX_SONG, Id.of(namespace));
     }
 
-    RegistryKey<JukeboxSong> TRIFECTA_CAP = of("trifecta_cap");
-    RegistryKey<JukeboxSong> BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL = of("butterflies_and_hurricanes_instrumental");
-    RegistryKey<JukeboxSong> BUDDY_HOLLY = of("buddy_holly");
-    RegistryKey<JukeboxSong> STEREO_MADNESS = of("stereo_madness");
-    RegistryKey<JukeboxSong> NOT_LIKE_US = of("not_like_us");
-    RegistryKey<JukeboxSong> RESISTANCE_INSTRUMENTAL = of("resistance_instrumental");
-    RegistryKey<JukeboxSong> BLISS_INSTRUMENTAL = of("bliss_instrumental");
-    RegistryKey<JukeboxSong> ENDLESSLY_INSTRUMENTAL = of("endlessly_instrumental");
-    RegistryKey<JukeboxSong> ENDLESSLY = of("endlessly");
-    RegistryKey<JukeboxSong> ENDLESSLY_STEREO = of("endlessly_stereo");
-    RegistryKey<JukeboxSong> SOU = of("story_of_undertale");
+    ResourceKey<JukeboxSong> TRIFECTA_CAP = of("trifecta_cap");
+    ResourceKey<JukeboxSong> BUTTERFLIES_AND_HURRICANES_INSTRUMENTAL = of("butterflies_and_hurricanes_instrumental");
+    ResourceKey<JukeboxSong> BUDDY_HOLLY = of("buddy_holly");
+    ResourceKey<JukeboxSong> STEREO_MADNESS = of("stereo_madness");
+    ResourceKey<JukeboxSong> NOT_LIKE_US = of("not_like_us");
+    ResourceKey<JukeboxSong> RESISTANCE_INSTRUMENTAL = of("resistance_instrumental");
+    ResourceKey<JukeboxSong> BLISS_INSTRUMENTAL = of("bliss_instrumental");
+    ResourceKey<JukeboxSong> ENDLESSLY_INSTRUMENTAL = of("endlessly_instrumental");
+    ResourceKey<JukeboxSong> ENDLESSLY = of("endlessly");
+    ResourceKey<JukeboxSong> ENDLESSLY_STEREO = of("endlessly_stereo");
+    ResourceKey<JukeboxSong> SOU = of("story_of_undertale");
 }

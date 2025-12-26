@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "poosmp:poop_bricks",
+  "result": {
+    "count": 1,
+    "id": "poosmp:poop_brick_wall"
+  }
+}

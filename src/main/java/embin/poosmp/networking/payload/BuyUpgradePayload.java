@@ -1,24 +1,24 @@
 package embin.poosmp.networking.payload;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import embin.poosmp.networking.PooSMPMessages;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public record BuyUpgradePayload(int upgrade) implements CustomPayload {
-    public static final PacketCodec<PacketByteBuf, BuyUpgradePayload> CODEC = CustomPayload.codecOf(BuyUpgradePayload::write, BuyUpgradePayload::new);
-    public static final Id<BuyUpgradePayload> ID = new Id<>(embin.poosmp.util.Id.of("poosmp:buy_upgrade"));
+public record BuyUpgradePayload(int upgrade) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, BuyUpgradePayload> CODEC = CustomPacketPayload.codec(BuyUpgradePayload::write, BuyUpgradePayload::new);
+    public static final Type<BuyUpgradePayload> ID = new Type<>(PooSMPMessages.BUY_UPGRADE);
 
-    public BuyUpgradePayload(PacketByteBuf buf) {
+    public BuyUpgradePayload(FriendlyByteBuf buf) {
         this(buf.readInt());
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
-    private void write(PacketByteBuf buf) {
+    private void write(FriendlyByteBuf buf) {
         buf.writeInt(upgrade);
     }
 }

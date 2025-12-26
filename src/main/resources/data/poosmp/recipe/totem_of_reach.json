@@ -7,15 +7,9 @@
     "#"
   ],
   "key": {
-    "3": {
-      "item": "minecraft:golden_apple"
-    },
-    "#": {
-      "item": "minecraft:diamond"
-    },
-    "4": {
-      "item": "minecraft:piston"
-    }
+    "3": "minecraft:golden_apple",
+    "#": "minecraft:diamond",
+    "4": "minecraft:piston"
   },
   "result": {
     "id": "poosmp:totem_of_reach",

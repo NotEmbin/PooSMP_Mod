@@ -1,6 +1,6 @@
 package embin.poosmp.economy.shop;
 
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Items;
 
 @Deprecated(forRemoval = true)
 public class ShopProducts {

@@ -1,32 +1,42 @@
 {
+  "attributes": {
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:cherry_leaves"
+        },
+        "probability": 0.01
+      }
+    ],
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "explodes": true
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 60,
+        "min_delay": 20,
+        "sound": "minecraft:music.credits"
+      }
+    },
+    "minecraft:visual/sky_color": "#f07aff",
+    "minecraft:visual/fog_color": "#ffc2fd",
+    "minecraft:visual/water_fog_color": "#330532"
+  },
   "temperature": 0.85,
   "downfall": 0.8,
   "has_precipitation": true,
   "creature_spawn_probability": 0.2,
   "effects": {
-    "sky_color": 15760127,
-    "fog_color": 16761597,
     "water_color": 14237668,
-    "water_fog_color": 3343666,
     "foliage_color": 16098068,
-    "grass_color_modifier": "none",
-    "particle": {
-      "options": {
-        "type": "minecraft:cherry_leaves"
-      },
-      "probability": 0.01
-    },
-    "music": {
-      "max_delay": 60,
-      "min_delay": 20,
-      "replace_current_music": false,
-      "sound": "minecraft:music.creative"
-    }
+    "grass_color_modifier": "none"
   },
   "spawners": {
     "misc": [
       {
-        "type": "minecraft:boat",
+        "type": "minecraft:oak_boat",
         "weight": 4,
         "minCount": 1,
         "maxCount": 2
@@ -34,7 +44,7 @@
     ]
   },
   "spawn_costs": {},
-  "carvers": {},
+  "carvers": [],
   "features": [
     [
       "minecraft:jungle_bush",

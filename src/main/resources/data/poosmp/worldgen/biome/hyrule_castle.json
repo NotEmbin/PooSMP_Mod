@@ -3,21 +3,32 @@
   "downfall": 0.5,
   "has_precipitation": false,
   "effects": {
-    "sky_color": 10171174,
-    "fog_color": 7021595,
     "water_color": 6062520,
-    "water_fog_color": 11382189,
     "grass_color": 7039851,
-    "foliage_color": 5658198,
-    "particle": {
-      "options": {
-        "type": "minecraft:crimson_spore"
-      },
-      "probability": 0.01
-    }
+    "foliage_color": 5658198
+  },
+  "attributes": {
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:crimson_spore"
+        },
+        "probability": 0.01
+      }
+    ],
+    "minecraft:visual/sky_color": "#9b3326",
+    "minecraft:visual/fog_color": "#6b241b",
+    "minecraft:visual/fog_start_distance": 12.0,
+    "minecraft:visual/fog_end_distance": 256.0,
+    "minecraft:visual/sky_light_factor": 0.8,
+    "minecraft:visual/sky_light_color": "#ffaaaa",
+    "minecraft:gameplay/eyeblossom_open": true,
+    "minecraft:gameplay/piglins_zombify": false,
+    "minecraft:visual/water_fog_color": "#adadad",
+    "minecraft:visual/cloud_color": "#aa8d2525"
   },
   "spawners": {},
   "spawn_costs": {},
-  "carvers": {},
+  "carvers": [],
   "features": []
 }

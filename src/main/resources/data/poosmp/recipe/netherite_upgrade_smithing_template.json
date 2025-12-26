@@ -7,15 +7,9 @@
     "###"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:netherrack"
-    },
-    "3": {
-      "item": "minecraft:netherite_scrap"
-    },
-    "2": {
-      "item": "minecraft:diamond"
-    }
+    "#": "minecraft:netherrack",
+    "3": "minecraft:netherite_scrap",
+    "2": "minecraft:diamond"
   },
   "result": {
     "id": "minecraft:netherite_upgrade_smithing_template",

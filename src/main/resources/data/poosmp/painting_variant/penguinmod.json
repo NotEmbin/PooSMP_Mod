@@ -1,5 +1,13 @@
 {
   "asset_id": "poosmp:penguinmod",
   "width": 2,
-  "height": 2
+  "height": 2,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.poosmp.penguinmod.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.poosmp.penguinmod.author"
+  }
 }

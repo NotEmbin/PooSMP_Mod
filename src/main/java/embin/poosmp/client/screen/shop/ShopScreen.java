@@ -1,41 +1,40 @@
 package embin.poosmp.client.screen.shop;
 
 import embin.poosmp.economy.shop.ShopCategory;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.ThreePartsLayoutWidget;
-import net.minecraft.text.Text;
-
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 // TODO: finish shop screen
 public class ShopScreen extends Screen {
-    protected final ThreePartsLayoutWidget layout = new ThreePartsLayoutWidget(this);
+    protected final HeaderAndFooterLayout layout = new HeaderAndFooterLayout(this);
 
     protected ShopScreen() {
-        super(Text.literal("Shop"));
+        super(Component.literal("Shop"));
     }
 
     @Override
     protected void init() {
-        this.layout.addFooter(ButtonWidget.builder(Text.literal("Exit"), button -> this.close()).width(200).build());
-        this.layout.forEachChild(this::addDrawableChild);
+        this.layout.addToFooter(Button.builder(Component.literal("Exit"), button -> this.onClose()).width(200).build());
+        this.layout.visitWidgets(this::addRenderableWidget);
     }
 
-    private class ShopCategoryWidget extends ElementListWidget<ShopCategoryWidget.ShopCategoryEntry> {
+    private class ShopCategoryWidget extends ContainerObjectSelectionList<ShopCategoryWidget.ShopCategoryEntry> {
         private final ShopCategory shopCategory;
 
-        public ShopCategoryWidget(MinecraftClient minecraftClient, ShopCategory shopCategory) {
+        public ShopCategoryWidget(Minecraft minecraftClient, ShopCategory shopCategory) {
             super(minecraftClient, ShopScreen.this.width, 400, 55, 44);
             this.shopCategory = shopCategory;
         }
 
-        private class ShopCategoryEntry extends ElementListWidget.Entry<ShopCategoryWidget.ShopCategoryEntry> {
+        private class ShopCategoryEntry extends ContainerObjectSelectionList.Entry<ShopCategoryWidget.ShopCategoryEntry> {
             private final ShopCategory shopCategory;
 
             public ShopCategoryEntry(ShopCategory shopCategory) {
@@ -43,31 +42,31 @@ public class ShopScreen extends Screen {
             }
 
             @Override
-            public List<? extends Selectable> selectableChildren() {
+            public List<? extends NarratableEntry> narratables() {
                 return List.of();
             }
 
             @Override
-            public List<? extends Element> children() {
+            public List<? extends GuiEventListener> children() {
                 return List.of();
             }
 
             @Override
-            public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            public void renderContent(GuiGraphics guiGraphics, int i, int j, boolean bl, float f) {
 
             }
         }
     }
 
-    private class ShopContentsWidget extends ElementListWidget<ShopContentsWidget.ShopContentsEntry> {
+    private class ShopContentsWidget extends ContainerObjectSelectionList<ShopContentsWidget.ShopContentsEntry> {
         private final ShopCategory shopCategory;
 
-        public ShopContentsWidget(MinecraftClient minecraftClient, ShopCategory shopCategory) {
+        public ShopContentsWidget(Minecraft minecraftClient, ShopCategory shopCategory) {
             super(minecraftClient, ShopScreen.this.width, 400, 55, 44);
             this.shopCategory = shopCategory;
         }
 
-        private class ShopContentsEntry extends ElementListWidget.Entry<ShopContentsWidget.ShopContentsEntry> {
+        private class ShopContentsEntry extends ContainerObjectSelectionList.Entry<ShopContentsWidget.ShopContentsEntry> {
             private final ShopCategory shopCategory;
 
             public ShopContentsEntry(ShopCategory shopCategory) {
@@ -75,17 +74,17 @@ public class ShopScreen extends Screen {
             }
 
             @Override
-            public List<? extends Selectable> selectableChildren() {
+            public List<? extends NarratableEntry> narratables() {
                 return List.of();
             }
 
             @Override
-            public List<? extends Element> children() {
+            public List<? extends GuiEventListener> children() {
                 return List.of();
             }
 
             @Override
-            public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            public void renderContent(GuiGraphics guiGraphics, int i, int j, boolean bl, float f) {
 
             }
         }

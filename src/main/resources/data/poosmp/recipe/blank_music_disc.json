@@ -7,12 +7,8 @@
     "###"
   ],
   "key": {
-    "3": {
-      "item": "minecraft:gold_nugget"
-    },
-    "#": {
-      "item": "minecraft:iron_nugget"
-    }
+    "3": "minecraft:gold_nugget",
+    "#": "minecraft:iron_nugget"
   },
   "result": {
     "id": "poosmp:blank_music_disc",

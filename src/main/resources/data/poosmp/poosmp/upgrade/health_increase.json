@@ -6,7 +6,7 @@
   },
   "attribute_modifiers": [
     {
-      "type": "minecraft:generic.max_health",
+      "type": "minecraft:max_health",
       "id": "poosmp:upgrade/health_increase",
       "amount": 2,
       "operation": "add_value"

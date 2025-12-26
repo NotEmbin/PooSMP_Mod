@@ -6,12 +6,8 @@
     "#"
   ],
   "key": {
-    "#": {
-      "item": "poosmp:ring"
-    },
-    "4": {
-      "item": "minecraft:diamond"
-    }
+    "#": "poosmp:ring",
+    "4": "minecraft:diamond"
   },
   "result": {
     "id": "poosmp:wedding_ring",

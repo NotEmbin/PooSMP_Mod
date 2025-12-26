@@ -7,15 +7,9 @@
     "4#4"
   ],
   "key": {
-    "3": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "#": {
-      "item": "betternether:nether_ruby"
-    },
-    "4": {
-      "item": "poosmp:pooplet"
-    }
+    "3": "minecraft:netherite_ingot",
+    "#": "betternether:nether_ruby",
+    "4": "poosmp:pooplet"
   },
   "result": {
     "id": "poosmp:raw_red_poo",

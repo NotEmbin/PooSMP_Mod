@@ -7,7 +7,7 @@
   "max_purchases": 20,
   "attribute_modifiers": [
     {
-      "type": "minecraft:player.mining_efficiency",
+      "type": "minecraft:mining_efficiency",
       "id": "poosmp:upgrade/mining_speed_increase",
       "amount": 2,
       "operation": "add_value"

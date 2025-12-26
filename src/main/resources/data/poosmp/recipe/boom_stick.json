@@ -7,15 +7,9 @@
     "4#4"
   ],
   "key": {
-    "3": {
-      "tag": "c:rods/wooden"
-    },
-    "#": {
-      "item": "minecraft:gunpowder"
-    },
-    "4": {
-      "item": "minecraft:diamond"
-    }
+    "3": "#c:rods/wooden",
+    "#": "minecraft:gunpowder",
+    "4": "minecraft:diamond"
   },
   "result": {
     "id": "poosmp:boom_stick",

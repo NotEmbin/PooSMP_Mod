@@ -1,22 +1,22 @@
 package embin.poosmp.client.screen.shop;
 
 import embin.poosmp.client.screen.PooSMPScreenHandlers;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.core.Holder;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 @Deprecated
-public class ShopScreenHandler extends ScreenHandler {
+public class ShopScreenHandler extends AbstractContainerMenu {
     public static final int MAX_ITEMS_PER_PAGE = 12;
     public static final int MAX_ROWS = 2;
     public int currentPage = 1;
-    public RegistryEntry<Item> selectedItem = null;
+    public Holder<Item> selectedItem = null;
 
-    public ShopScreenHandler(int syncId, Inventory inventory) {
+    public ShopScreenHandler(int syncId, Container inventory) {
         super(PooSMPScreenHandlers.SHOP, syncId);
 
         // Inventory slots
@@ -33,12 +33,12 @@ public class ShopScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMoveStack(Player player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 }

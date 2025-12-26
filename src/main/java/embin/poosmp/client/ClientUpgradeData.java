@@ -1,19 +1,18 @@
 package embin.poosmp.client;
 
-import embin.poosmp.PooSMPRegistries;
 import embin.poosmp.upgrade.Upgrade;
 import embin.poosmp.util.Id;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 import java.util.Map;
 
 @Environment(EnvType.CLIENT)
+@Deprecated
 public class ClientUpgradeData {
     public static final ClientUpgradeData INSTANCE = new ClientUpgradeData();
     public Map<Identifier, Integer> purchases;
@@ -46,11 +45,11 @@ public class ClientUpgradeData {
         return this.balance;
     }
 
-    public void sync(PacketByteBuf buf) {
-        NbtCompound data = buf.readNbt();
+    public void sync(FriendlyByteBuf buf) {
+        CompoundTag data = buf.readNbt();
         if (data != null) {
-            for (String key : data.getKeys()) {
-                this.purchases.put(Id.of(key), data.getInt(key));
+            for (String key : data.keySet()) {
+                this.purchases.put(Id.of(key), data.getIntOr(key, 0));
             }
         }
     }

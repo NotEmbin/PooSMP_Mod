@@ -3,108 +3,108 @@ package embin.poosmp.block;
 import embin.poosmp.PooSMPMod;
 import embin.poosmp.block.annoyance.Annoyances;
 import embin.poosmp.util.Id;
-import embin.poosmp.world.PooSMPConfiguredFeatures;
-import embin.poosmp.world.tree.PooSMPSaplingGens;
-import net.minecraft.block.*;
-import net.minecraft.block.enums.NoteBlockInstrument;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.GrassBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+
+import java.util.function.Function;
 
 public class PooSMPBlocks {
-    public static final Block POOP_BLOCK = register("poop_block", new Block(copyBlock(Blocks.MUD).mapColor(DyeColor.BROWN)));
-    public static final Block MISSINGNO_BLOCK = register("missingno", new Block(AbstractBlock.Settings.create().requiresTool().mapColor(DyeColor.MAGENTA).strength(1.5F)), new Item.Settings().rarity(Rarity.EPIC));
-    public static final Block POOP_BRICKS = register("poop_bricks", new Block(copyBlock(Blocks.MUD_BRICKS).mapColor(MapColor.ORANGE)));
-    public static final Block POOP_BRICK_STAIRS = register("poop_brick_stairs", stairBlock(POOP_BRICKS));
-    public static final Block POOP_BRICK_SLAB = register("poop_brick_slab", slabBlock(POOP_BRICKS));
-    public static final Block POOP_BRICK_WALL = register("poop_brick_wall", wallBlock(POOP_BRICKS));
-    public static final Block RED_NETHER_BRICK_FENCE = register("red_nether_brick_fence", new FenceBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_RED).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F).sounds(BlockSoundGroup.NETHER_BRICKS)));
-    public static final Block SUS = register("im_gonna_kill_myself", new AnnoyanceBlock(Annoyances.SUS, AbstractBlock.Settings.create().mapColor(DyeColor.RED).strength(1.0F)));
-    public static final Block DDEDEDODEDIAMANTE_BLOCK = register("ddededodediamante_block", new ddededodediamanteBlock(AbstractBlock.Settings.create().mapColor(DyeColor.MAGENTA).strength(1.0F)));
-    public static final Block PENIS_BLOCK = register("minecraft:penis", new GrassBlock(copyBlock(Blocks.GRASS_BLOCK)));
-    public static final Block BANKERS_TABLE = register("bankers_table", new Block(copyBlock(Blocks.FLETCHING_TABLE).mapColor(DyeColor.BROWN)));
-
-    public static final Block PALE_OAK_LOG = register("minecraft:pale_oak_log", new PillarBlock(copyBlock(Blocks.OAK_LOG)));
-    public static final Block PALE_OAK_WOOD = register("minecraft:pale_oak_wood", new PillarBlock(copyBlock(Blocks.OAK_WOOD)));
-    public static final Block STRIPPED_PALE_OAK_LOG = register("minecraft:stripped_pale_oak_log", new PillarBlock(copyBlock(Blocks.STRIPPED_OAK_LOG)));
-    public static final Block STRIPPED_PALE_OAK_WOOD = register("minecraft:stripped_pale_oak_wood", new PillarBlock(copyBlock(Blocks.STRIPPED_OAK_WOOD)));
-    public static final Block PALE_OAK_PLANKS = register("minecraft:pale_oak_planks", new Block(copyBlock(Blocks.OAK_PLANKS).mapColor(MapColor.OFF_WHITE)));
-    public static final Block PALE_OAK_LEAVES = register("minecraft:pale_oak_leaves", new LeavesBlock(copyBlock(Blocks.OAK_LEAVES)));
-    public static final Block PALE_OAK_SAPLING = register("minecraft:pale_oak_sapling", new SaplingBlock(PooSMPSaplingGens.PALE_OAK, copyBlock(Blocks.OAK_SAPLING)));
-    public static final Block PALE_MOSS_BLOCK = register("minecraft:pale_moss_block", new NewMossBlock(PooSMPConfiguredFeatures.PALE_MOSS_PATCH_BONEMEAL, AbstractBlock.Settings.create().burnable().mapColor(MapColor.LIGHT_GRAY).strength(0.1F).sounds(BlockSoundGroup.MOSS_BLOCK).pistonBehavior(PistonBehavior.DESTROY)));
-    public static final Block PALE_HANGING_MOSS = register("minecraft:pale_hanging_moss", new HangingMossBlock(AbstractBlock.Settings.create().burnable().mapColor(PALE_MOSS_BLOCK.getDefaultMapColor()).noCollision().sounds(BlockSoundGroup.MOSS_CARPET).pistonBehavior(PistonBehavior.DESTROY)));
-    public static final Block PALE_MOSS_CARPET = register("minecraft:pale_moss_carpet", new CarpetBlock(AbstractBlock.Settings.create().burnable().mapColor(PALE_MOSS_BLOCK.getDefaultMapColor()).strength(0.1F).sounds(BlockSoundGroup.MOSS_CARPET).pistonBehavior(PistonBehavior.DESTROY)));
-    public static final Block POTTED_PALE_OAK_SAPLING = register("minecraft:potted_pale_oak_sapling", new FlowerPotBlock(PALE_OAK_SAPLING, AbstractBlock.Settings.create()));
-    public static final Block RESIN_BLOCK = register("minecraft:resin_block", new Block(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).sounds(BlockSoundGroup.PACKED_MUD)));
-    public static final Block RESIN_BRICKS = register("minecraft:resin_bricks", new Block(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(1.5F, 6.0F).sounds(BlockSoundGroup.MUD_BRICKS)));
-    public static final Block RESIN_BRICK_STAIRS = register("minecraft:resin_brick_stairs", stairBlock(RESIN_BRICKS));
-    public static final Block RESIN_BRICK_SLAB = register("minecraft:resin_brick_slab", slabBlock(RESIN_BRICKS));
-    public static final Block RESIN_BRICK_WALL = register("minecraft:resin_brick_wall", wallBlock(RESIN_BRICKS));
-    public static final Block CHISELED_RESIN_BRICKS = register("minecraft:chiseled_resin_bricks", new Block(copyBlock(RESIN_BRICKS)));
-    public static final Block PALE_OAK_DOOR = register("minecraft:pale_oak_door", new DoorBlock(PooSMPBlockSetTypes.PALE_OAK, AbstractBlock.Settings.create().mapColor(PALE_OAK_PLANKS.getDefaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(3.0F).nonOpaque().burnable().pistonBehavior(PistonBehavior.DESTROY)));
-    public static final Block PALE_OAK_FENCE = register("minecraft:pale_oak_fence", new FenceBlock(AbstractBlock.Settings.create().mapColor(PALE_OAK_PLANKS.getDefaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).burnable().sounds(BlockSoundGroup.WOOD)));
-    public static final Block PALE_OAK_FENCE_GATE = register("minecraft:pale_oak_fence_gate", new FenceGateBlock(PooSMPWoodTypes.PALE_OAK, AbstractBlock.Settings.create().mapColor(PALE_OAK_PLANKS.getDefaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).burnable().sounds(BlockSoundGroup.WOOD)));
-    public static final Block PALE_OAK_STAIRS = register("minecraft:pale_oak_stairs", stairBlock(PALE_OAK_PLANKS));
-    public static final Block PALE_OAK_SLAB = register("minecraft:pale_oak_slab", slabBlock(PALE_OAK_PLANKS));
-    public static final Block PALE_OAK_TRAPDOOR = register("minecraft:pale_oak_trapdoor", new TrapdoorBlock(PooSMPBlockSetTypes.PALE_OAK, AbstractBlock.Settings.create().mapColor(PALE_OAK_PLANKS.getDefaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(3.0F).nonOpaque().allowsSpawning(Blocks::never).burnable()));
-    public static final Block PALE_OAK_PRESSURE_PLATE = register("minecraft:pale_oak_pressure_plate", new PressurePlateBlock(PooSMPBlockSetTypes.PALE_OAK, AbstractBlock.Settings.create().mapColor(PALE_OAK_PLANKS.getDefaultMapColor()).solid().instrument(NoteBlockInstrument.BASS).noCollision().strength(0.5F).burnable().pistonBehavior(PistonBehavior.DESTROY)));
-    public static final Block PALE_OAK_BUTTON = register("minecraft:pale_oak_button", new ButtonBlock(PooSMPBlockSetTypes.PALE_OAK, 30, AbstractBlock.Settings.create().noCollision().strength(0.5f).pistonBehavior(PistonBehavior.DESTROY)));
-    public static final Block RESIN_CLUMP = register("minecraft:resin_clump", new MultifaceBlock(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_ORANGE).replaceable().noCollision().sounds(BlockSoundGroup.PACKED_MUD).burnable().pistonBehavior(PistonBehavior.DESTROY)));
-    // public static final Block ITEM_SHOP = register("item_shop", new ItemShopBlock(copyBlock(Blocks.IRON_BLOCK)));
+    public static final Block POOP_BLOCK = register("poop_block", Block::new, copyBlock(Blocks.MUD).mapColor(DyeColor.BROWN));
+    public static final Block MISSINGNO_BLOCK = register("missingno", BlockBehaviour.Properties.of().requiresCorrectToolForDrops().mapColor(DyeColor.MAGENTA).strength(1.5F), new Item.Properties().rarity(Rarity.EPIC));
+    public static final Block POOP_BRICKS = register("poop_bricks", Block::new, copyBlock(Blocks.MUD_BRICKS).mapColor(MapColor.COLOR_ORANGE));
+    public static final Block POOP_BRICK_STAIRS = register("poop_brick_stairs", stairBlock(POOP_BRICKS), copyBlock(POOP_BRICKS));
+    public static final Block POOP_BRICK_SLAB = register("poop_brick_slab", SlabBlock::new, copyBlock(POOP_BRICKS));
+    public static final Block POOP_BRICK_WALL = register("poop_brick_wall", wallBlock(), copyBlock(POOP_BRICKS));
+    public static final Block RED_NETHER_BRICK_FENCE = register("red_nether_brick_fence", FenceBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0F, 6.0F).sound(SoundType.NETHER_BRICKS));
+    public static final Block SUS = register("im_gonna_kill_myself", properties -> new AnnoyanceBlock(Annoyances.SUS, properties), BlockBehaviour.Properties.of().mapColor(DyeColor.RED).strength(1.0F));
+    public static final Block DDEDEDODEDIAMANTE_BLOCK = register("ddededodediamante_block", ddededodediamanteBlock::new, BlockBehaviour.Properties.of().mapColor(DyeColor.MAGENTA).strength(1.0F));
+    public static final Block PENIS_BLOCK = register("minecraft:penis", GrassBlock::new, copyBlock(Blocks.GRASS_BLOCK));
+    public static final Block BANKERS_TABLE = register("bankers_table", copyBlock(Blocks.FLETCHING_TABLE).mapColor(DyeColor.BROWN));
     // i can't bother with this right now
-    public static final Block RED_POO_BLOCK = register("red_poo_block", new Block(AbstractBlock.Settings.create().requiresTool().mapColor(DyeColor.RED).strength(2.5F).sounds(BlockSoundGroup.BONE)), new Item.Settings().rarity(Rarity.UNCOMMON));
-    public static final Block DRAGON_ANNOYANCE = register("ear_destroyer_9000", new AnnoyanceBlock(Annoyances.DRAGON, AbstractBlock.Settings.create().mapColor(DyeColor.WHITE).strength(1.0F)));
-    public static final Block FAKE_DIRT = register("fake_dirt", fakeBlock(Blocks.DIRT));
-    public static final Block FAKE_GRASS_BLOCK = register("fake_grass_block", fakeBlock(Blocks.GRASS_BLOCK));
-    public static final Block FAKE_STONE = register("fake_stone", fakeBlock(Blocks.STONE));
-    public static final Block RIGGED_STONE = register("rigged_stone", new RiggedBlock(copyBlock(Blocks.STONE)));
+    // public static final Block ITEM_SHOP = register("item_shop", new ItemShopBlock(copyBlock(Blocks.IRON_BLOCK)));
+    public static final Block RED_POO_BLOCK = register("red_poo_block", BlockBehaviour.Properties.of().requiresCorrectToolForDrops().mapColor(DyeColor.RED).strength(2.5F).sound(SoundType.BONE_BLOCK), new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Block DRAGON_ANNOYANCE = register("ear_destroyer_9000", properties -> new AnnoyanceBlock(Annoyances.DRAGON, properties), BlockBehaviour.Properties.of().mapColor(DyeColor.WHITE).strength(1.0F));
+    public static final Block FAKE_DIRT = register("fake_dirt", fakeBlock(Blocks.DIRT), copyBlock(Blocks.DIRT));
+    public static final Block FAKE_GRASS_BLOCK = register("fake_grass_block", fakeBlock(Blocks.GRASS_BLOCK), copyBlock(Blocks.GRASS_BLOCK));
+    public static final Block FAKE_STONE = register("fake_stone", fakeBlock(Blocks.STONE), copyBlock(Blocks.STONE));
+    public static final Block RIGGED_STONE = register("rigged_stone", riggedBlock(Blocks.STONE), copyBlock(Blocks.STONE));
 
 
-    public static Block register(Block block, String name, Item.Settings settings, boolean should_register_item) {
+    public static Block register(Function<BlockBehaviour.Properties, Block> blockFunction, String name, Item.Properties settings, BlockBehaviour.Properties blockProperties, boolean should_register_item) {
         Identifier id = Id.of(name);
+        ResourceKey<Block> resourceKey = ResourceKey.create(Registries.BLOCK, id);
+        Block block = Registry.register(BuiltInRegistries.BLOCK, resourceKey, blockFunction.apply(blockProperties.setId(resourceKey)));
         if (should_register_item) {
-            BlockItem blockItem = new BlockItem(block, settings);
-            Registry.register(Registries.ITEM, id, blockItem);
+            ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
+            Identifier modelId = id;
+            if (block instanceof ImpersonatingBlock impersonatingBlock) {
+                modelId = impersonatingBlock.getBlockIdImpersonatingAs();
+            }
+            Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, settings.setId(itemKey).useBlockDescriptionPrefix().modelId(modelId)));
         }
-        return Registry.register(Registries.BLOCK, id, block);
+        return block;
     }
 
-    public static Block register(String name, Block block, Item.Settings settings) {
-        return register(block, name, settings, true);
+    public static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFunction, Item.Properties settings) {
+        return register(blockFunction, name, settings, BlockBehaviour.Properties.of(), true);
     }
 
-    public static Block register(String name, Block block, boolean should_register_item) {
-        return register(block, name, new Item.Settings(), should_register_item);
+    public static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFunction, BlockBehaviour.Properties settings) {
+        return register(blockFunction, name, new Item.Properties(), settings, true);
     }
 
-    public static Block register(String name, Block block) {
-        return register(block, name, new Item.Settings(), true);
+    public static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFunction, boolean should_register_item) {
+        return register(blockFunction, name, new Item.Properties(), BlockBehaviour.Properties.of(), should_register_item);
     }
 
-    public static AbstractBlock.Settings copyBlock(Block block) {
-        return AbstractBlock.Settings.copy(block);
+    public static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFunction) {
+        return register(blockFunction, name, new Item.Properties(), BlockBehaviour.Properties.of(), true);
     }
 
-    public static Block stairBlock(Block block) {
-        return new StairsBlock(block.getDefaultState(), copyBlock(block));
+    public static Block register(String name, BlockBehaviour.Properties properties) {
+        return register(Block::new, name, new Item.Properties(), properties, true);
     }
 
-    public static Block slabBlock(Block block) {
-        return new SlabBlock(copyBlock(block));
+    public static Block register(String name, BlockBehaviour.Properties properties, Item.Properties itemProperties) {
+        return register(Block::new, name, itemProperties, properties, true);
     }
 
-    public static Block wallBlock(Block block) {
-        return new WallBlock(copyBlock(block).solid());
+    public static BlockBehaviour.Properties copyBlock(Block block) {
+        return BlockBehaviour.Properties.ofFullCopy(block);
     }
 
-    public static Block fakeBlock(Block block) {
-        return new FakeBlock(block, copyBlock(block).breakInstantly());
+    public static Function<BlockBehaviour.Properties, Block> stairBlock(Block block) {
+        return settings -> new StairBlock(block.defaultBlockState(), settings);
+    }
+
+    public static Function<BlockBehaviour.Properties, Block> wallBlock() {
+        return settings -> new WallBlock(settings.forceSolidOn());
+    }
+
+    public static Function<BlockBehaviour.Properties, Block> fakeBlock(Block block) {
+        return settings -> new FakeBlock(block, settings.instabreak());
+    }
+
+    public static Function<BlockBehaviour.Properties, Block> riggedBlock(Block block) {
+        return settings -> new RiggedBlock(block, settings.instabreak());
     }
 
     public static void init() {

@@ -1,5 +1,10 @@
-// 1.21	2025-01-22T12:34:18.5198752	PooSMP Mod/Block Loot Tables
-0c4f9db680a8a55f22d819ce1c9ed3a6a1b13706 data\poosmp\loot_table\blocks\red_nether_brick_fence.json
-cbc5cf344f1da161e766a6968d5f464d608a3897 data\poosmp\loot_table\blocks\poop_brick_slab.json
-be8a11340e5e3dfa04c22d31ba2b1dbff4161874 data\poosmp\loot_table\blocks\poop_brick_wall.json
-97136d6e5413cc00b8f2d9503d835eb5a73c3e4e data\poosmp\loot_table\blocks\poop_brick_stairs.json
+// 1.21.11	-999999999-01-01T00:00:00	PooSMP Mod/Block Loot Tables
+b43b03f6da137b470269b829786f48abd0f285da data/poosmp/loot_table/blocks/fake_dirt.json
+a2df997f8312cf60cf629cc97c273ffa701c8b22 data/poosmp/loot_table/blocks/fake_grass_block.json
+bb4d76902da4c4f529e96bcbd553eea06c129cb2 data/poosmp/loot_table/blocks/fake_stone.json
+cbc5cf344f1da161e766a6968d5f464d608a3897 data/poosmp/loot_table/blocks/poop_brick_slab.json
+97136d6e5413cc00b8f2d9503d835eb5a73c3e4e data/poosmp/loot_table/blocks/poop_brick_stairs.json
+be8a11340e5e3dfa04c22d31ba2b1dbff4161874 data/poosmp/loot_table/blocks/poop_brick_wall.json
+0c4f9db680a8a55f22d819ce1c9ed3a6a1b13706 data/poosmp/loot_table/blocks/red_nether_brick_fence.json
+6c2e3ecd312a87fd831b1d850701f5a5fe818c5e data/poosmp/loot_table/blocks/red_poo_block.json
+5e5b89510f610b259795a0add81d3d451661de18 data/poosmp/loot_table/blocks/rigged_stone.json

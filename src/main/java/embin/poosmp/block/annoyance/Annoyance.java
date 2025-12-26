@@ -1,6 +1,6 @@
 package embin.poosmp.block.annoyance;
 
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
 
 public class Annoyance {
     private final SoundEvent annoyanceSound;

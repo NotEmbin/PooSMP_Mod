@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "###",
+    "#3#",
+    "###"
+  ],
+  "key": {
+    "3": "#c:rods/wooden",
+    "#": "poosmp:null_shard"
+  },
+  "result": {
+    "id": "poosmp:null_stick",
+    "count": 1,
+    "components": {
+      "!poosmp:from_creative": {}
+    }
+  },
+  "show_notification": true
+}

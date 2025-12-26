@@ -7,12 +7,8 @@
     "333"
   ],
   "key": {
-    "3": {
-      "item": "minecraft:copper_ingot"
-    },
-    "#": {
-      "item": "poosmp:diamond_shard"
-    }
+    "3": "minecraft:copper_ingot",
+    "#": "poosmp:diamond_shard"
   },
   "result": {
     "id": "poosmp:fill_armor_trim_smithing_template",

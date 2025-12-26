@@ -1,11 +1,11 @@
 package embin.poosmp.util;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 public class MoneyData {
     public static int add_money(IEntityDataSaver player, int amount) {
-        NbtCompound nbt = player.poosmpmod$getPersistentData();
-        int money = nbt.getInt("money");
+        CompoundTag nbt = player.poosmpmod$getPersistentData();
+        int money = nbt.getIntOr("money", 0);
         money += amount;
         if (money >= 2_147_000_000) {
             money = 2_147_000_000;
@@ -15,8 +15,8 @@ public class MoneyData {
     }
 
     public static int remove_money(IEntityDataSaver player, int amount) {
-        NbtCompound nbt = player.poosmpmod$getPersistentData();
-        int money = nbt.getInt("money");
+        CompoundTag nbt = player.poosmpmod$getPersistentData();
+        int money = nbt.getIntOr("money", 0);
         money -= amount;
         if (money <= 0) {
             money = 0;

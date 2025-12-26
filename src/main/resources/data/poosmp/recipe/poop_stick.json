@@ -7,15 +7,9 @@
     "4#4"
   ],
   "key": {
-    "3": {
-      "tag": "c:rods/wooden"
-    },
-    "#": {
-      "item": "poosmp:poop_block"
-    },
-    "4": {
-      "item": "poosmp:diamond_shard"
-    }
+    "3": "#c:rods/wooden",
+    "#": "poosmp:poop_block",
+    "4": "poosmp:diamond_shard"
   },
   "result": {
     "id": "poosmp:poop_stick",

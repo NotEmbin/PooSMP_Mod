@@ -1,13 +1,13 @@
 package embin.poosmp.networking.payload;
 
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 @Deprecated
-public record MoneySyncPayload() implements CustomPayload {
-    public static final CustomPayload.Id<MoneySyncPayload> ID = new CustomPayload.Id<>(embin.poosmp.util.Id.of("poosmp:money_sync"));
+public record MoneySyncPayload() implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<MoneySyncPayload> ID = new CustomPacketPayload.Type<>(embin.poosmp.util.Id.of("poosmp:money_sync"));
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

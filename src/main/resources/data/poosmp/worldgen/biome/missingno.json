@@ -1,24 +1,27 @@
 {
+  "attributes": {
+    "minecraft:visual/sky_color": "#ff00dd",
+    "minecraft:visual/fog_color": "#ff44ee",
+    "minecraft:visual/water_fog_color": "#330532",
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 60,
+        "min_delay": 20,
+        "sound": "minecraft:music.creative"
+      }
+    }
+  },
   "temperature": 0.85,
   "downfall": 0.8,
   "has_precipitation": false,
   "creature_spawn_probability": 0.2,
   "effects": {
-    "sky_color": 16711901,
-    "fog_color": 16729326,
     "water_color": 14237668,
-    "water_fog_color": 3343666,
     "foliage_color": 16711901,
-    "grass_color_modifier": "none",
-    "music": {
-      "max_delay": 60,
-      "min_delay": 20,
-      "replace_current_music": false,
-      "sound": "minecraft:music.creative"
-    }
+    "grass_color_modifier": "none"
   },
   "spawners": {},
   "spawn_costs": {},
-  "carvers": {},
+  "carvers": [],
   "features": []
 }

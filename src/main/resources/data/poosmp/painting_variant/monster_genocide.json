@@ -1,5 +1,13 @@
 {
   "asset_id": "poosmp:monster_genocide",
   "width": 3,
-  "height": 3
+  "height": 3,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.poosmp.monster_genocide.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.poosmp.monster_genocide.author"
+  }
 }

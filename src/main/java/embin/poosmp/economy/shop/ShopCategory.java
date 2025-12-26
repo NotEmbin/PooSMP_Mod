@@ -1,22 +1,21 @@
 package embin.poosmp.economy.shop;
 
-import embin.poosmp.PooSMPRegistries;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
+import embin.poosmp.world.PooSMPRegistries;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class ShopCategory {
-    private final Text name;
+    private final Component name;
     private final ItemStack displayed_item_stack;
-    public ShopCategory(Text name, Item displayed_item) {
+    public ShopCategory(Component name, Item displayed_item) {
         this.name = name;
         this.displayed_item_stack = new ItemStack(displayed_item);
     }
@@ -27,32 +26,31 @@ public class ShopCategory {
     }
 
     public boolean hasItem(Item item) {
-        return item.getDefaultStack().isIn(getShopProductsTag());
+        return item.getDefaultInstance().is(getShopProductsTag());
     }
 
     public boolean isIn(TagKey<ShopCategory> tagKey) {
-        return PooSMPRegistries.SHOP_CATEGORY.getEntry(this).isIn(tagKey);
+        return PooSMPRegistries.SHOP_CATEGORY.wrapAsHolder(this).is(tagKey);
     }
 
     public ItemStack getDisplayedItem() {
         return this.displayed_item_stack;
     }
 
-    public Text getName() {
+    public Component getName() {
         return this.name;
     }
 
     public Identifier getId() {
-        return PooSMPRegistries.SHOP_CATEGORY.getId(this);
+        return PooSMPRegistries.SHOP_CATEGORY.getKey(this);
     }
 
     public TagKey<Item> getShopProductsTag() {
-        return TagKey.of(RegistryKeys.ITEM, this.getId().withPrefixedPath("in_shop_category/"));
+        return TagKey.create(Registries.ITEM, this.getId().withPrefix("in_shop_category/"));
     }
 
-    public List<RegistryEntry<Item>> getItems(RegistryWrapper.WrapperLookup wrapperLookup) {
-        RegistryEntryLookup. RegistryLookup registryLookup = wrapperLookup.createRegistryLookup();
-        Stream<RegistryEntry<Item>> itemStream = registryLookup.getOrThrow(RegistryKeys.ITEM).getOrThrow(getShopProductsTag()).stream();
+    public List<Holder<Item>> getItems(HolderLookup.Provider wrapperLookup) {
+        Stream<Holder<Item>> itemStream = wrapperLookup.lookupOrThrow(Registries.ITEM).getOrThrow(getShopProductsTag()).stream();
         return itemStream.toList();
     }
 }

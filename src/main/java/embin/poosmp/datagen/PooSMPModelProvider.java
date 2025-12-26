@@ -1,50 +1,45 @@
 package embin.poosmp.datagen;
 
+import embin.poosmp.PooSMPMod;
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.items.PooSMPItems;
+import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.ItemModelGenerator;
-import net.minecraft.data.client.Models;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+
+import java.util.List;
 
 public class PooSMPModelProvider extends FabricModelProvider {
+    private final List<Item> ignoredItems;
     public PooSMPModelProvider(FabricDataOutput output) {
         super(output);
+        this.ignoredItems = List.of(
+                PooSMPItems.NULL_STICK,
+                PooSMPBlocks.SUS.asItem(),
+                PooSMPBlocks.POOP_BRICK_WALL.asItem(),
+                PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem(),
+                PooSMPItems.POOP_STICK
+        );
     }
 
     @Override
-    public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-        BlockStateModelGenerator.BlockTexturePool poop_bricks = blockStateModelGenerator.registerCubeAllModelTexturePool(PooSMPBlocks.POOP_BRICKS);
-        BlockStateModelGenerator.BlockTexturePool red_nether_bricks = blockStateModelGenerator.registerCubeAllModelTexturePool(Blocks.RED_NETHER_BRICKS);
-        poop_bricks.stairs(PooSMPBlocks.POOP_BRICK_STAIRS);
-        poop_bricks.slab(PooSMPBlocks.POOP_BRICK_SLAB);
-        poop_bricks.wall(PooSMPBlocks.POOP_BRICK_WALL);
-        red_nether_bricks.fence(PooSMPBlocks.RED_NETHER_BRICK_FENCE);
-        //blockStateModelGenerator.registerSimpleCubeAll(PooSMPBlocks.PENIS_BLOCK);
-        blockStateModelGenerator.registerSimpleCubeAll(PooSMPBlocks.RESIN_BLOCK);
-        BlockStateModelGenerator.BlockTexturePool resin_bricks = blockStateModelGenerator.registerCubeAllModelTexturePool(PooSMPBlocks.RESIN_BRICKS);
-        resin_bricks.stairs(PooSMPBlocks.RESIN_BRICK_STAIRS);
-        resin_bricks.slab(PooSMPBlocks.RESIN_BRICK_SLAB);
-        resin_bricks.wall(PooSMPBlocks.RESIN_BRICK_WALL);
-        blockStateModelGenerator.registerSimpleCubeAll(PooSMPBlocks.CHISELED_RESIN_BRICKS);
+    public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
+        // why do i HAVE to put item model generation in the BLOCK STATE MODEL GEN FUNCTION
+        BuiltInRegistries.ITEM.stream().filter(item -> item.getCreatorNamespace(item.getDefaultInstance()).equals(PooSMPMod.MOD_ID)).forEach(item -> {
+            if (!this.ignoredItems.contains(item)) {
+                Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
+                Identifier modelId = item instanceof BlockItem ? itemId.withPrefix("block/") : itemId.withPrefix("item/");
+                blockStateModelGenerator.registerSimpleItemModel(item, modelId);
+            }
+        });
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        itemModelGenerator.register(PooSMPItems.ONE_DOLLAR_BILL, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.TWO_DOLLAR_BILL, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.FIVE_DOLLAR_BILL, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.TEN_DOLLAR_BILL, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.FIFTY_DOLLAR_BILL, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.HUNDRED_DOLLAR_BILL, Models.GENERATED);
-        //itemModelGenerator.register(PooSMPItems.ONE_CENT_COIN, Models.GENERATED);
-        //itemModelGenerator.register(PooSMPItems.FIVE_CENT_COIN, Models.GENERATED);
-        //itemModelGenerator.register(PooSMPItems.TEN_CENT_COIN, Models.GENERATED);
-        //itemModelGenerator.register(PooSMPItems.TWENTY_FIVE_CENT_COIN, Models.GENERATED);
-        //itemModelGenerator.register(PooSMPItems.ONE_DOLLAR_COIN, Models.GENERATED);
-        itemModelGenerator.register(PooSMPItems.BACON_BUCKET, Models.GENERATED);
+    public void generateItemModels(ItemModelGenerators itemModelGenerator) {
     }
 }

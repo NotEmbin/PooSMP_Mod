@@ -1,22 +1,32 @@
 package embin.poosmp.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
-
-public class FakeBlock extends Block {
+public class FakeBlock extends Block implements ImpersonatingBlock {
     private final Block fakeOf;
 
-    public FakeBlock(Block block, Settings settings) {
+    public FakeBlock(Block block, Properties settings) {
         super(settings.noCollision());
         this.fakeOf = block;
     }
 
     @Override
-    protected List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {
-        return List.of(this.asItem().getDefaultStack());
+    public void stepOn(Level level, BlockPos blockPos, BlockState blockState, Entity entity) {
+        this.fakeOf.stepOn(level, blockPos, blockState, entity);
+    }
+
+    @Override
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
+        this.fakeOf.animateTick(blockState, level, blockPos, randomSource);
+    }
+
+    @Override
+    public Block getBlockImpersonatingAs() {
+        return this.fakeOf;
     }
 }
