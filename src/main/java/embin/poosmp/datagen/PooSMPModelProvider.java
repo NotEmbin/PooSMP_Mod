@@ -42,6 +42,5 @@ public class PooSMPModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators itemModelGenerator) {
-        itemModelGenerator.generateTrimmableItem(Items.WOODEN_PICKAXE);
     }
 }
