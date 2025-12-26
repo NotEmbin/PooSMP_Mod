@@ -83,8 +83,6 @@ public class MobStickItem extends CreativeSnitchItem {
         }
 
         if (!world.isClientSide()) {
-            MinecraftServer server = world.getServer();
-            Scoreboard scoreboard = server.getScoreboard();
             EntityType<?> entityType = this.mob;
             ItemStack offhand_item = stack.getOrDefault(PooSMPItemComponents.MOB_OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             if (offhand_item == null) {
@@ -115,6 +113,9 @@ public class MobStickItem extends CreativeSnitchItem {
             if (entity instanceof Mob mob) {
                 mob.setItemInHand(InteractionHand.OFF_HAND, offhand_item.copy());
             }
+
+            MinecraftServer server = world.getServer();
+            Scoreboard scoreboard = server.getScoreboard();
             PlayerTeam team = scoreboard.getPlayerTeam(player_uuid);
             if (team != null) {
                 scoreboard.addPlayerToTeam(entity.getScoreboardName(), team);
