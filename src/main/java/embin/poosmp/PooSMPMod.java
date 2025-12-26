@@ -278,12 +278,14 @@ public class PooSMPMod implements ModInitializer {
                 });
                 return Command.SINGLE_SUCCESS;
             }));
+
             dispatcher.register(Commands.literal("getmoney1").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.ONE_DOLLAR_BILL)));
             dispatcher.register(Commands.literal("getmoney2").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.TWO_DOLLAR_BILL)));
             dispatcher.register(Commands.literal("getmoney10").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.TEN_DOLLAR_BILL)));
             dispatcher.register(Commands.literal("getmoney25").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.TWENTY_FIVE_DOLLAR_BILL)));
             dispatcher.register(Commands.literal("getmoney50").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.FIFTY_DOLLAR_BILL)));
             dispatcher.register(Commands.literal("getmoney100").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.HUNDRED_DOLLAR_BILL)));
+
             dispatcher.register(Commands.literal("deathcount").executes(context -> {
                 ServerPlayer player = context.getSource().getPlayer();
                 return tellDeathCount(context, player);
