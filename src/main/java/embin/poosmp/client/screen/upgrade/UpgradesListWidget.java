@@ -128,7 +128,7 @@ public class UpgradesListWidget extends ContainerObjectSelectionList<UpgradesLis
         public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float f) {
             final int x = this.getX();
             final int y = this.getY();
-            guiGraphics.blitSprite(RenderPipelines.GUI, SLOT_TEXTURE, x + 1, y + 1, 18, 18);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_TEXTURE, x + 1, y + 1, 18, 18);
             guiGraphics.renderFakeItem(this.upgrade.icon().getDefaultInstance(), x + 2, y + 2);
             this.buyButton.setPosition(x + 175, y);
             this.sellButton.setPosition(x + 80, y);
