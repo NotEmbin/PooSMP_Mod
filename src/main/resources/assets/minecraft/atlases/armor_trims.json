@@ -5,7 +5,7 @@
       "palette_key": "minecraft:trims/color_palettes/trim_palette",
       "textures": [
 		"poosmp:trims/entity/humanoid/fill",
-        "poosmp:trims/entity/humanoid_leggings/fill_leggings"
+        "poosmp:trims/entity/humanoid_leggings/fill"
       ],
       "permutations": {
         "quartz": "trims/color_palettes/quartz",
