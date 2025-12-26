@@ -16,7 +16,7 @@ public final class ItemWorth {
     }
 
     public static void setPrice(DefaultItemComponentEvents.ModifyContext modifyContext, ShopCategory category, Item item, double price) {
-        setPrice(modifyContext, category, item, price, price / 2);
+        setPrice(modifyContext, category, item, price, price / 2D);
     }
 
     public static void setPrices(DefaultItemComponentEvents.ModifyContext context) {
@@ -26,5 +26,16 @@ public final class ItemWorth {
         setPrice(context, ShopCategories.MATERIALS, Items.GOLD_NUGGET, 0.9, 0.4);
         setPrice(context, ShopCategories.MATERIALS, Items.DIAMOND, 18);
         setPrice(context, ShopCategories.MATERIALS, PooSMPItems.DIAMOND_SHARD, 1.5, 1);
+        setPrice(context, ShopCategories.MATERIALS, Items.COPPER_INGOT, 2.25);
+        setPrice(context, ShopCategories.MATERIALS, Items.COPPER_NUGGET, 0.25);
+        setPrice(context, ShopCategories.NATURE, Items.GRASS_BLOCK, 0.3, 0.05);
+        setPrice(context, ShopCategories.NATURE, Items.DIRT, 0.2, 0.02);
+        setPrice(context, ShopCategories.NATURE, Items.STONE, 0.25, 0.03);
+        setPrice(context, ShopCategories.NATURE, Items.NETHERRACK, 0.55, 0.1);
+        setPrice(context, ShopCategories.NATURE, Items.END_STONE, 1.5, 1);
+        setPrice(context, ShopCategories.NATURE, Items.COBBLESTONE, 0.25, 0.03);
+        setPrice(context, ShopCategories.MATERIALS, Items.EMERALD, 8);
+        setPrice(context, ShopCategories.MATERIALS, Items.NETHERITE_SCRAP, 400);
+        setPrice(context, ShopCategories.MATERIALS, Items.NETHERITE_INGOT, 1600);
     }
 }
