@@ -26,7 +26,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 
 public class TradeConstructors {
-    public static final DataComponentMap TRADED_BOOK_ENCHANTS = DataComponentMap.builder().build();
 
     public static void register_villager_trades() {
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.MASON, 1, factories -> {
@@ -86,10 +85,9 @@ public class TradeConstructors {
             factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.TEN_DOLLAR_BILL, 1, PooSMPItems.FIVE_DOLLAR_BILL, 2).getOffer(level, entity, random)));
         });
         TradeOfferHelper.registerVillagerOffers(PooSMPVillagers.BANKER_KEY, 5, factories -> {
-            factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.ONE_DOLLAR_BILL, 50).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 2).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> new ToMoney(Items.ELYTRA, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 8).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.FIFTY_DOLLAR_BILL, 1).getOffer(level, entity, random)));
+            factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 16).getOffer(level, entity, random)));
+            factories.add(((level, entity, random) -> new ToMoney(Items.ELYTRA, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 16).getOffer(level, entity, random)));
+            factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 4).getOffer(level, entity, random)));
             factories.add(((level, entity, random) -> {
                 Optional<Holder<Enchantment>> enchantment = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getRandomElementOf(PooSMPTags.Enchantments.BANKER_TRADEABLE, random);
                 if (enchantment.isPresent()) {
@@ -102,6 +100,7 @@ public class TradeConstructors {
                     return new ToMoney(new ItemStack(Items.BOOK), PooSMPItems.HUNDRED_DOLLAR_BILL, 1).getOffer(level, entity, random);
                 }
             }));
+            factories.add((serverLevel, entity, randomSource) -> new ToMoney(PooSMPItems.RAW_RED_POO, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 50).getOffer(serverLevel, entity, randomSource));
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3, factories -> {
             factories.add(((level, entity, random) -> new FromMoney(Items.PUMPKIN, 32, PooSMPItems.ONE_DOLLAR_BILL).getOffer(level, entity, random)));
