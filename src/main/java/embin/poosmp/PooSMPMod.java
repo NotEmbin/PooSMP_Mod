@@ -1,7 +1,6 @@
 package embin.poosmp;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.economy.ItemWorth;
 import embin.poosmp.economy.shop.ShopCategories;
@@ -19,7 +18,6 @@ import embin.poosmp.world.PooSMPRegistries;
 import embin.poosmp.world.PooSMPSavedData;
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
@@ -28,7 +26,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.impl.item.ComponentTooltipAppenderRegistryImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -38,20 +36,16 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.function.Predicate;
 
 public class PooSMPMod implements ModInitializer {
 	public static final String MOD_ID = "poosmp";
@@ -280,6 +274,12 @@ public class PooSMPMod implements ModInitializer {
                 });
                 return Command.SINGLE_SUCCESS;
             }));
+            dispatcher.register(Commands.literal("getmoney1").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.ONE_DOLLAR_BILL)));
+            dispatcher.register(Commands.literal("getmoney2").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.TWO_DOLLAR_BILL)));
+            dispatcher.register(Commands.literal("getmoney10").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.TEN_DOLLAR_BILL)));
+            dispatcher.register(Commands.literal("getmoney25").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.TWENTY_FIVE_DOLLAR_BILL)));
+            dispatcher.register(Commands.literal("getmoney50").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.FIFTY_DOLLAR_BILL)));
+            dispatcher.register(Commands.literal("getmoney100").executes(context -> getMoneyItem(context.getSource(), PooSMPItems.HUNDRED_DOLLAR_BILL)));
 		});
 
 		DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:displayed_id"), modifyContext -> {
@@ -300,4 +300,25 @@ public class PooSMPMod implements ModInitializer {
 
 		LOGGER.info("im all pooped up");
 	}
+
+    @SuppressWarnings("DataFlowIssue")
+    public static int getMoneyItem(CommandSourceStack context, Item moneyItem) {
+        ItemStack moneyStack = moneyItem.getDefaultInstance();
+        if (moneyStack.has(PooSMPItemComponents.MONEY)) {
+            final double moneyAmount = moneyStack.get(PooSMPItemComponents.MONEY);
+            MinecraftServer server = context.getServer();
+            ServerPlayer player = context.getPlayer();
+            if (player == null) return 0;
+            PooSMPSavedData savedData = PooSMPSavedData.get(server);
+            final double playerBalance = savedData.getBalance(player);
+            if (moneyAmount > playerBalance) {
+                context.sendFailure(Component.literal("You are too broke to get this"));
+                return -1;
+            }
+            savedData.addBalance(player, -moneyAmount);
+            ServerLevel level = player.level();
+            level.addFreshEntity(new ItemEntity(level, player.getX(), player.getY(), player.getZ(), moneyStack.copy()));
+            return Command.SINGLE_SUCCESS;
+        } else return -50;
+    }
 }
