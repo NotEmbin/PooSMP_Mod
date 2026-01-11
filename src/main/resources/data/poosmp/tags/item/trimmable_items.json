@@ -34,6 +34,11 @@
     "poosmp:red_poo_pickaxe",
     "poosmp:red_poo_axe",
     "poosmp:red_poo_shovel",
-    "poosmp:red_poo_hoe"
+    "poosmp:red_poo_hoe",
+    "minecraft:copper_sword",
+    "minecraft:copper_pickaxe",
+    "minecraft:copper_axe",
+    "minecraft:copper_shovel",
+    "minecraft:copper_hoe"
   ]
 }

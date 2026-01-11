@@ -65,7 +65,7 @@ public class TradeConstructors {
             factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 16).getOffer(level, entity, random)));
             factories.add(((level, entity, random) -> new ToMoney(Items.ELYTRA, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 16).getOffer(level, entity, random)));
             factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_SCRAP, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 4).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> {
+            factories.add((level, entity, random) -> {
                 Optional<Holder<Enchantment>> enchantment = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getRandomElementOf(PooSMPTags.Enchantments.BANKER_TRADEABLE, random);
                 if (enchantment.isPresent()) {
                     final int maxLevel = enchantment.orElseThrow().value().getMaxLevel();
@@ -76,9 +76,10 @@ public class TradeConstructors {
                 } else {
                     return new ToMoney(new ItemStack(Items.BOOK), PooSMPItems.HUNDRED_DOLLAR_BILL, 1).getOffer(level, entity, random);
                 }
-            }));
+            });
             factories.add((serverLevel, entity, randomSource) -> new ToMoney(PooSMPItems.RAW_RED_POO, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 50).getOffer(serverLevel, entity, randomSource));
             factories.add((serverLevel, entity, randomSource) -> new ToMoney(PooSMPBlocks.DDEDEDODEDIAMANTE_BLOCK.asItem(), 16, PooSMPItems.ONE_DOLLAR_BILL, 10).getOffer(serverLevel, entity, randomSource));
+            factories.add((serverLevel, entity, randomSource) -> new ToMoney(PooSMPItems.RED_POO_UPGRADE_SMITHING_TEMPLATE, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 10).getOffer(serverLevel, entity, randomSource));
         });
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 3, factories -> {
             factories.add(((level, entity, random) -> new FromMoney(Items.PUMPKIN, 32, PooSMPItems.ONE_DOLLAR_BILL).getOffer(level, entity, random)));
