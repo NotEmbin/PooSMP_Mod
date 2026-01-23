@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import embin.poosmp.block.PooSMPBlocks;
 import embin.poosmp.economy.ItemWorth;
 import embin.poosmp.economy.shop.ShopCategories;
+import embin.poosmp.items.ItemUses;
 import embin.poosmp.items.PooSMPItems;
 import embin.poosmp.items.component.PooSMPItemComponents;
 import embin.poosmp.items.component.ValueComponent;
@@ -70,6 +71,7 @@ public class PooSMPMod implements ModInitializer {
 		PooSMPItemGroups.init();
 		ShopCategories.registerCategories();
         PooSMPGameRules.acknowledge();
+        ItemUses.register();
 
 		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.RED_NETHER_BRICK_WALL, PooSMPBlocks.RED_NETHER_BRICK_FENCE.asItem());
@@ -131,21 +133,6 @@ public class PooSMPMod implements ModInitializer {
 		if (PooSMPMod.SHOP_ENABLED) {
 			DefaultItemComponentEvents.MODIFY.register(Id.of("poosmp:set_item_prices"), ItemWorth::setPrices);
 		}
-
-        UseItemCallback.EVENT.register(Id.of("jumpscare_stick"), (player, level, interactionHand) -> {
-            ItemStack itemStack = player.getItemInHand(interactionHand);
-            if (itemStack.has(PooSMPItemComponents.JUMPSCARE_STICK)) {
-                if (player.getCooldowns().isOnCooldown(itemStack)) return InteractionResult.PASS;
-                if (level instanceof ServerLevel serverLevel) {
-                    for (ServerPlayer serverPlayer : serverLevel.getServer().getPlayerList().getPlayers()) {
-                        serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.GUARDIAN_ELDER_EFFECT, 0.7f));
-                    }
-                }
-                player.getCooldowns().addCooldown(itemStack, 20);
-                return InteractionResult.SUCCESS;
-            }
-            return InteractionResult.PASS;
-        });
 
 		LOGGER.info("im all pooped up");
 	}

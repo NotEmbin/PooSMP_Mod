@@ -13,7 +13,7 @@ public final class PooSMPGameRules {
     public static final GameRule<Boolean> ANNOYANCES_MAKE_SOUND = ofBool("annoyances_make_sound", true);
 
     private static GameRule<Boolean> ofBool(String id, boolean defaultValue) {
-        return GameRuleBuilder.forBoolean(defaultValue).codec(Codec.BOOL).buildAndRegister(Id.of(id));
+        return GameRuleBuilder.forBoolean(defaultValue).buildAndRegister(Id.of(id));
     }
 
     private static GameRule<Double> ofDouble(String id, double defaultValue) {

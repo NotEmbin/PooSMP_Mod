@@ -109,4 +109,10 @@ public class PooSMPItemComponents {
             Id.of("jumpscare_stick"),
             DataComponentType.<Unit>builder().persistent(Unit.CODEC).build()
     );
+
+    public static final DataComponentType<Unit> FUN_STICK = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Id.of("fun_stick"),
+            DataComponentType.<Unit>builder().persistent(Unit.CODEC).build()
+    );
 }
