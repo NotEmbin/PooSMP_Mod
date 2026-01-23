@@ -45,6 +45,13 @@ public class TradeConstructors {
             factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.TEN_DOLLAR_BILL, 1, PooSMPItems.ONE_DOLLAR_BILL, 10).getOffer(level, entity, random)));
             factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, 1, PooSMPItems.ONE_DOLLAR_BILL, 25).getOffer(level, entity, random)));
         });
+        TradeOfferHelper.registerVillagerOffers(PooSMPVillagers.BANKER_KEY, 3, factories -> {
+            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.FIFTY_DOLLAR_BILL, 1, PooSMPItems.ONE_DOLLAR_BILL, 50).getOffer(level, entity, random)));
+            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.FIFTY_DOLLAR_BILL, 1, PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, 2).getOffer(level, entity, random)));
+            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.HUNDRED_DOLLAR_BILL, 1, PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, 4).getOffer(level, entity, random)));
+            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.HUNDRED_DOLLAR_BILL, 1, PooSMPItems.FIFTY_DOLLAR_BILL, 2).getOffer(level, entity, random)));
+            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.TEN_DOLLAR_BILL, 1, PooSMPItems.FIVE_DOLLAR_BILL, 2).getOffer(level, entity, random)));
+        });
         TradeOfferHelper.registerVillagerOffers(PooSMPVillagers.BANKER_KEY, 4, factories -> {
             factories.add(((level, entity, random) -> new ToMoney(Items.GOLD_INGOT, 1, PooSMPItems.ONE_DOLLAR_BILL, 7).getOffer(level, entity, random)));
             factories.add(((level, entity, random) -> new ToMoney(Items.IRON_INGOT, 1, PooSMPItems.ONE_DOLLAR_BILL, 8).getOffer(level, entity, random)));
@@ -53,13 +60,6 @@ public class TradeConstructors {
             factories.add(((level, entity, random) -> new ToMoney(Items.EMERALD, 1, PooSMPItems.FIVE_DOLLAR_BILL, 1).getOffer(level, entity, random)));
             factories.add(((level, entity, random) -> new ToMoney(Items.DIAMOND, 1, PooSMPItems.ONE_DOLLAR_BILL, 25).getOffer(level, entity, random)));
             factories.add(((level, entity, random) -> new ToMoney(Items.DIAMOND, 1, PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, 1).getOffer(level, entity, random)));
-        });
-        TradeOfferHelper.registerVillagerOffers(PooSMPVillagers.BANKER_KEY, 3, factories -> {
-            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.FIFTY_DOLLAR_BILL, 1, PooSMPItems.ONE_DOLLAR_BILL, 50).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.FIFTY_DOLLAR_BILL, 1, PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, 2).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.HUNDRED_DOLLAR_BILL, 1, PooSMPItems.TWENTY_FIVE_DOLLAR_BILL, 4).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.HUNDRED_DOLLAR_BILL, 1, PooSMPItems.FIFTY_DOLLAR_BILL, 2).getOffer(level, entity, random)));
-            factories.add(((level, entity, random) -> new ToMoney(PooSMPItems.TEN_DOLLAR_BILL, 1, PooSMPItems.FIVE_DOLLAR_BILL, 2).getOffer(level, entity, random)));
         });
         TradeOfferHelper.registerVillagerOffers(PooSMPVillagers.BANKER_KEY, 5, factories -> {
             factories.add(((level, entity, random) -> new ToMoney(Items.NETHERITE_INGOT, 1, PooSMPItems.HUNDRED_DOLLAR_BILL, 16).getOffer(level, entity, random)));

@@ -149,5 +149,6 @@
   "block.poosmp.rigged_stone": "Rigged Stone",
   "tooltip.poosmp.item_value.sell_price": "Sells for $%s",
   "upgrade.poosmp.mining_speed_increase": "Mining Speed Upgrade",
-  "item.poosmp.null_stick": "Null Stick"
+  "item.poosmp.null_stick": "Null Stick",
+  "item.poosmp.jumpscare_stick": "Jumpscare Stick"
 }

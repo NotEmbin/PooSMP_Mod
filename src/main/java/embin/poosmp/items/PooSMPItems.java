@@ -13,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -116,6 +117,7 @@ public class PooSMPItems {
     public static final Item MAGIC_DEVICE = register("magic_device", MagicDeviceItem::new, new Item.Properties().durability(180).attributes(magicDeviceAttributes(17.0F)).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final Item NULL_SHARD = register("null_shard", Rarity.EPIC);
     public static final Item NULL_STICK = warpStick("null_stick", PooSMPKeys.MISSINGNO);
+    public static final Item JUMPSCARE_STICK = register("jumpscare_stick", new Item.Properties().component(PooSMPItemComponents.JUMPSCARE_STICK, Unit.INSTANCE));
 
     public static ItemStack getBiomeStickStack(String biome) {
         ItemStack stack = new ItemStack(BIOME_STICK);

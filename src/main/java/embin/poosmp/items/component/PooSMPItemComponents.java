@@ -103,4 +103,10 @@ public class PooSMPItemComponents {
             Id.of("warp_dimension"),
             DataComponentType.<ResourceKey<Level>>builder().persistent(Level.RESOURCE_KEY_CODEC).build()
     );
+
+    public static final DataComponentType<Unit> JUMPSCARE_STICK = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Id.of("jumpscare_stick"),
+            DataComponentType.<Unit>builder().persistent(Unit.CODEC).build()
+    );
 }

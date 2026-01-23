@@ -1,0 +1,34 @@
+{
+  "attributes": {
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:ash"
+        },
+        "probability": 0.01
+      }
+    ],
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "explodes": true
+    },
+    "minecraft:visual/sky_color": "#444444",
+    "minecraft:visual/fog_color": "#666666",
+    "minecraft:visual/water_fog_color": "#555555"
+  },
+  "temperature": 0.85,
+  "downfall": 0.8,
+  "has_precipitation": false,
+  "creature_spawn_probability": 0.2,
+  "effects": {
+    "water_color": "#777777",
+    "foliage_color": "#777777",
+    "grass_color": "#777777",
+    "grass_color_modifier": "none"
+  },
+  "spawners": {},
+  "spawn_costs": {},
+  "carvers": [],
+  "features": []
+}
