@@ -17,7 +17,7 @@ public final class PooSMPGameRules {
     }
 
     private static GameRule<Double> ofDouble(String id, double defaultValue) {
-        return GameRuleBuilder.forDouble(defaultValue).codec(Codec.doubleRange(0, 32767)).buildAndRegister(Id.of(id));
+        return GameRuleBuilder.forDouble(defaultValue).codec(Codec.doubleRange(0, 1_000_000)).buildAndRegister(Id.of(id));
     }
 
     public static void acknowledge() {}

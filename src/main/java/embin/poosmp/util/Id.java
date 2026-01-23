@@ -7,7 +7,7 @@ public class Id {
 
     public static Identifier of(String namespace, String default_namespace) {
         String name = removeInvalidCharactersFromString(namespace);
-        String[] splitted = name.split(String.valueOf(Identifier.NAMESPACE_SEPARATOR)); // Identifier.NAMESPACE_SEPARATOR = ":"
+        String[] splitted = name.split(String.valueOf(Identifier.NAMESPACE_SEPARATOR), 2); // Identifier.NAMESPACE_SEPARATOR = ":"
         if (splitted.length == 1) {
             return Identifier.fromNamespaceAndPath(default_namespace, namespace);
         }
