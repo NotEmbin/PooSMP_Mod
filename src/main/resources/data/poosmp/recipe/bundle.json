@@ -6,8 +6,12 @@
     "#"
   ],
   "key": {
-    "#": "minecraft:leather",
-    "4": "minecraft:string"
+    "#": {
+      "item": "minecraft:leather"
+    },
+    "4": {
+      "item": "minecraft:string"
+    }
   },
   "result": {
     "id": "minecraft:bundle",

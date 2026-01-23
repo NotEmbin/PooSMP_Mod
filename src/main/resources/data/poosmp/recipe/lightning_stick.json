@@ -7,9 +7,15 @@
     "4#4"
   ],
   "key": {
-    "3": "#c:rods/wooden",
-    "#": "#c:ingots/copper",
-    "4": "poosmp:diamond_shard"
+    "3": {
+      "tag": "c:rods/wooden"
+    },
+    "#": {
+      "tag": "c:ingots/copper"
+    },
+    "4": {
+      "item": "poosmp:diamond_shard"
+    }
   },
   "result": {
     "id": "poosmp:lightning_stick",

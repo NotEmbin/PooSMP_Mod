@@ -7,8 +7,12 @@
 	"###"
   ],
   "key": {
-    "#": "poosmp:poop_block",
-    "3": "poosmp:diamond_shard"
+    "#": {
+      "item": "poosmp:poop_block"
+    },
+    "3": {
+      "item": "poosmp:diamond_shard"
+    }
   },
   "result": {
     "id": "poosmp:ddededodediamante_block",

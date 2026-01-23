@@ -7,8 +7,12 @@
     "###"
   ],
   "key": {
-    "#": "minecraft:nether_brick",
-    "3": "#poosmp:makes_nether_bricks_red"
+    "#": {
+      "item": "minecraft:nether_brick"
+    },
+    "3": {
+      "tag": "poosmp:makes_nether_bricks_red"
+    }
   },
   "result": {
     "id": "poosmp:red_nether_brick",

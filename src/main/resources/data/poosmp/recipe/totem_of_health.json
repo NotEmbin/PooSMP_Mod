@@ -6,9 +6,15 @@
     " # "
   ],
   "key": {
-    "#": "poosmp:red_nether_brick",
-    "4": "minecraft:enchanted_golden_apple",
-    "3": "minecraft:diamond"
+    "#": {
+      "item": "poosmp:red_nether_brick"
+    },
+    "4": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "3": {
+      "item": "minecraft:diamond"
+    }
   },
   "result": {
     "id": "poosmp:totem_of_health",

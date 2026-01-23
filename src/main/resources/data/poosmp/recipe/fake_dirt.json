@@ -7,8 +7,12 @@
     " # "
   ],
   "key": {
-    "3": "minecraft:glow_ink_sac",
-    "#": "minecraft:dirt"
+    "3": {
+      "item": "minecraft:glow_ink_sac"
+    },
+    "#": {
+      "item": "minecraft:dirt"
+    }
   },
   "result": {
     "id": "poosmp:fake_dirt",

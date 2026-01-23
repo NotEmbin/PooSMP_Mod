@@ -3,7 +3,9 @@
   "category": "misc",
   "cookingtime": 120,
   "experience": 15,
-  "ingredient": "poosmp:raw_red_poo",
+  "ingredient": {
+    "item": "poosmp:raw_red_poo"
+  },
   "result": {
     "id": "poosmp:red_poo_ingot"
   }

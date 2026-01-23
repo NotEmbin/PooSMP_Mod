@@ -7,9 +7,15 @@
     "4#4"
   ],
   "key": {
-    "3": "#c:rods/wooden",
-    "#": "minecraft:ender_eye",
-    "4": "minecraft:diamond"
+    "3": {
+      "tag": "c:rods/wooden"
+    },
+    "#": {
+      "item": "minecraft:ender_eye"
+    },
+    "4": {
+      "item": "minecraft:diamond"
+    }
   },
   "result": {
     "id": "poosmp:warp_stick",

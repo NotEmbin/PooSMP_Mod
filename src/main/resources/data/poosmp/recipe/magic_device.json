@@ -7,11 +7,21 @@
     "#6#"
   ],
   "key": {
-    "6": "minecraft:gunpowder",
-    "5": "poosmp:screw",
-    "4": "minecraft:iron_ingot",
-    "3": "minecraft:redstone",
-    "#": "poosmp:gear"
+    "6": {
+      "item": "minecraft:gunpowder"
+    },
+    "5": {
+      "item": "poosmp:screw"
+    },
+    "4": {
+      "item": "minecraft:iron_ingot"
+    },
+    "3": {
+      "item": "minecraft:redstone"
+    },
+    "#": {
+      "item": "poosmp:gear"
+    }
   },
   "result": {
     "id": "poosmp:magic_device",

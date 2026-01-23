@@ -7,8 +7,12 @@
     "###"
   ],
   "key": {
-    "3": "#c:rods/wooden",
-    "#": "minecraft:redstone"
+    "3": {
+      "tag": "c:rods/wooden"
+    },
+    "#": {
+      "item": "minecraft:redstone"
+    }
   },
   "result": {
     "id": "poosmp:jumpscare_stick",

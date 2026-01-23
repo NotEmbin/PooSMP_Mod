@@ -7,8 +7,12 @@
     "###"
   ],
   "key": {
-    "3": "#c:rods/wooden",
-    "#": "poosmp:null_shard"
+    "3": {
+      "tag": "c:rods/wooden"
+    },
+    "#": {
+      "item": "poosmp:null_shard"
+    }
   },
   "result": {
     "id": "poosmp:null_stick",

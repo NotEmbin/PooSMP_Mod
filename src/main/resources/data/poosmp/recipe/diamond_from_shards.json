@@ -3,7 +3,9 @@
   "category": "misc",
   "group": "diamond",
   "key": {
-    "#": "poosmp:diamond_shard"
+    "#": {
+      "item": "poosmp:diamond_shard"
+    }
   },
   "pattern": [
     "###",

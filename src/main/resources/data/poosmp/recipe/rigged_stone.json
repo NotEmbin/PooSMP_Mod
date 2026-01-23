@@ -7,8 +7,12 @@
     " # "
   ],
   "key": {
-    "3": "minecraft:stone",
-    "#": "minecraft:gunpowder"
+    "3": {
+      "item": "minecraft:stone"
+    },
+    "#": {
+      "item": "minecraft:gunpowder"
+    }
   },
   "result": {
     "id": "poosmp:rigged_stone",

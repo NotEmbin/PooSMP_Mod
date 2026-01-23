@@ -7,9 +7,15 @@
     "4#4"
   ],
   "key": {
-    "3": "#c:rods/wooden",
-    "#": "minecraft:leather",
-    "4": "poosmp:diamond_shard"
+    "3": {
+      "tag": "c:rods/wooden"
+    },
+    "#": {
+      "item": "minecraft:leather"
+    },
+    "4": {
+      "item": "poosmp:diamond_shard"
+    }
   },
   "result": {
     "id": "poosmp:cow_stick",

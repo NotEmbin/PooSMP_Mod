@@ -2,7 +2,9 @@
   "type": "minecraft:stonecutting",
   "category": "misc",
   "group": "music_discs",
-  "ingredient": "#poosmp:convertable_discs",
+  "ingredient": {
+    "tag": "poosmp:convertable_discs"
+  },
   "result": {
     "id": "poosmp:music_disc/endlessly_instrumental",
     "count": 1

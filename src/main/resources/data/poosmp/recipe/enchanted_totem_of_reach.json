@@ -7,8 +7,12 @@
     "###"
   ],
   "key": {
-    "3": "poosmp:totem_of_reach",
-    "#": "minecraft:diamond"
+    "3": {
+      "item": "poosmp:totem_of_reach"
+    },
+    "#": {
+      "item": "minecraft:diamond"
+    }
   },
   "result": {
     "id": "poosmp:enchanted_totem_of_reach",

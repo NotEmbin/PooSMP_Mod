@@ -1,10 +1,16 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": "poosmp:red_poo_ingot",
-  "base": "#poosmp:red_poo_convertibles/boots",
+  "addition": {
+    "item": "poosmp:red_poo_ingot"
+  },
+  "base": {
+    "tag": "poosmp:red_poo_convertibles/boots"
+  },
   "result": {
     "count": 1,
     "id": "poosmp:red_poo_boots"
   },
-  "template": "poosmp:red_poo_upgrade_smithing_template"
+  "template": {
+    "item": "poosmp:red_poo_upgrade_smithing_template"
+  }
 }

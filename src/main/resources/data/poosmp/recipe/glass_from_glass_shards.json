@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "poosmp:glass_shard"
+    "#": {
+      "item": "poosmp:glass_shard"
+    }
   },
   "pattern": [
     "###",

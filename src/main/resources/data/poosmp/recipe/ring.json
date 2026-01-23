@@ -7,8 +7,12 @@
     "3#3"
   ],
   "key": {
-    "3": "minecraft:quartz",
-    "#": "minecraft:iron_nugget"
+    "3": {
+      "item": "minecraft:quartz"
+    },
+    "#": {
+      "item": "minecraft:iron_nugget"
+    }
   },
   "result": {
     "id": "poosmp:ring",

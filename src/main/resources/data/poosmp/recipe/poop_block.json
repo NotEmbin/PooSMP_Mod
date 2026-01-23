@@ -6,7 +6,9 @@
     "##"
   ],
   "key": {
-    "#": "#minecraft:dirt"
+    "#": {
+      "tag": "minecraft:dirt"
+    }
   },
   "result": {
     "id": "poosmp:poop_block",
